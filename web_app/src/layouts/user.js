@@ -52,7 +52,7 @@ export default function Dashboard(props) {
   const [image, setImage] = React.useState(defaultBGImage);
   const [color, setColor] = React.useState("blue");
   const [bgColor, setBgColor] = React.useState("darkBlue");
-  const [isKovan, setIsKovan] = React.useState(true);
+  const [chainId, setChainId] = React.useState(0);
   const [ETHBalance, setETHBalance] = React.useState("~");
   const [addr, setAddr] = React.useState("");
   const [isAssetHolder, setIsAssetHolder] = React.useState(false);
@@ -414,12 +414,6 @@ export default function Dashboard(props) {
     });
   };
 
-  const readCookie = async (job) => {
-    if (cookies["hasBeenNotified"] === false) return;
-    if (!cookies[job]) return console.log("Referenced nonexistant cookie");
-    return cookies[job];
-  };
-
   const handleEthereum = () => {
     if (window.ethereum) {
       let web3;
@@ -428,6 +422,7 @@ export default function Dashboard(props) {
       web3 = new Web3(web3.givenProvider);
       window.web3 = web3;
       web3.eth.net.getId().then(async (chainId) => {
+        setChainId(chainId);
         window.ethereum.on("chainChanged", (chainId) => {
           console.log(chainId);
           window.location.reload();
@@ -523,11 +518,9 @@ export default function Dashboard(props) {
               }
             });
 
-          setIsKovan(true);
+          setChainId(chainId);
           return setIsMounted(true);
         } else {
-          window.isKovan = false;
-          setIsKovan(false);
           return swal({
             title: "Connect to the Kovan Testnet!",
             text: "Please connect your ethereum provider to the Kovan Testnet and reload the page to access page functionality.",
@@ -711,6 +704,7 @@ export default function Dashboard(props) {
                 connectArweave={connectArweaveEvent}
                 rootNames={rootNames}
                 nodeSets={nodeSets}
+                chainId={chainId}
                 heldNodeData={heldNodeData}
                 nodeExtData={nodeExtData}
                 ps={sps}
@@ -723,7 +717,6 @@ export default function Dashboard(props) {
                 assets={assetBalance}
                 nodes={nodeBalance}
                 currentACPrice={currentACPrice}
-                // IDHolder={isIDHolder}
                 simpleAssetView={simpleAssetView}
                 winKey={winKey}
                 prufClient={prufClient}

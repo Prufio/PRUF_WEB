@@ -596,7 +596,7 @@ export default function NewRecord(props) {
       }
 
       if (description !== "") {
-        ipfsObj.Description = description;
+        ipfsObj.engraving = description;
       }
 
       if (displayImage !== "") {
@@ -635,7 +635,7 @@ export default function NewRecord(props) {
       } else if (storageProvider === "2") {
         let file = fileMetaData;
         let metaData = {
-          Description: ipfsObj.Description,
+          Description: ipfsObj.engraving,
           name: ipfsObj.name,
         };
         metaData["Content-Type"] = file.type;
@@ -770,7 +770,7 @@ export default function NewRecord(props) {
         countPair: [100000, 100000],
         status: "Transferable",
         statusNum: "51",
-        Description: ipfsObj.Description,
+        Description: ipfsObj.engraving,
         nonMutableStorage: ipfsObj,
         identicon: [<Jdenticon value={idx} key="" />],
         identiconLG: [<Jdenticon value={idx} key="" />],
@@ -901,7 +901,7 @@ export default function NewRecord(props) {
         countPair: [100000, 100000],
         status: "Transferable",
         statusNum: "51",
-        Description: ipfsObj.Description,
+        Description: ipfsObj.engraving,
         nonMutableStorage: ipfsObj,
         identicon: [<Jdenticon value={idx} key="" />],
         identiconLG: [<Jdenticon value={idx} key="" />],

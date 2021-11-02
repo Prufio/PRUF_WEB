@@ -15,10 +15,14 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import TextField from "@material-ui/core/TextField";
 import CardBody from "components/Card/CardBody.js";
 import CardIcon from "components/Card/CardIcon.js";
-import {AddPhotoAlternateOutlined, DeleteForever, Settings, } from "@material-ui/icons";
+import {AddPhotoAlternateOutlined, DeleteForever, Settings, KeyboardArrowLeft,} from "@material-ui/icons";
+import Share from "@material-ui/icons/Share";
+import Icon from "@material-ui/core/Icon";
+import FormControl from "@material-ui/core/FormControl";
 import Check from "@material-ui/icons/Check";
 import CardFooter from "components/Card/CardFooter.js";
 import placeholder from "../../assets/img/placeholder.jpg";
+import { RWebShare } from "react-web-share";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 
@@ -34,30 +38,6 @@ export default function ModifyDescription(props) {
 
   const [asset] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)));
   console.log(window.sentPacket)
-  
-  const [assetInfo] = React.useState(
-    JSON.parse(
-      JSON.stringify({
-        photoUrls: window.sentPacket.photoUrls || {},
-        photo: window.sentPacket.photo || {},
-        text: window.sentPacket.text || {},
-        name: window.sentPacket.name || "",
-        urls: window.sentPacket.urls || {},
-      })
-    )
-  );
-
-  const [newAssetInfo, setNewAssetInfo] = React.useState(
-    JSON.parse(
-      JSON.stringify({
-        photoUrls: window.sentPacket.photoUrls || {},
-        photo: window.sentPacket.photo || {},
-        text: window.sentPacket.text || {},
-        name: window.sentPacket.name || "",
-        urls: window.sentPacket.urls || {},
-      })
-    )
-  );
 
   const [id] = React.useState(window.sentPacket.id);
 
@@ -144,30 +124,23 @@ export default function ModifyDescription(props) {
         });
       }
 
-      else if (asset.nodeData.storageProvider === "2") {
-        swal({
-          title: "Not yet supported.",
-          text:
-            "We do not support mutable data modification on arweave yet. This feature is coming in the next release.",
-          icon: "warning",
-          button: "Close",
-        }).then(() => {
-          window.backIndex = asset.dBIndex;
-          window.location.href = asset.lastRef;
-        });
-      }
+      // else if (asset.nodeData.storageProvider === "2") {
+      //   swal({
+      //     title: "Not yet supported.",
+      //     text:
+      //       "We do not support mutable data modification on arweave yet. This feature is coming in the next release.",
+      //     icon: "warning",
+      //     button: "Close",
+      //   }).then(() => {
+      //     window.backIndex = asset.dBIndex;
+      //     window.location.href = asset.lastRef;
+      //   });
+      // }
 
       // setSelectedImage(
-      //   assetInfo.photo.displayImage || Object.values(assetInfo.photo)[0] || ""
+      //   asset.photo.displayImage || Object.values(asset.photo)[0] || ""
       // );
       setSelectedImage(asset.displayImage)
-      if (assetInfo.photo.displayImage) {
-        setSelectedKey("displayImage");
-      } else if (Object.values(assetInfo.photo)[0] !== undefined) {
-        setSelectedKey(Object.keys(assetInfo.photo)[0]);
-      } else {
-        setSelectedKey("");
-      }
       setHasMounted(true);
     }
   }, []);
@@ -202,7 +175,7 @@ export default function ModifyDescription(props) {
   };
 
   const removeElement = (type, rem) => {
-    let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
+    let tempObj = JSON.parse(JSON.stringify(newasset));
     delete tempObj[type][rem];
     //console.log(tempObj)
     if (type === image) {
@@ -223,46 +196,46 @@ export default function ModifyDescription(props) {
         setSelectedKey("");
       }
     }
-    setNewAssetInfo(tempObj);
+    setNewasset(tempObj);
     return forceUpdate();
   };
 
   const setDisplayImage = (img, key) => {
-    console.log("Deleting: ", key);
-    let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
-    if (key === "displayImage") {
-      return console.log("Nothing was done. Already set.");
-    }
-    let newKey = generateNewKey(tempObj);
-    if (tempObj.photo.displayImage) {
-      tempObj.photo[newKey] = tempObj.photo.displayImage;
-      tempObj.photoUrls[newKey] = tempObj.photoUrls.displayImage;
-    }
-    tempObj.photo.displayImage = img;
-    tempObj.photoUrls.displayImage = tempObj.photoUrls[key];
-    delete tempObj.photo[key];
-    delete tempObj.photoUrls[key];
-    //console.log(tempObj);
-    setNewAssetInfo(tempObj);
-    setSelectedImage(tempObj.photo.displayImage);
-    setSelectedKey("displayImage");
-    return forceUpdate();
+    // console.log("Deleting: ", key);
+    // let tempObj = JSON.parse(JSON.stringify(newasset));
+    // if (key === "displayImage") {
+    //   return console.log("Nothing was done. Already set.");
+    // }
+    // let newKey = generateNewKey(tempObj);
+    // if (tempObj.photo.displayImage) {
+    //   tempObj.photo[newKey] = tempObj.photo.displayImage;
+    //   tempObj.photoUrls[newKey] = tempObj.photoUrls.displayImage;
+    // }
+    // tempObj.photo.displayImage = img;
+    // tempObj.photoUrls.displayImage = tempObj.photoUrls[key];
+    // delete tempObj.photo[key];
+    // delete tempObj.photoUrls[key];
+    // //console.log(tempObj);
+    // setNewasset(tempObj);
+    // setSelectedImage(tempObj.photo.displayImage);
+    // setSelectedKey("displayImage");
+    // return forceUpdate();
   };
 
   // const resetChanges = () => {
-  //   setNewAssetInfo(assetInfo);
+  //   setNewasset(asset);
   //   return forceUpdate();
   // };
 
   const submitChanges = async () => {
-    if (JSON.stringify(newAssetInfo) === JSON.stringify(assetInfo)) {
+    if (JSON.stringify(newasset) === JSON.stringify(asset)) {
       return swal({
         title: "New data matches old! No changes made.",
         icon: "warning",
         button: "Close",
       });
     }
-    let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
+    let tempObj = JSON.parse(JSON.stringify(newasset));
     tempObj.photo = tempObj.photoUrls;
     delete tempObj.photoUrls;
 
@@ -290,7 +263,7 @@ export default function ModifyDescription(props) {
         console.log(`Url --> ${url}`);
         let b32Hash = window.utils.getBytes32FromIPFSHash(String(hash.cid));
         setIpfsActive(false);
-        updateAssetInfo(b32Hash, tempObj);
+        updateasset(b32Hash, tempObj);
       }
     });
   };
@@ -305,7 +278,7 @@ export default function ModifyDescription(props) {
     return tempHash;
   };
 
-  const updateAssetInfo = (hash, newAsset) => {
+  const updateasset = (hash, newAsset) => {
     setHelp(false);
     if (!hash || !id) {
       return;
@@ -368,7 +341,7 @@ export default function ModifyDescription(props) {
           button: "Close",
         }).then(() => {
           //refreshBalances()
-          window.newDescObj = JSON.parse(JSON.stringify(newAssetInfo));
+          window.newDescObj = JSON.parse(JSON.stringify(newasset));
           window.backIndex = asset.dBIndex;
           window.location.href = asset.lastRef;
           window.replaceAssetData = {
@@ -383,8 +356,8 @@ export default function ModifyDescription(props) {
   };
 
   const urlKeyIsGood = (e) => {
-    if (newAssetInfo.urls) {
-      if (newAssetInfo.urls[e] || e === "") {
+    if (newasset.urls) {
+      if (newasset.urls[e] || e === "") {
         return false;
       }
     }
@@ -394,7 +367,7 @@ export default function ModifyDescription(props) {
   const submitCurrentUrl = () => {
     let url = assetURL,
       key = URLTitle,
-      tempObj = JSON.parse(JSON.stringify(newAssetInfo));
+      tempObj = JSON.parse(JSON.stringify(newasset));
     if ((url === "" && key !== "") || (url !== "" && key === "")) {
       if (url === "") {
         return setloginURLState("error");
@@ -411,7 +384,7 @@ export default function ModifyDescription(props) {
     }
     tempObj.urls[key] = url;
     console.log(tempObj);
-    setNewAssetInfo(tempObj);
+    setNewasset(tempObj);
     setAssetURL("");
     setURLTitle("");
     setloginURLState("");
@@ -420,24 +393,24 @@ export default function ModifyDescription(props) {
   };
 
   const handleName = (e) => {
-    let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
+    let tempObj = JSON.parse(JSON.stringify(newasset));
     tempObj.name = e;
-    setNewAssetInfo(tempObj);
+    setNewasset(tempObj);
   };
 
   const handleDescription = (e) => {
-    let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
+    let tempObj = JSON.parse(JSON.stringify(newasset));
     tempObj.text.Description = e;
-    setNewAssetInfo(tempObj);
+    setNewasset(tempObj);
   };
 
   const renderImage = (mobile) => {
-    //console.log("AI", assetInfo)
-    //console.log("NAI", newAssetInfo)
+    //console.log("AI", asset)
+    //console.log("NAI", newasset)
     if (!mobile) {
       if (
-        newAssetInfo.photo.displayImage !== undefined ||
-        Object.values(newAssetInfo.photo).length > 0
+        newasset.photo.displayImage !== undefined ||
+        Object.values(newasset.photo).length > 0
       ) {
         console.log(selectedImage)
         return (
@@ -456,8 +429,8 @@ export default function ModifyDescription(props) {
           </CardHeader>
         );
       } else if (
-        newAssetInfo.photo.displayImage === undefined &&
-        Object.values(newAssetInfo.photo).length === 0
+        newasset.photo.displayImage === undefined &&
+        Object.values(newasset.photo).length === 0
       ) {
         return (
           <CardHeader image className={classes.cardHeaderHoverCustom}>
@@ -477,8 +450,8 @@ export default function ModifyDescription(props) {
       }
     } else if (mobile) {
       if (
-        newAssetInfo.photo.displayImage !== undefined ||
-        Object.values(newAssetInfo.photo).length > 0
+        newasset.photo.displayImage !== undefined ||
+        Object.values(newasset.photo).length > 0
       ) {
         return (
           <CardHeader image className={classes.cardHeaderHover}>
@@ -496,8 +469,8 @@ export default function ModifyDescription(props) {
           </CardHeader>
         );
       } else if (
-        newAssetInfo.photo.displayImage === undefined &&
-        Object.values(newAssetInfo.photo).length === 0
+        newasset.photo.displayImage === undefined &&
+        Object.values(newasset.photo).length === 0
       ) {
         return (
           <CardHeader image className={classes.cardHeaderHover}>
@@ -515,7 +488,7 @@ export default function ModifyDescription(props) {
     }
     console.log(fileName);
 
-    let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
+    let tempObj = JSON.parse(JSON.stringify(newasset));
     if (tempObj.photo[fileName]) {
       //console.log("Already exists, adding copy")
       let tempFN = fileName;
@@ -561,7 +534,7 @@ export default function ModifyDescription(props) {
               let url = `https://ipfs.io/ipfs/${hash.cid}`;
               console.log(`Url --> ${url}`);
               tempObj.photoUrls[fileName] = url;
-              setNewAssetInfo(tempObj);
+              setNewasset(tempObj);
               if (selectedImage === "") {
                 setSelectedImage(tempObj.photo[fileName]);
                 setSelectedKey(fileName);
@@ -588,7 +561,7 @@ export default function ModifyDescription(props) {
               let url = `https://ipfs.io/ipfs/${hash.cid}`;
               console.log(`Url --> ${url}`);
               tempObj.photoUrls[fileName] = url;
-              setNewAssetInfo(tempObj);
+              setNewasset(tempObj);
               if (selectedImage === "") {
                 setSelectedImage(tempObj.photo[fileName]);
                 setSelectedKey(fileName);
@@ -656,11 +629,11 @@ export default function ModifyDescription(props) {
       }
 
       if (newObj) {
-        newObj.photoUrls = newAssetInfo.photoUrls;
+        newObj.photoUrls = newasset.photoUrls;
         console.log(newObj);
         if (newObj.name && newObj.text && newObj.photo && newObj.urls) {
           console.log("Setting new JSON config into state");
-          setNewAssetInfo(newObj);
+          setNewasset(newObj);
           forceUpdate();
         } else {
           return console.log("Does not contain the requisite keys");
@@ -675,13 +648,13 @@ export default function ModifyDescription(props) {
 
   const createBackupJSON = () => {
     let filename;
-    if (newAssetInfo.name !== "") {
-      filename = newAssetInfo.name.replace(/ /g, "_") + "_Backup.json";
+    if (newasset.name !== "") {
+      filename = newasset.name.replace(/ /g, "_") + "_Backup.json";
     } else {
       filename = "unnamed_asset_backup.json";
     }
 
-    let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
+    let tempObj = JSON.parse(JSON.stringify(newasset));
     tempObj.photo = tempObj.photoUrls;
     delete tempObj.photoUrls;
 
@@ -699,263 +672,264 @@ export default function ModifyDescription(props) {
     document.body.removeChild(anchorTag);
   };
 
-  const settings = () => {
-    swal("What would you like to do with this image?", {
-      buttons: {
-        delete: {
-          text: "Delete",
-          value: "delete",
-        },
-        profile: {
-          text: "Set Default",
-          value: "default",
-        },
-        back: {
-          text: "Cancel",
-          value: "back",
-        },
-      },
-    }).then((value) => {
-      switch (value) {
-        case "delete":
-          if (
-            newAssetInfo.photo.displayImage === undefined &&
-            Object.values(newAssetInfo.photo).length === 0
-          ) {
-            return swal("Cannot delete asset identicon.");
-          }
-          swal("Are you sure you want to delete this image?", {
-            buttons: {
-              yes: {
-                text: "Delete",
-                value: "yes",
-              },
-              no: {
-                text: "Cancel",
-                value: "no",
-              },
-            },
-          }).then((value) => {
-            switch (value) {
-              case "yes":
-                removeElement(image, selectedKey);
-                swal("Image Deleted!");
-                break;
+  // const settings = () => {
+  //   swal("What would you like to do with this image?", {
+  //     buttons: {
+  //       delete: {
+  //         text: "Delete",
+  //         value: "delete",
+  //       },
+  //       profile: {
+  //         text: "Set Default",
+  //         value: "default",
+  //       },
+  //       back: {
+  //         text: "Cancel",
+  //         value: "back",
+  //       },
+  //     },
+  //   }).then((value) => {
+  //     switch (value) {
+  //       case "delete":
+  //         if (
+  //           newasset.photo.displayImage === undefined &&
+  //           Object.values(newasset.photo).length === 0
+  //         ) {
+  //           return swal("Cannot delete asset identicon.");
+  //         }
+  //         swal("Are you sure you want to delete this image?", {
+  //           buttons: {
+  //             yes: {
+  //               text: "Delete",
+  //               value: "yes",
+  //             },
+  //             no: {
+  //               text: "Cancel",
+  //               value: "no",
+  //             },
+  //           },
+  //         }).then((value) => {
+  //           switch (value) {
+  //             case "yes":
+  //               removeElement(image, selectedKey);
+  //               swal("Image Deleted!");
+  //               break;
 
-              case "no":
-                swal("Image not Deleted");
-                break;
+  //             case "no":
+  //               swal("Image not Deleted");
+  //               break;
 
-              default:
-                return;
-            }
-          });
-          break;
+  //             default:
+  //               return;
+  //           }
+  //         });
+  //         break;
 
-        case "default":
-          if (
-            newAssetInfo.photo.displayImage === undefined &&
-            Object.values(newAssetInfo.photo).length === 0
-          ) {
-            return swal("Cannot set asset identicon as default image.");
-          }
-          setDisplayImage(selectedImage, selectedKey);
-          swal("Default image set!");
-          break;
+  //       case "default":
+  //         if (
+  //           newasset.photo.displayImage === undefined &&
+  //           Object.values(newasset.photo).length === 0
+  //         ) {
+  //           return swal("Cannot set asset identicon as default image.");
+  //         }
+  //         setDisplayImage(selectedImage, selectedKey);
+  //         swal("Default image set!");
+  //         break;
 
-        case "back":
-          break;
+  //       case "back":
+  //         break;
 
-        default:
-          return;
-      }
-    });
-  };
+  //       default:
+  //         return;
+  //     }
+  //   });
+  // };
 
-  const deleteURL = (key) => {
-    swal("Delete this URL?", {
-      buttons: {
-        delete: {
-          text: "delete",
-          value: "delete",
-        },
-        back: {
-          text: "Cancel",
-          value: "back",
-        },
-      },
-    }).then((value) => {
-      switch (value) {
-        case "delete":
-          swal("Are you sure you want to delete this URL?", {
-            buttons: {
-              yes: {
-                text: "Delete",
-                value: "yes",
-              },
-              no: {
-                text: "No",
-                value: "no",
-              },
-            },
-          }).then((value) => {
-            switch (value) {
-              case "yes":
-                removeElement(url, key);
-                break;
+  // const deleteURL = (key) => {
+  //   swal("Delete this URL?", {
+  //     buttons: {
+  //       delete: {
+  //         text: "delete",
+  //         value: "delete",
+  //       },
+  //       back: {
+  //         text: "Cancel",
+  //         value: "back",
+  //       },
+  //     },
+  //   }).then((value) => {
+  //     switch (value) {
+  //       case "delete":
+  //         swal("Are you sure you want to delete this URL?", {
+  //           buttons: {
+  //             yes: {
+  //               text: "Delete",
+  //               value: "yes",
+  //             },
+  //             no: {
+  //               text: "No",
+  //               value: "no",
+  //             },
+  //           },
+  //         }).then((value) => {
+  //           switch (value) {
+  //             case "yes":
+  //               removeElement(url, key);
+  //               break;
 
-              case "no":
-                break;
+  //             case "no":
+  //               break;
 
-              default:
-                return;
-            }
-          });
-          break;
+  //             default:
+  //               return;
+  //           }
+  //         });
+  //         break;
 
-        case "back":
-          break;
+  //       case "back":
+  //         break;
 
-        default:
-          return;
-      }
-    });
-  };
+  //       default:
+  //         return;
+  //     }
+  //   });
+  // };
 
-  const generateUrls = (obj) => {
-    if (!obj.urls) {
-      return;
-    } else if (Object.values(obj.urls).length === 0) {
-      return;
-    }
-    let urls = Object.values(obj.urls),
-      keys = Object.keys(obj.urls),
-      component = [
-        <div key="UrlHeader">
-          <h4 className="bold_h4"> Attatched Links</h4>
-          <hr className="bold_hr" />
-        </div>,
-      ];
-    for (let i = 0; i < urls.length; i++) {
-      component.push(
-        <div className="inlineDelete" key={"url" + i}>
-          <div
-            className="deleteURL"
-            onClick={() => {
-              deleteURL(keys[i]);
-            }}
-          >
-            <Danger>
-              <DeleteForever />
-            </Danger>
-          </div>
-          <h4 className={classes.cardTitle}>
-            {" "}
-            {keys[i]}:{" "}
-            <a href={urls[i]} rel="noopener noreferrer" target="_blank">
-              {urls[i]}
-            </a>
-          </h4>
-          <hr />
-        </div>
-      );
-    }
-    return component;
-  };
+  // const generateUrls = (obj) => {
+  //   if (!obj.urls) {
+  //     return;
+  //   } else if (Object.values(obj.urls).length === 0) {
+  //     return;
+  //   }
+  //   let urls = Object.values(obj.urls),
+  //     keys = Object.keys(obj.urls),
+  //     component = [
+  //       <div key="UrlHeader">
+  //         <h4 className="bold_h4"> Attatched Links</h4>
+  //         <hr className="bold_hr" />
+  //       </div>,
+  //     ];
+  //   for (let i = 0; i < urls.length; i++) {
+  //     component.push(
+  //       <div className="inlineDelete" key={"url" + i}>
+  //         <div
+  //           className="deleteURL"
+  //           onClick={() => {
+  //             deleteURL(keys[i]);
+  //           }}
+  //         >
+  //           <Danger>
+  //             <DeleteForever />
+  //           </Danger>
+  //         </div>
+  //         <h4 className={classes.cardTitle}>
+  //           {" "}
+  //           {keys[i]}:{" "}
+  //           <a href={urls[i]} rel="noopener noreferrer" target="_blank">
+  //             {urls[i]}
+  //           </a>
+  //         </h4>
+  //         <hr />
+  //       </div>
+  //     );
+  //   }
+  //   return component;
+  // };
 
-  const generateThumbs = (obj) => {
-    console.log(obj);
-    let component = [],
-      photos = Object.values(obj.photo),
-      keys = Object.keys(obj.photo);
-    //console.log("photos", photos)
+  // const generateThumbs = (obj) => {
+  //   return []
+  //   console.log(obj);
+  //   let component = [],
+  //     photos = Object.values(obj.photo),
+  //     keys = Object.keys(obj.photo);
+  //   //console.log("photos", photos)
 
-    if (photos.length === 0 && !isUploading) {
-      return (
-        <div className="assetImageSelectorButton">
-          <img
-            title="View Image"
-            src={placeholder}
-            className="imageSelectorImage"
-            alt=""
-          />
-        </div>
-      );
-    }
-    if (photos.length === 0 && isUploading) {
-      return (
-        <>
-          <div className="assetImageSelectorButton">
-            <div className="lds-default">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
-        </>
-      );
-    }
-    for (let i = 0; i < photos.length; i++) {
-      console.log(photos)
-      component.push(
-        <div
-          key={"thumb" + String(i)}
-          value={keys[i]}
-          className="assetImageSelectorButton"
-          onClick={() => {
-            showImage(photos[i], keys[i]);
-          }}
-        >
-          <img
-            title="View Image"
-            src={photos[i]}
-            className="imageSelectorImage"
-            alt=""
-          />
-        </div>
-      );
-    }
-    if (isUploading === true) {
-      component.push(
-        <div className="assetImageSelectorButton">
-          <div className="lds-default">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-        </div>
-      );
-    }
-    return component;
-  };
+  //   if (photos.length === 0 && !isUploading) {
+  //     return (
+  //       <div className="assetImageSelectorButton">
+  //         <img
+  //           title="View Image"
+  //           src={placeholder}
+  //           className="imageSelectorImage"
+  //           alt=""
+  //         />
+  //       </div>
+  //     );
+  //   }
+  //   if (photos.length === 0 && isUploading) {
+  //     return (
+  //       <>
+  //         <div className="assetImageSelectorButton">
+  //           <div className="lds-default">
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //           </div>
+  //         </div>
+  //       </>
+  //     );
+  //   }
+  //   for (let i = 0; i < photos.length; i++) {
+  //     console.log(photos)
+  //     component.push(
+  //       <div
+  //         key={"thumb" + String(i)}
+  //         value={keys[i]}
+  //         className="assetImageSelectorButton"
+  //         onClick={() => {
+  //           showImage(photos[i], keys[i]);
+  //         }}
+  //       >
+  //         <img
+  //           title="View Image"
+  //           src={photos[i]}
+  //           className="imageSelectorImage"
+  //           alt=""
+  //         />
+  //       </div>
+  //     );
+  //   }
+  //   if (isUploading === true) {
+  //     component.push(
+  //       <div className="assetImageSelectorButton">
+  //         <div className="lds-default">
+  //           <div></div>
+  //           <div></div>
+  //           <div></div>
+  //           <div></div>
+  //           <div></div>
+  //           <div></div>
+  //           <div></div>
+  //           <div></div>
+  //           <div></div>
+  //           <div></div>
+  //           <div></div>
+  //           <div></div>
+  //         </div>
+  //       </div>
+  //     );
+  //   }
+  //   return component;
+  // };
 
   const goBack = () => {
     window.backIndex = asset.dBIndex;
     window.location.href = asset.lastRef;
   };
 
-  const showImage = (img, key) => {
-    setSelectedImage(img);
-    setSelectedKey(key);
-  };
+  // const showImage = (img, key) => {
+  //   setSelectedImage(img);
+  //   setSelectedKey(key);
+  // };
 
   if(!props.prufClient){
     return <>
@@ -987,343 +961,340 @@ export default function ModifyDescription(props) {
         Go Back
       </Button>
       <Card>
-        {renderImage(isMobile)}
-        <CardBody>
-          <div className="imageSelector">
-            <input
-              type="file"
-              onChange={uploadImage}
-              ref={fileInput}
-              className="imageInput"
-            />
-            <input
-              type="file"
-              onChange={useCustomJSON}
-              ref={fileInputJSON}
-              className="imageInput"
-            />
-            {!isUploading && (
-              <div
-                className="imageSelectorPlus"
-                onClick={() => {
-                  handleClick();
-                }}
-              >
-                <AddPhotoAlternateOutlined />
-              </div>
-            )}
-            {isUploading && (
-              <div className="imageSelectorPlus">
-                <AddPhotoAlternateOutlined />
-              </div>
-            )}
-            {generateThumbs(asset)}
-          </div>
-          <br />
-          {!transactionActive && (
             <>
-              <TextField
-                onChange={(e) => {
-                  handleName(e.target.value);
-                }}
-                id="outlined-full-width"
-                label="Name"
-                defaultValue={asset.name}
-                fullWidth
-                margin="normal"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                variant="outlined"
-              />
-              <TextField
-                onChange={(e) => {
-                  handleDescription(e.target.value);
-                }}
-                id="outlined-multiline-static"
-                label="Description:"
-                multiline
-                rows={4}
-                defaultValue={asset.Description}
-                variant="outlined"
-                fullWidth
-              />
-            </>
-          )}
-
-          {transactionActive && (
-            <>
-              <TextField
-                id="outlined-full-width"
-                label="Name"
-                defaultValue={asset.name}
-                fullWidth
-                margin="normal"
-                disabled="true"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                variant="outlined"
-              />
-              <TextField
-                disabled="true"
-                id="outlined-multiline-static"
-                label="Description:"
-                multiline
-                rows={4}
-                defaultValue={asset.Description}
-                variant="outlined"
-                fullWidth
-              />
-            </>
-          )}
-          {!transactionActive && (
-            <div className={formClasses.checkboxAndRadio}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    tabIndex={-1}
-                    onClick={() => setAdvancedInput(!advancedInput)}
-                    checkedIcon={<Check className={formClasses.checkedIcon} />}
-                    icon={<Check className={formClasses.uncheckedIcon} />}
-                    classes={{
-                      checked: formClasses.checked,
-                      root: formClasses.checkRoot,
-                    }}
-                  />
-                }
-                classes={{
-                  label: formClasses.label,
-                  root: formClasses.labelRoot,
-                }}
-                label="Advanced Options"
-              />
-            </div>
-          )}
-          {advancedInput && !transactionActive && (
-            <div>
-              <div>
-                {generateUrls(newAssetInfo)}
-                <h4 className="bold_h4"> New Link </h4>
-                <hr className="bold_hr" />
-                <CustomInput
-                  success={loginURLTitleState === "success"}
-                  error={loginURLTitleState === "error"}
-                  labelText="Link Name"
-                  id="urlKey"
-                  inputProps={{
-                    value: URLTitle,
-                    onChange: (e) => {
-                      setURLTitle(e.target.value.trim());
-                      if (urlKeyIsGood(e.target.value)) {
-                        setloginURLTitleState("success");
-                      } else {
-                        setloginURLTitleState("error");
-                      }
-                      setloginURLTitle(e.target.value);
-                    },
-                  }}
-                />
-
-                <TextField
-                  success={loginURLState === "success"}
-                  error={loginURLState === "error"}
-                  onChange={(e) => {
-                    setAssetURL(e.target.value.trim());
-                    if (validator.isURL(e.target.value)) {
-                      setloginURLState("success");
-                    } else {
-                      setloginURLState("error");
-                    }
-                    setloginURL(e.target.value);
-                  }}
-                  value={assetURL}
-                  id="outlined-full-width"
-                  labeltext="Link Address"
-                  fullWidth
-                  margin="normal"
-                  placeholder="ex. 'https://foo.web/dir'"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  variant="outlined"
-                />
-                <Button
-                  onClick={() => {
-                    submitCurrentUrl();
-                  }}
-                  color="info"
-                  className="advancedJSONButton"
-                >
-                  Add Link
-                </Button>
-              </div>
-              <br />
-              <h4 className="bold_h4"> Advanced JSON Options </h4>
-              <hr className="bold_hr" />
-              <div className="URL"></div>
               {!isMobile && (
+                <CardHeader image className={classes.cardHeaderHoverCustom}>
+                  {asset.displayImage !== "" && (
+                    <>
+                      {/* <Tooltip
+                        id="tooltip-top"
+                        title="Back"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
+                         <Button
+                          onClick={() => moreInfo("back")}
+                          color="info"
+                          justIcon
+                          className="back"
+                        >
+                          <KeyboardArrowLeft />
+                        </Button> 
+                      </Tooltip> */}
+                      {asset.nodeData.storageProvider === "2" && (
+                        <Tooltip title="See it on ARweave">
+                          <a
+                            href={`${asset.displayImage}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <img src={selectedImage} alt="" />
+                          </a>
+                        </Tooltip>
+                      )}
+                      {asset.nodeData.storageProvider === "1" && (
+                        <img src={selectedImage} alt="" />
+                      )}
+                    </>
+                  )}
+                  {asset.displayImage === "" && (
+                    <>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Back"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
+                        <Button
+                          onClick={() => moreInfo("back")}
+                          color="info"
+                          justIcon
+                          className="back"
+                        >
+                          <KeyboardArrowLeft />
+                        </Button>
+                      </Tooltip>
+                      <div className="jdenticonMoreInfo">
+                        <Jdenticon value={asset.id} />
+                      </div>
+                    </>
+                  )}
+                </CardHeader>
+              )}
+              {isMobile && (
+                <CardHeader
+                  image
+                  onClick={() => moreInfo("back")}
+                  className={classes.cardHeaderHover}
+                >
+                  {asset.displayImage !== "" && (
+                    <>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Back"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
+                        <Button
+                          onClick={() => moreInfo("back")}
+                          color="info"
+                          justIcon
+                          className="back"
+                        >
+                          <KeyboardArrowLeft />
+                        </Button>
+                      </Tooltip>
+                      <img src={selectedImage} alt="..." />
+                    </>
+                  )}
+                  {asset.displayImage === "" && (
+                    <>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Back"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
+                        <Button
+                          onClick={() => moreInfo("back")}
+                          color="info"
+                          justIcon
+                          className="back"
+                        >
+                          <KeyboardArrowLeft />
+                        </Button>
+                      </Tooltip>
+                      <div className="jdenticonMoreInfo">
+                        <Jdenticon className="jdenticonMoreInfo" value={asset.id} />
+                      </div>
+                    </>
+                  )}
+                </CardHeader>
+              )}
+            </>
+            <CardBody>
+              {/* {Object.values(asset.photo).length > 1 && (
+                <div className="imageSelector">
+                  {generateThumbs(asset)}
+                </div>
+              )} */}
+              <div className="horizontal">
+                <h4 className={classes.cardTitleContent}>
+                  Name:&nbsp;
+            </h4>
+                <h4 className={classes.cardTitle}>
+                  {asset.nonMutableStorage.name}
+                </h4>
+              </div>
+              <div className="horizontal">
+                <h4 className={classes.cardTitleContent}>
+                  Node:&nbsp;
+            </h4>
+                <h4 className={classes.cardTitle}>
+                  {asset.nodeName}
+                </h4>
+              </div>
+
+              {/* {asset.currency === "0" && (
+                <div className="horizontal">
+                  <h4 className={classes.cardTitleContent}>
+                    Status:&nbsp;
+              </h4>
+                  <h4 className={classes.cardTitle}>
+                    {asset.status}
+                  </h4>
+                </div>
+              )}
+              {asset.currency === undefined && (
+                <div className="horizontal">
+                  <h4 className={classes.cardTitleContent}>
+                    Status:&nbsp;
+              </h4>
+                  <h4 className={classes.cardTitle}>
+                    {asset.status}
+                  </h4>
+                </div>
+              )}
+              {asset.currency !== "0" &&
+                asset.currency !== undefined && (
+                  <>
+                    <div className="horizontal">
+                      <h4 className={classes.cardTitleContent}>
+                        Status:&nbsp;
+                </h4>
+                      <h4 className={classes.cardTitle}>
+                        {asset.status}
+                      </h4>
+                    </div>
+                    <div className="horizontal">
+                      <h4 className={classes.cardTitleContent}>
+                        Sale Price:&nbsp;
+                </h4>
+                      <h4 className={classes.cardTitle}>
+                        {currency}{asset.price}
+                      </h4>
+                    </div>
+                  </>
+                )} */}
+              {asset.nonMutableStorage.engraving !== undefined && (
                 <>
-                  <Button
-                    onClick={() => {
-                      handleJSON();
-                    }}
-                    className="advancedJSONButton"
-                  >
-                    Upload Custom IPFS Data
-                  </Button>
                   <br />
-                  <Button
-                    onClick={() => createBackupJSON()}
-                    color="info"
-                    className="advancedJSONButton"
-                  >
-                    Download Asset IPFS Data
-                  </Button>
+                  <TextField
+                    id="outlined-multiline-static"
+                    label="Engraving"
+                    multiline
+                    rows={4}
+                    defaultValue={asset.nonMutableStorage.engraving}
+                    variant="outlined"
+                    fullWidth
+                    disabled
+                  />
                 </>
               )}
-            </div>
-          )}
-          {!transactionActive && !isUploading && (
-            <div className="MLBGradientSubmit">
-              <hr className="medium_hr" />
-              <Button
-                onClick={() => {
-                  submitChanges();
-                }}
-                color="info"
-                className="MLBGradient"
-              >
-                Submit Changes
-              </Button>
-            </div>
-          )}
-          {asset.opCost > 0 ? (
-            <h4 className="costsText">Cost: ü{asset.opCost}</h4>
-          ) : (
-            <></>
-          )}
-          {!transactionActive && isUploading && (
-            <div className="MLBGradientSubmit">
-              <hr className="medium_hr" />
-              <Button disabled color="info" className="MLBGradient">
-                Submit Changes
-              </Button>
-            </div>
-          )}
-          {!transactionActive && ipfsActive && (
-            <h3>
-              Uploading Extended Data
-              <div className="lds-ellipsisIF">
-                <div></div>
-                <div></div>
-                <div></div>
-              </div>
-            </h3>
-          )}
-          {!ipfsActive && transactionActive && (
-            <h3>
-              Updating Asset
-              <div className="lds-ellipsisIF">
-                <div></div>
-                <div></div>
-                <div></div>
-              </div>
-            </h3>
-          )}
-        </CardBody>
-        <CardFooter chart>
-          {!isMobile && (
-            <>
-              {!copyText && (
+              {asset.nonMutableStorage.engraving === undefined && (
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Engraving"
+                  multiline
+                  rows={4}
+                  defaultValue="None"
+                  variant="outlined"
+                  fullWidth
+                  disabled
+                />
+              )}
+              {/*@dev URLs go here*/}
+              <br />
+            </CardBody>
+            <CardFooter>
+              {!isMobile && (
+                <>
+                  {!copyText && (
+                    <Tooltip title="Copy to Clipboard">
+                      <div className={classes.stats}>
+                        Asset ID:
+                        <button
+                          className="IDText"
+                          onClick={() => {
+                            copyTextSnippet(asset.id);
+                          }}
+                        >
+                          {asset.id}
+                        </button>
+                      </div>
+                    </Tooltip>
+                  )}
+                  {copyText && (
+                    <Tooltip title="Copied to Clipboard">
+                      <div className={classes.stats}>
+                        Asset ID:
+                        <button
+                          className="IDText"
+                          onClick={() => {
+                            copyTextSnippet(asset.id);
+                          }}
+                        >
+                          {asset.id}
+                        </button>
+                      </div>
+                    </Tooltip>
+                  )}
+                </>
+              )}
+              {isMobile && !isAndroid && (
+                <>
+                  {!copyText && (
+                    <Tooltip title="Copy to Clipboard">
+                      <div className={classes.stats}>
+                        Asset ID:
+                        <button
+                          className="IDText"
+                          onClick={() => {
+                            copyTextSnippet(asset.id);
+                          }}
+                        >
+                          {asset.id.substring(0, 10) +
+                            "..." +
+                            asset.id.substring(56, 66)}
+                        </button>
+                      </div>
+                    </Tooltip>
+                  )}
+                  {copyText && (
+                    <Tooltip title="Copied to Clipboard">
+                      <div className={classes.stats}>
+                        Asset ID:
+                        <button
+                          className="IDText"
+                          onClick={() => {
+                            copyTextSnippet(asset.id);
+                          }}
+                        >
+                          {asset.id.substring(0, 10) +
+                            "..." +
+                            asset.id.substring(56, 66)}
+                        </button>
+                      </div>
+                    </Tooltip>
+                  )}
+                </>
+              )}
+              {isMobile && isAndroid && (
                 <Tooltip title="Copy to Clipboard">
-                  <div className={classes.stats}>
-                    Asset ID:&nbsp;
-                    <button
-                      className="IDText"
-                      onClick={() => {
-                        copyTextSnippet(id);
-                      }}
-                    >
-                      {id}
-                    </button>
-                  </div>
-                </Tooltip>
-              )}
-              {copyText && (
-                <Tooltip title="Copied to Clipboard">
-                  <div className={classes.stats}>
-                    Asset ID:&nbsp;
-                    <button
-                      className="IDText"
-                      onClick={() => {
-                        copyTextSnippet(id);
-                      }}
-                    >
-                      {id}
-                    </button>
-                  </div>
-                </Tooltip>
-              )}
-            </>
-          )}
-          {isMobile && !isAndroid && (
-            <>
-              {!copyText && (
-                <Tooltip title="Copy to Clipboard">
-                  <div className={classes.stats}>
-                    Asset ID:&nbsp;
-                    <button
-                      className="IDText"
-                      onClick={() => {
-                        copyTextSnippet(id);
-                      }}
-                    >
-                      {id.substring(0, 10) +
+                  <CopyToClipboard
+                    text={asset.id}
+                    onCopy={() => {
+                      swal("Asset ID Copied to Clipboard!");
+                    }}
+                  >
+                    <span>
+                      Asset ID:
+                      {asset.id.substring(0, 10) +
                         "..." +
-                        id.substring(56, 66)}
-                    </button>
-                  </div>
+                        asset.id.substring(56, 66)}
+                    </span>
+                  </CopyToClipboard>
                 </Tooltip>
               )}
-              {copyText && (
-                <Tooltip title="Copied to Clipboard">
-                  <div className={classes.stats}>
-                    Asset ID:&nbsp;
-                    <button
-                      className="IDText"
-                      onClick={() => {
-                        copyTextSnippet(id);
-                      }}
-                    >
-                      {id.substring(0, 10) +
-                        "..." +
-                        id.substring(56, 66)}
-                    </button>
-                  </div>
+              <div className="icons">
+                <RWebShare
+                  className="shareMenu"
+                  data={{
+                    text: "Check out my PRüF-verified asset!",
+                    url: URL,
+                    title: "Share Asset Link",
+                  }}
+                >
+                  <Tooltip title="Share Asset URL">
+                    <Icon className="footerIcon">
+                      <Share />
+                    </Icon>
+                  </Tooltip>
+                </RWebShare>
+                <Tooltip title="View QR">
+                  <Icon
+                    className="footerIcon"
+                    onClick={() => {
+                      swalReact({
+                        content: (
+                          <QRCode
+                            value={URL}
+                            size="160"
+                            fgColor="#002a40"
+                            quietZone="2"
+                            ecLevel="M"
+                          />
+                        ),
+                        buttons: "close",
+                      });
+                    }}
+                  >
+                    qr_code
+                  </Icon>
                 </Tooltip>
-              )}
-            </>
-          )}
-          {isMobile && isAndroid && (
-            <Tooltip title="Copy to Clipboard">
-              <CopyToClipboard
-                text={asset.id}
-                onCopy={() => {
-                  swal("Asset ID Copied to Clipboard!");
-                }}
-              >
-                <span>
-                  Asset ID: &nbsp;{" "}
-                  {asset.id.substring(0, 14) +
-                    "..." +
-                    asset.id.substring(52, 66)}
-                </span>
-              </CopyToClipboard>
-            </Tooltip>
-          )}
-        </CardFooter>
-      </Card>
+              </div>
+            </CardFooter>
+          </Card>
     </div>
   );
 }

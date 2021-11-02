@@ -230,7 +230,7 @@ export default function Search(props) {
   };
 
   const renderOptions = (status) => {
-    if (!status || !asset.statusNum) return;
+    if (!status) return;
     let na = '(Not Available in this Status)'
     let opt
     switch(status) {
@@ -278,12 +278,12 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: true,
-          //   msg: `Update Mutable Info ${na}`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: true,
             msg: `Update Owner Info ${na}`,
@@ -335,12 +335,12 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: false,
-          //   msg: `Update Mutable Info`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: false,
+            msg: `Update Mutable Info`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -392,12 +392,12 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: false,
-          //   msg: `Update Mutable Info`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: false,
+            msg: `Update Mutable Info`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -449,12 +449,12 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: true,
-          //   msg: `Update Mutable Info ${na}`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -506,12 +506,12 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: true,
-          //   msg: `Update Mutable Info ${na}`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -563,12 +563,12 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: true,
-          //   msg: `Update Mutable Info ${na}`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: true,
             msg: `Update Owner Info ${na}`,
@@ -620,12 +620,12 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: true,
-          //   msg: `Update Mutable Info ${na}`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -677,12 +677,12 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: true,
-          //   msg: `Update Mutable Info ${na}`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -734,12 +734,12 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: false,
-          //   msg: `Update Mutable Info`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: false,
+            msg: `Update Mutable Info`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -791,12 +791,12 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: true,
-          //   msg: `Update Mutable Info ${na}`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: true,
             msg: `Update Owner Info ${na}`,
@@ -1974,12 +1974,12 @@ export default function Search(props) {
   //   obj.urls = obj.nonMutableStorage.urls || obj.mutableStorage.urls || {};
   //   obj.name = obj.nonMutableStorage.name || obj.mutableStorage.name || "Name Unavailable";
   //   obj.photoUrls = obj.nonMutableStorage.photo || obj.mutableStorage.photo || {};
-  //   obj.Description = obj.nonMutableStorage.Description || obj.mutableStorage.Description || "";
+  //   obj.engraving = obj.nonMutableStorage.engraving || obj.mutableStorage.engraving || "";
   //   obj.ContentUrl = obj.nonMutableStorage.contentUrl || obj.mutableStorage.contentUrl || "";
   //   obj.storageProvider = obj.nodeData.storageProvider;
   //   obj.PrimaryContent = obj.nonMutableStorage.PrimaryContent || obj.mutableStorage.PrimaryContent || ""; 
   //   obj.ContentType = obj.nonMutableStorage.ContentType || obj.mutableStorage.ContentType || obj.nonMutableStorage["Content-Type"] || obj.mutableStorage["Content-Type"] || "";
-  //   obj.Description = obj.nonMutableStorage.Description || obj.mutableStorage.Description || "";
+  //   obj.engraving = obj.nonMutableStorage.engraving || obj.mutableStorage.engraving || "";
   //   let vals = Object.values(obj.photo), keys = Object.keys(obj.photo);
 
   //   console.log("Finalizing", obj);
@@ -2794,19 +2794,19 @@ export default function Search(props) {
                     {asset.text !== undefined && (
                       <>
                         <br />
-                        {asset.Description !== undefined && (
+                        {asset.engraving !== undefined && (
                           <TextField
                             id="outlined-multiline-static"
                             label="Description"
                             multiline
                             rows={4}
-                            defaultValue={asset.Description}
+                            defaultValue={asset.engraving}
                             variant="outlined"
                             fullWidth
                             disabled
                           />
                         )}
-                        {asset.Description === undefined && (
+                        {asset.engraving === undefined && (
                           <TextField
                             id="outlined-multiline-static"
                             label="Description: None"

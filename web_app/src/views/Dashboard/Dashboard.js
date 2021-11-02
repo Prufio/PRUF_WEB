@@ -441,45 +441,6 @@ export default function Dashboard(props) {
     }
   };
 
-  const generateThumbs = (obj) => {
-    return []
-    let component = [],
-      photos = Object.values(obj.photo);
-    //console.log("photos", photos)
-    if (photos.length === 0) {
-      return (
-        <div className="assetImageSelectorButton">
-          <img
-            title="View Image"
-            src={placeholder}
-            className="imageSelectorImage"
-            alt=""
-          />
-        </div>
-      );
-    }
-    for (let i = 0; i < photos.length; i++) {
-      component.push(
-        <div
-          key={"thumb" + String(i)}
-          value={photos[i]}
-          className="assetImageSelectorButton"
-          onClick={() => {
-            showImage(photos[i]);
-          }}
-        >
-          <img
-            title="View Image"
-            src={photos[i]}
-            className="imageSelectorImage"
-            alt=""
-          />
-        </div>
-      );
-    }
-    return component;
-  };
-
   const showImage = (e) => {
     setSelectedImage(e);
 
@@ -560,12 +521,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: true,
-          //   msg: `Update Mutable Info ${na}`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: true,
             msg: `Update Owner Info ${na}`,
@@ -617,12 +578,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: false,
-          //   msg: `Update Mutable Info`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: false,
+            msg: `Update Mutable Info`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -674,12 +635,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: false,
-          //   msg: `Update Mutable Info`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: false,
+            msg: `Update Mutable Info`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -731,12 +692,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: true,
-          //   msg: `Update Mutable Info ${na}`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -788,12 +749,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: true,
-          //   msg: `Update Mutable Info ${na}`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -845,12 +806,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: true,
-          //   msg: `Update Mutable Info ${na}`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: true,
             msg: `Update Owner Info ${na}`,
@@ -902,12 +863,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: true,
-          //   msg: `Update Mutable Info ${na}`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -959,12 +920,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: true,
-          //   msg: `Update Mutable Info ${na}`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -1016,12 +977,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: false,
-          //   msg: `Update Mutable Info`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: false,
+            msg: `Update Mutable Info`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -1073,12 +1034,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          // {
-          //   dis: true,
-          //   msg: `Update Mutable Info ${na}`,
-          //   key: "umiOption",
-          //   val: "edit-information"
-          // },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
           {
             dis: true,
             msg: `Update Owner Info ${na}`,
@@ -1478,25 +1439,25 @@ export default function Dashboard(props) {
                     </div>
                   </>
                 )} */}
-              {selectedAssetObj.nonMutableStorage.Description !== undefined && (
+              {selectedAssetObj.nonMutableStorage.engraving !== undefined && (
                 <>
                   <br />
                   <TextField
                     id="outlined-multiline-static"
-                    label="Description"
+                    label="Engraving"
                     multiline
                     rows={4}
-                    defaultValue={selectedAssetObj.nonMutableStorage.Description}
+                    defaultValue={selectedAssetObj.nonMutableStorage.engraving}
                     variant="outlined"
                     fullWidth
                     disabled
                   />
                 </>
               )}
-              {selectedAssetObj.nonMutableStorage.Description === undefined && (
+              {selectedAssetObj.nonMutableStorage.engraving === undefined && (
                 <TextField
                   id="outlined-multiline-static"
-                  label="Description"
+                  label="Engraving"
                   multiline
                   rows={4}
                   defaultValue="None"

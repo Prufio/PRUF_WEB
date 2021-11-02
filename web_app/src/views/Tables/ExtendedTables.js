@@ -464,8 +464,8 @@ export default function ExtendedTables() {
               tableShopping
               customHeadCellClasses={[
                 classes.center,
-                classes.description,
-                classes.description,
+                classes.engraving,
+                classes.engraving,
                 classes.right,
                 classes.right,
                 classes.right,

@@ -256,7 +256,7 @@ export default function Home(props) {
                   </div>
                 </div>
               )}
-              {!prufTransactionActive && (
+              {!prufTransactionActive && props.chainId === 42 && (
                 <div className="MLBGradientSubmit">
                   <Button
                     color="info"
