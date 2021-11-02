@@ -80,7 +80,7 @@ export default function Dashboard(props) {
   const [replaceAssetData, setReplaceAssetData] = React.useState(0);
   const [currentACPrice, setCurrentACPrice] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");
-  const [nodeIdBalance, setNodeBalance] = React.useState("~");
+  const [nodeBalance, setNodeBalance] = React.useState("~");
   const [showPlaceHolder, setShowPlaceHolder] = React.useState(false)
   const [heldNodeData, setHeldNodeData] = React.useState([
     ["Loading Nodes...", "~", "~", "~"],
@@ -144,8 +144,11 @@ export default function Dashboard(props) {
 
     if (cookies) checkForCookies();
 
-    window.addEventListener("refresh", () =>
-      setReplaceAssetData(replaceAssetData + 1)
+    window.addEventListener("refresh", () =>{
+      console.log(replaceAssetData)
+      let newNum = replaceAssetData + 1
+      setReplaceAssetData(newNum)
+    }
     );
     window.addEventListener("connectArweave", () => {
       if (!window.arweaveWallet) {
@@ -195,6 +198,12 @@ export default function Dashboard(props) {
       setShowPlaceHolder(false)
     }
   }, [assets]);
+
+  React.useEffect(() => {
+    if (heldNodeData.length !== nodeBalance) {
+      setNodeBalance(heldNodeData.length)
+    }
+  }, [heldNodeData]);
 
   React.useEffect(() => {
     setWinKey(String(Math.round(Math.random() * 100000)));
@@ -532,14 +541,6 @@ export default function Dashboard(props) {
     }
   };
 
-  // if (window.ethereum && !window.populatedListeners) {
-  //   window.addEventListener("chainListener", chainListener, { once: true });
-  //   window.addEventListener("accountListener", acctListener, { once: true });
-  //   window.addEventListener("refresh", refreshHandler);
-  //   window.addEventListener("connectArweave", connectArweave);
-  //   window.populatedListeners = true;
-  // }
-
   window.onload = () => {
     window.balances = {};
     window.replaceAssetData = {};
@@ -720,7 +721,7 @@ export default function Dashboard(props) {
                 pruf={prufBalance}
                 ether={ETHBalance}
                 assets={assetBalance}
-                nodes={nodeIdBalance}
+                nodes={nodeBalance}
                 currentACPrice={currentACPrice}
                 // IDHolder={isIDHolder}
                 simpleAssetView={simpleAssetView}
