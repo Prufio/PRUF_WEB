@@ -1089,43 +1089,6 @@ export default function ModifyDescription(props) {
           )}
           {/*@dev URLs go here*/}
           <br />
-        </CardBody>
-        <CardFooter>
-          {!isMobile && (
-            <>
-              {!copyText && (
-                <Tooltip title="Copy to Clipboard">
-                  <div className={classes.stats}>
-                    Asset ID:
-                    <button
-                      className="IDText"
-                      onClick={() => {
-                        copyTextSnippet(asset.id);
-                      }}
-                    >
-                      {asset.id}
-                    </button>
-                  </div>
-                </Tooltip>
-              )}
-              {copyText && (
-                <Tooltip title="Copied to Clipboard">
-                  <div className={classes.stats}>
-                    Asset ID:
-                    <button
-                      className="IDText"
-                      onClick={() => {
-                        copyTextSnippet(asset.id);
-                      }}
-                    >
-                      {asset.id}
-                    </button>
-                  </div>
-                </Tooltip>
-              )}
-              {displayMutableData(newMutableStorage)}
-              {/*@dev URLs go here*/}
-              <br />
             </CardBody>
             <CardFooter>
               {!isMobile && (
@@ -1202,96 +1165,60 @@ export default function ModifyDescription(props) {
               )}
               {isMobile && isAndroid && (
                 <Tooltip title="Copy to Clipboard">
-                  <div className={classes.stats}>
-                    Asset ID:
-                    <button
-                      className="IDText"
-                      onClick={() => {
-                        copyTextSnippet(asset.id);
-                      }}
-                    >
+                  <CopyToClipboard
+                    text={asset.id}
+                    onCopy={() => {
+                      swal("Asset ID Copied to Clipboard!");
+                    }}
+                  >
+                    <span>
+                      Asset ID:
                       {asset.id.substring(0, 10) +
                         "..." +
                         asset.id.substring(56, 66)}
-                    </button>
-                  </div>
+                    </span>
+                  </CopyToClipboard>
                 </Tooltip>
               )}
-              {copyText && (
-                <Tooltip title="Copied to Clipboard">
-                  <div className={classes.stats}>
-                    Asset ID:
-                    <button
-                      className="IDText"
-                      onClick={() => {
-                        copyTextSnippet(asset.id);
-                      }}
-                    >
-                      {asset.id.substring(0, 10) +
-                        "..." +
-                        asset.id.substring(56, 66)}
-                    </button>
-                  </div>
+              <div className="icons">
+                <RWebShare
+                  className="shareMenu"
+                  data={{
+                    text: "Check out my PRüF-verified asset!",
+                    url: URL,
+                    title: "Share Asset Link",
+                  }}
+                >
+                  <Tooltip title="Share Asset URL">
+                    <Icon className="footerIcon">
+                      <Share />
+                    </Icon>
+                  </Tooltip>
+                </RWebShare>
+                <Tooltip title="View QR">
+                  <Icon
+                    className="footerIcon"
+                    onClick={() => {
+                      swalReact({
+                        content: (
+                          <QRCode
+                            value={URL}
+                            size="160"
+                            fgColor="#002a40"
+                            quietZone="2"
+                            ecLevel="M"
+                          />
+                        ),
+                        buttons: "close",
+                      });
+                    }}
+                  >
+                    qr_code
+                  </Icon>
                 </Tooltip>
-              )}
-            </>
-          )}
-          {isMobile && isAndroid && (
-            <Tooltip title="Copy to Clipboard">
-              <CopyToClipboard
-                text={asset.id}
-                onCopy={() => {
-                  swal("Asset ID Copied to Clipboard!");
-                }}
-              >
-                <span>
-                  Asset ID:
-                  {asset.id.substring(0, 10) +
-                    "..." +
-                    asset.id.substring(56, 66)}
-                </span>
-              </CopyToClipboard>
-            </Tooltip>
-          )}
-          <div className="icons">
-            <RWebShare
-              className="shareMenu"
-              data={{
-                text: "Check out my PRüF-verified asset!",
-                url: URL,
-                title: "Share Asset Link",
-              }}
-            >
-              <Tooltip title="Share Asset URL">
-                <Icon className="footerIcon">
-                  <Share />
-                </Icon>
-              </Tooltip>
-            </RWebShare>
-            <Tooltip title="View QR">
-              <Icon
-                className="footerIcon"
-                onClick={() => {
-                  swalReact({
-                    content: (
-                      <QRCode
-                        value={URL}
-                        size="160"
-                        fgColor="#002a40"
-                        quietZone="2"
-                        ecLevel="M"
-                      />
-                    ),
-                    buttons: "close",
-                  });
-                }}
-              >
-                qr_code
-              </Icon>
-            </Tooltip>
-          </div>
-        </CardFooter>
-      </Card>
+              </div>
+            </CardFooter>
+          </Card>
     </div>
   );
 }
