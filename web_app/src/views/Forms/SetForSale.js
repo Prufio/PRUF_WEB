@@ -65,7 +65,7 @@ export default function SetForSale(props) {
             assetInfo.statusNum && assetInfo.statusNum === '56' ||
             assetInfo.statusNum && assetInfo.statusNum === '70'
         ) {
-            swal({
+            swalReact({
                 title: 'Asset not in correct status!',
                 text:
                     'This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.',
@@ -168,7 +168,7 @@ export default function SetForSale(props) {
                             link.innerHTML = String(str1 + tempTxHash + str2)
                             setError(Object.values(_error)[0])
                             if (tempTxHash !== undefined) {
-                                swal({
+                                swalReact({
                                     title: 'Something went wrong!',
                                     content: link,
                                     icon: 'warning',
@@ -176,7 +176,7 @@ export default function SetForSale(props) {
                                 })
                             }
                             if (tempTxHash === undefined) {
-                                swal({
+                                swalReact({
                                     title: 'Something went wrong!',
                                     icon: 'warning',
                                     button: 'Close',
@@ -192,7 +192,7 @@ export default function SetForSale(props) {
                             let str2 = "' target='_blank'>here</a>"
                             link.innerHTML = String(str1 + tempTxHash + str2)
                             setTxHash(receipt.transactionHash)
-                            swal({
+                            swalReact({
                                 title: 'Asset price has been changed!',
                                 content: link,
                                 icon: 'success',
@@ -234,7 +234,7 @@ export default function SetForSale(props) {
         let tempTxHash
         if (assetInfo.price === price) {
             setloginPriceState('error')
-            return swal("Price has not changed!")
+            return swalReact("Price has not changed!")
         }
         if (assetInfo.price !== '0') {
             swalReact({
@@ -315,7 +315,7 @@ export default function SetForSale(props) {
                                     )
                                     setError(Object.values(_error)[0])
                                     if (tempTxHash !== undefined) {
-                                        swal({
+                                        swalReact({
                                             title: 'Something went wrong!',
                                             content: link,
                                             icon: 'warning',
@@ -323,7 +323,7 @@ export default function SetForSale(props) {
                                         })
                                     }
                                     if (tempTxHash === undefined) {
-                                        swal({
+                                        swalReact({
                                             title: 'Something went wrong!',
                                             icon: 'warning',
                                             button: 'Close',
@@ -341,7 +341,7 @@ export default function SetForSale(props) {
                                         str1 + tempTxHash + str2
                                     )
                                     setTxHash(receipt.transactionHash)
-                                    swal({
+                                    swalReact({
                                         title: 'Asset set for sale!',
                                         content: link,
                                         icon: 'success',
@@ -389,7 +389,7 @@ export default function SetForSale(props) {
                                     )
                                     setError(Object.values(_error)[0])
                                     if (tempTxHash !== undefined) {
-                                        swal({
+                                        swalReact({
                                             title: 'Something went wrong!',
                                             content: link,
                                             icon: 'warning',
@@ -397,7 +397,7 @@ export default function SetForSale(props) {
                                         })
                                     }
                                     if (tempTxHash === undefined) {
-                                        swal({
+                                        swalReact({
                                             title: 'Something went wrong!',
                                             icon: 'warning',
                                             button: 'Close',
@@ -415,7 +415,7 @@ export default function SetForSale(props) {
                                         str1 + tempTxHash + str2
                                     )
                                     setTxHash(receipt.transactionHash)
-                                    swal({
+                                    swalReact({
                                         title: 'Asset set for sale!',
                                         content: link,
                                         icon: 'success',
@@ -483,7 +483,7 @@ export default function SetForSale(props) {
                     link.innerHTML = String(str1 + tempTxHash + str2)
                     setError(Object.values(_error)[0])
                     if (tempTxHash !== undefined) {
-                        swal({
+                        swalReact({
                             title: 'Something went wrong!',
                             content: link,
                             icon: 'warning',
@@ -491,7 +491,7 @@ export default function SetForSale(props) {
                         })
                     }
                     if (tempTxHash === undefined) {
-                        swal({
+                        swalReact({
                             title: 'Something went wrong!',
                             icon: 'warning',
                             button: 'Close',
@@ -507,7 +507,7 @@ export default function SetForSale(props) {
                     let str2 = "' target='_blank'>here</a>"
                     link.innerHTML = String(str1 + tempTxHash + str2)
                     setTxHash(receipt.transactionHash)
-                    swal({
+                    swalReact({
                         title: 'Asset set for sale!',
                         content: link,
                         icon: 'success',
@@ -551,7 +551,7 @@ export default function SetForSale(props) {
                     link.innerHTML = String(str1 + tempTxHash + str2)
                     setError(Object.values(_error)[0])
                     if (tempTxHash !== undefined) {
-                        swal({
+                        swalReact({
                             title: 'Something went wrong!',
                             content: link,
                             icon: 'warning',
@@ -559,7 +559,7 @@ export default function SetForSale(props) {
                         })
                     }
                     if (tempTxHash === undefined) {
-                        swal({
+                        swalReact({
                             title: 'Something went wrong!',
                             icon: 'warning',
                             button: 'Close',
@@ -575,7 +575,7 @@ export default function SetForSale(props) {
                     let str2 = "' target='_blank'>here</a>"
                     link.innerHTML = String(str1 + tempTxHash + str2)
                     setTxHash(receipt.transactionHash)
-                    swal({
+                    swalReact({
                         title: 'Asset set for sale!',
                         content: link,
                         icon: 'success',

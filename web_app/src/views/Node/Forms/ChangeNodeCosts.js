@@ -148,7 +148,7 @@ export default function ChangeNodeCosts(props) {
         console.log(nodeInfo)
         console.log(_beneficiaryAddress)
         if (!formChanged) {
-            return swal('Costs not changed')
+            return swalReact('Costs not changed')
         }
 
         if (!obj) {
@@ -195,7 +195,7 @@ export default function ChangeNodeCosts(props) {
         }
 
         if (!window.web3.utils.isAddress(_beneficiaryAddress)) {
-            return swal({
+            return swalReact({
                 title: 'Submitted address is not a valid ethereum address!',
                 text: 'Please check form and input a valid ethereum address.',
                 icon: 'warning',
@@ -236,7 +236,7 @@ export default function ChangeNodeCosts(props) {
                 link.innerHTML = String(str1 + tempTxHash + str2)
                 setError(Object.values(_error)[0])
                 if (tempTxHash !== undefined) {
-                    swal({
+                    swalReact({
                         title: 'Something went wrong!',
                         content: link,
                         icon: 'warning',
@@ -244,7 +244,7 @@ export default function ChangeNodeCosts(props) {
                     })
                 }
                 if (tempTxHash === undefined) {
-                    swal({
+                    swalReact({
                         title: 'Something went wrong!',
                         icon: 'warning',
                         button: 'Close',
@@ -270,12 +270,12 @@ export default function ChangeNodeCosts(props) {
                 setTxHash(receipt.transactionHash)
                 if (!nodeInfo.costs[index] && iteration + 1 > Object.values(obj).length){
                     console.log("exit")
-                    return swal('Cost updates complete!').then(() => {
+                    return swalReact('Cost updates complete!').then(() => {
                         window.location.href = nodeInfo.lastRef
                     })
                 } else if (nodeInfo.costs[index].beneficiary === _beneficiaryAddress && iteration + 1 > Object.values(obj).length) {
                     console.log("exit")
-                    return swal('Cost updates complete!').then(() => {
+                    return swalReact('Cost updates complete!').then(() => {
                         window.location.href = nodeInfo.lastRef
                     })
                 } else {

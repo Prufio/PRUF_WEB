@@ -400,7 +400,7 @@ class Sidebar extends React.Component {
     const copyTextSnippet = (temp) => {
       navigator.clipboard.writeText(temp);
       if (isMobile) {
-        swal("Address Copied to Clipboard!");
+        swalReact("Address Copied to Clipboard!");
       }
       if (!isMobile) {
         this.setState({ copyText: true });
@@ -425,7 +425,7 @@ class Sidebar extends React.Component {
               <CopyToClipboard
                 text={addr}
                 onCopy={() => {
-                  swal(
+                  swalReact(
                     "Address Copied to Clipboard!\n" +
                     addr.substring(0, 8) +
                     "..." +
@@ -458,7 +458,7 @@ class Sidebar extends React.Component {
               <CopyToClipboard
                 text={addr}
                 onCopy={() => {
-                  swal(
+                  swalReact(
                     "Address Copied to Clipboard!\n" +
                     addr.substring(0, 8) +
                     "..." +
@@ -681,7 +681,7 @@ class Sidebar extends React.Component {
                     <CopyToClipboard
                       text={addr}
                       onCopy={() => {
-                        swal(
+                        swalReact(
                           "Address Copied to Clipboard!\n" +
                           addr.substring(0, 8) +
                           "..." +

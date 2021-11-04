@@ -48,7 +48,7 @@ export default function HeaderLinks(props) {
                 )
             return window.location.reload()
         } else {
-            return swal({
+            return swalReact({
                 title: 'Not a valid asset ID!',
                 text: 'Please submit a valid asset ID.',
                 icon: 'warning',

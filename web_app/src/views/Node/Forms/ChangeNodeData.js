@@ -105,7 +105,7 @@ export default function ChangeNodeData(props) {
         try {
             payload = JSON.stringify(obj)
         } catch {
-            return swal({
+            return swalReact({
                 title: 'Cannot stringify data from JSON',
                 content: link,
                 icon: 'warning',
@@ -313,7 +313,7 @@ export default function ChangeNodeData(props) {
                 link.innerHTML = String(str1 + tempTxHash + str2)
                 //setError(Object.values(_error)[0]);
                 if (tempTxHash !== undefined) {
-                    swal({
+                    swalReact({
                         title: 'Something went wrong!',
                         content: link,
                         icon: 'warning',
@@ -321,7 +321,7 @@ export default function ChangeNodeData(props) {
                     })
                 }
                 if (tempTxHash === undefined) {
-                    swal({
+                    swalReact({
                         title: 'Something went wrong!',
                         icon: 'warning',
                         button: 'Close',
@@ -337,7 +337,7 @@ export default function ChangeNodeData(props) {
                 let str2 = "' target='_blank'>here</a>"
                 link.innerHTML = String(str1 + tempTxHash + str2)
                 //setTxHash(receipt.transactionHash);
-                swal({
+                swalReact({
                     title: 'Node Configuration Saved!',
                     content: link,
                     icon: 'success',

@@ -94,7 +94,7 @@ export default function TransferNode(props) {
         const pageKey = thousandHashesOf(props.addr, props.winKey)
 
         if (!window.web3.utils.isAddress(address)) {
-            return swal({
+            return swalReact({
                 title: 'Submitted address is not valid!',
                 text: 'Please check form and input a valid ethereum address.',
                 icon: 'warning',
@@ -131,7 +131,7 @@ export default function TransferNode(props) {
                 link.innerHTML = String(str1 + tempTxHash + str2)
                 setError(Object.values(_error)[0])
                 if (tempTxHash !== undefined) {
-                    swal({
+                    swalReact({
                         title: 'Something went wrong!',
                         content: link,
                         icon: 'warning',
@@ -139,7 +139,7 @@ export default function TransferNode(props) {
                     })
                 }
                 if (tempTxHash === undefined) {
-                    swal({
+                    swalReact({
                         title: 'Something went wrong!',
                         icon: 'warning',
                         button: 'Close',
@@ -156,7 +156,7 @@ export default function TransferNode(props) {
                 let str2 = "' target='_blank'>here</a>"
                 link.innerHTML = String(str1 + tempTxHash + str2)
                 setTxHash(receipt.transactionHash)
-                swal({
+                swalReact({
                     title: 'Transfer Successful!',
                     content: link,
                     icon: 'success',

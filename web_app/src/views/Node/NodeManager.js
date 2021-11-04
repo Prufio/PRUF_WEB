@@ -39,7 +39,6 @@ import Pruf from "../../assets/img/pruftoken.png";
 import { simpleBarChart, pieChart } from "variables/charts.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import chartStyles from "assets/jss/material-dashboard-pro-react/views/chartsStyle.js";
-import swal from "sweetalert";
 import { isMobile } from "react-device-detect";
 // import { tooltip } from 'assets/jss/material-dashboard-pro-react'
 
@@ -181,13 +180,13 @@ export default function NodeManager(props) {
     // setDash(false)
     // setDelegation(true)
     // setAnalytics(false)
-    swal("Coming Soon!");
+    swalReact("Coming Soon!");
   };
 
   const setAnalyticsButton = () => {
     // setDash(false)
     // setDelegation(false)
-    swal("Coming Soon!");
+    swalReact("Coming Soon!");
   };
 
   const setRewardsButton = () => {
@@ -404,9 +403,9 @@ export default function NodeManager(props) {
         case "delegate":
           // eslint-disable-next-line react/prop-types
           if (delegationAmount > props.pruf) {
-            return swal("Insufficient Balance.");
+            return swalReact("Insufficient Balance.");
           }
-          swal("Delegation Set!");
+          swalReact("Delegation Set!");
           break;
 
         case "back":

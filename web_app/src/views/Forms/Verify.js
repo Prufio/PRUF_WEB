@@ -210,7 +210,7 @@ export default function Verify(props) {
           .then(e => {
             if (e) {
               console.log("Verification Confirmed");
-              swal({
+              swalReact({
                 title: "Match Confirmed!",
                 icon: "success",
                 button: "Close",
@@ -219,7 +219,7 @@ export default function Verify(props) {
               setTransaction(false);
             } else {
               console.log("Verification not Confirmed");
-              swal({
+              swalReact({
                 title: "Match Failed!",
                 text: "Please make sure forms are filled out correctly.",
                 icon: "warning",
@@ -233,7 +233,7 @@ export default function Verify(props) {
   
     const blockchainVerifyAsset = async () => {
       if (!props.addr) {
-        return swal({
+        return swalReact({
           title: "Connect to an ethereum provider to use this functionality!",
           button: "Close",
         });
@@ -304,7 +304,7 @@ export default function Verify(props) {
             setVerifyResult(receiptVal);
             console.log("Verification Result :", receiptVal);
             if (receiptVal === "Match confirmed") {
-              swal({
+              swalReact({
                 title: "Match Confirmed!",
                 content: link,
                 icon: "success",
@@ -315,7 +315,7 @@ export default function Verify(props) {
       
             if (receiptVal !== "Match confirmed") {
               if (tempTxHash !== undefined) {
-                swal({
+                swalReact({
                   title: "Match Failed!",
                   content: link,
                   icon: "warning",
@@ -323,7 +323,7 @@ export default function Verify(props) {
                 });
               }
               if (tempTxHash === undefined) {
-                swal({
+                swalReact({
                   title: "Match Failed!",
                   icon: "warning",
                   button: "Close",

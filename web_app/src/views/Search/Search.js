@@ -1,7 +1,6 @@
 import React from "react";
 import "../../assets/css/custom.css";
 import { RWebShare } from "react-web-share";
-import swal from "sweetalert";
 import swalReact from "@sweetalert/with-react";
 import { isAndroid, isMobile } from "react-device-detect";
 import { QRCode } from "react-qrcode-logo";
@@ -216,7 +215,7 @@ export default function Search(props) {
         });
       });
     } catch {
-      swal({
+      swalReact({
         title: "Could not find node",
         icon: "warning",
         text: "Please try again.",
@@ -1034,13 +1033,13 @@ export default function Search(props) {
   };
 
   const purchaseAsset = () => {
-    // if (!props.addr) return swal("No address detected")
+    // if (!props.addr) return swalReact("No address detected")
     // let newAsset = JSON.parse(JSON.stringify(asset));
     // const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
     // let tempTxHash;
     // console.log("Purchasing Asset");
     // if (Number(props.pruf) < Number(price)) {
-    //   swal({
+    //   swalReact({
     //     title: "Insufficient balance!",
     //     icon: "warning",
     //     button: "Close",
@@ -1058,7 +1057,7 @@ export default function Search(props) {
     //     let str2 = "' target='_blank'>here</a>";
     //     link.innerHTML = String(str1 + tempTxHash + str2);
     //     if (tempTxHash !== undefined) {
-    //       swal({
+    //       swalReact({
     //         title: "Something went wrong!",
     //         content: link,
     //         icon: "warning",
@@ -1066,7 +1065,7 @@ export default function Search(props) {
     //       });
     //     }
     //     if (tempTxHash === undefined) {
-    //       swal({
+    //       swalReact({
     //         title: "Something went wrong!",
     //         icon: "warning",
     //         button: "Close",
@@ -1087,7 +1086,7 @@ export default function Search(props) {
     //     let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
     //     let str2 = "' target='_blank'>here</a>";
     //     link.innerHTML = String(str1 + tempTxHash + str2);
-    //     swal({
+    //     swalReact({
     //       title: "Purchase Success!",
     //       content: link,
     //       icon: "success",
@@ -1155,7 +1154,7 @@ export default function Search(props) {
     //       let str2 = "' target='_blank'>here</a>";
     //       link.innerHTML = String(str1 + tempTxHash + str2);
     //       if (tempTxHash !== undefined) {
-    //         swal({
+    //         swalReact({
     //           title: "Something went wrong!",
     //           content: link,
     //           icon: "warning",
@@ -1163,7 +1162,7 @@ export default function Search(props) {
     //         });
     //       }
     //       if (tempTxHash === undefined) {
-    //         swal({
+    //         swalReact({
     //           title: "Something went wrong!",
     //           icon: "warning",
     //           button: "Close",
@@ -1182,7 +1181,7 @@ export default function Search(props) {
     //       let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
     //       let str2 = "' target='_blank'>here</a>";
     //       link.innerHTML = String(str1 + tempTxHash + str2);
-    //       swal({
+    //       swalReact({
     //         title: "Recycle Success!",
     //         content: link,
     //         icon: "success",
@@ -1212,7 +1211,7 @@ export default function Search(props) {
   const copyTextSnippet = (temp) => {
     navigator.clipboard.writeText(temp);
     if (isMobile) {
-      swal("Asset ID Copied to Clipboard!");
+      swalReact("Asset ID Copied to Clipboard!");
     }
     if (!isMobile) {
       setCopyText(true);
@@ -1263,7 +1262,7 @@ export default function Search(props) {
         props.prufClient.get.isRightsHolder(idxHash, rgtHash).then((e) => {
           if (e) {
             console.log("Verification Confirmed");
-            swal({
+            swalReact({
               title: "Match Confirmed!",
               icon: "success",
               button: "Close",
@@ -1273,7 +1272,7 @@ export default function Search(props) {
             setIsVerifying(false);
           } else {
             console.log("Verification not Confirmed");
-            swal({
+            swalReact({
               title: "Match Failed!",
               text: "Please make sure forms are filled out correctly.",
               icon: "warning",
@@ -1288,7 +1287,7 @@ export default function Search(props) {
 
   const blockchainVerifyAsset = async () => {
     if (!props.addr) {
-      return swal({
+      return swalReact({
         title: "Connect to an ethereum provider to use this functionality!",
         button: "Close",
       });
@@ -1362,7 +1361,7 @@ export default function Search(props) {
             setVerifyResult(receiptVal);
             console.log("Verification Result :", receiptVal);
             if (receiptVal === "Match confirmed") {
-              swal({
+              swalReact({
                 title: "Match Confirmed!",
                 content: link,
                 icon: "success",
@@ -1373,7 +1372,7 @@ export default function Search(props) {
 
             if (receiptVal !== "Match confirmed") {
               if (tempTxHash !== undefined) {
-                swal({
+                swalReact({
                   title: "Match Failed!",
                   content: link,
                   icon: "warning",
@@ -1381,7 +1380,7 @@ export default function Search(props) {
                 });
               }
               if (tempTxHash === undefined) {
-                swal({
+                swalReact({
                   title: "Match Failed!",
                   icon: "warning",
                   button: "Close",
@@ -1407,7 +1406,7 @@ export default function Search(props) {
       console.log("Here is what we got in the scanner: ", scanQuery);
       checkInputs(scanQuery);
     } else {
-      swal({
+      swalReact({
         title: "QR code does not contain a valid asset ID.",
         icon: "warning",
         button: "Close",
@@ -1458,7 +1457,7 @@ export default function Search(props) {
 
     props.prufClient.utils.isValidId(id).then((e) => {
       if (!e)
-        return swal({
+        return swalReact({
           title: "Invalid ID submitted! Check input fields and try again.",
           icon: "warning",
           button: "Close",
@@ -1470,7 +1469,7 @@ export default function Search(props) {
         } else {
           setIDXRaw("");
           setIDXRawInput(false);
-          return swal({
+          return swalReact({
             title: "Asset does not exist!",
             icon: "warning",
             button: "Close",
@@ -2980,7 +2979,7 @@ export default function Search(props) {
                                               );
                                             });
                                         } else
-                                          swal("No ethereum provider detected");
+                                          swalReact("No ethereum provider detected");
                                       }}
                                     >
                                       connect
@@ -3934,7 +3933,7 @@ export default function Search(props) {
                       <CopyToClipboard
                         text={asset.id}
                         onCopy={() => {
-                          swal("Asset ID Copied to Clipboard!");
+                          swalReact("Asset ID Copied to Clipboard!");
                         }}
                       >
                         <span>

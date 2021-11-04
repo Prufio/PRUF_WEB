@@ -1,7 +1,7 @@
 import React from "react";
 import "../../assets/css/custom.css";
 import { isMobile, isAndroid } from "react-device-detect";
-import swal from "sweetalert";
+import swalReact from "@sweetalert/with-react";
 import base64 from "base64-arraybuffer";
 import validator from "validator";
 import { makeStyles } from "@material-ui/core/styles";
@@ -15,16 +15,22 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import TextField from "@material-ui/core/TextField";
 import CardBody from "components/Card/CardBody.js";
 import CardIcon from "components/Card/CardIcon.js";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import Accordion from "@material-ui/core/Accordion";
 import {
   AddPhotoAlternateOutlined,
   DeleteForever,
   Settings,
   KeyboardArrowLeft,
+  NoteAddOutlined,
+  Share,
+  Check,
+  ExpandMoreOutlined,
+  FiberManualRecordTwoTone,
 } from "@material-ui/icons";
-import Share from "@material-ui/icons/Share";
 import Icon from "@material-ui/core/Icon";
 import FormControl from "@material-ui/core/FormControl";
-import Check from "@material-ui/icons/Check";
 import CardFooter from "components/Card/CardFooter.js";
 import placeholder from "../../assets/img/placeholder.jpg";
 import { RWebShare } from "react-web-share";
@@ -44,7 +50,7 @@ const useEngravingStyles = makeStyles(engravingStyles);
 export default function ModifyDescription(props) {
   if (!window.sentPacket) window.sentPacket = {};
 
-  const [asset] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)));
+  const [asset, setAsset] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)));
   console.log(window.sentPacket);
 
   const [id] = React.useState(window.sentPacket.id);
@@ -76,7 +82,7 @@ export default function ModifyDescription(props) {
   // eslint-disable-next-line no-unused-vars
   const [loginURLTitle, setloginURLTitle] = React.useState("");
   const [loginURLTitleState, setloginURLTitleState] = React.useState("");
-  const [newMutableStorage, setNewMutableStorage] = React.useState({})
+  const [newMutableStorage, setNewMutableStorage] = React.useState();
   // const [downloadName, setDownloadName] = React.useState("");
   // const [downloadLink, setDownloadLink] = React.useState("");
   const [copyText, setCopyText] = React.useState(false);
@@ -120,7 +126,7 @@ export default function ModifyDescription(props) {
         asset.statusNum === "56" ||
         asset.statusNum === "70"
       ) {
-        swal({
+        swalReact({
           title: "Asset not in correct status!",
           text: "This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.",
           icon: "warning",
@@ -132,7 +138,7 @@ export default function ModifyDescription(props) {
       }
 
       // else if (asset.nodeData.storageProvider === "2") {
-      //   swal({
+      //   swalReact({
       //     title: "Not yet supported.",
       //     text:
       //       "We do not support mutable data modification on arweave yet. This feature is coming in the next release.",
@@ -153,16 +159,17 @@ export default function ModifyDescription(props) {
   }, []);
 
   const handleChanges = (key, value) => {
+    let obj = JSON.parse(JSON.stringify(asset));
+    console.log(obj.mutableStorage)
+    if (obj.mutableStorage === "") obj.mutableStorage = {}
     if (value === "delete") {
-      let obj = JSON.parse(JSON.stringify(newMutableStorage)) 
-      delete obj[key]
+      delete obj.mutableStorage[key];
     } else {
-      let obj = JSON.parse(JSON.stringify(newMutableStorage)) 
-      obj[key] = value
+      obj.mutableStorage[key] = value;
     }
 
-    setNewMutableStorage(obj)
-  }
+    setAsset(obj);
+  };
 
   const getRandomInt = () => {
     return Math.floor(Math.random() * Math.floor(99999));
@@ -201,7 +208,7 @@ export default function ModifyDescription(props) {
         setSelectedKey("");
       }
     }
-    setnewMutableStorage(tempObj);
+    setNewMutableStorage(tempObj);
     return forceUpdate();
   };
 
@@ -221,47 +228,40 @@ export default function ModifyDescription(props) {
     // delete tempObj.photo[key];
     // delete tempObj.photoUrls[key];
     // //console.log(tempObj);
-    // setnewMutableStorage(tempObj);
+    // setNewMutableStorage(tempObj);
     // setSelectedImage(tempObj.photo.displayImage);
     // setSelectedKey("displayImage");
     // return forceUpdate();
   };
 
   // const resetChanges = () => {
-  //   setnewMutableStorage(asset);
+  //   setNewMutableStorage(asset);
   //   return forceUpdate();
   // };
 
   const submitChanges = async () => {
 
-    if (JSON.stringify(newMutableStorage) === JSON.stringify(asset.mutableStorage)) {
-      return swal({
-        title: "New data matches old! No changes made.",
-        icon: "warning",
-        button: "Close",
-      });
-    }
-
-    let tempObj = await JSON.parse(JSON.stringify(newMutableStorage));
+    let tempObj = await JSON.parse(JSON.stringify(asset.mutableStorage));
     let payload = await JSON.stringify(tempObj, null, 5);
     let fileSize = await Buffer.byteLength(payload, "utf8");
 
     if (asset.nodeData.storageProvider === "1") {
       if (fileSize > 10000000) {
-        return swal({
+        return swalReact({
           title:
-            "Document size exceeds 10 MB demo limit! (" + String(fileSize) + "Bytes)",
+            "Document size exceeds 10 MB demo limit! (" +
+            String(fileSize) +
+            "Bytes)",
           icon: "warning",
           button: "Close",
         });
       }
-  
-      setIpfsActive(true);
-      postToIpfs(payload)
-    } else if (asset.nodeData.storageProvider === "2") {
-      postToArweave(payload)
-    } 
 
+      setIpfsActive(true);
+      postToIpfs(payload);
+    } else if (asset.nodeData.storageProvider === "2") {
+      postToArweave(payload);
+    }
   };
 
   const postToIpfs = async (data) => {
@@ -271,17 +271,21 @@ export default function ModifyDescription(props) {
         setIpfsActive(false);
       } else {
         console.log("uploaded at hash: ", hash.cid.string);
-        props.prufClient.utils.ipfsToB32(hash.cid.string).then(hash=>{
+        props.prufClient.utils.ipfsToB32(hash.cid.string).then((hash) => {
           setIpfsActive(false);
-          updateAssetMS([hash, "0x0000000000000000000000000000000000000000000000000000000000000000"])
-        })
+          updateAssetMS([
+            hash,
+            "0x0000000000000000000000000000000000000000000000000000000000000000",
+          ]);
+        });
       }
     });
-  }
+  };
 
   const postToArweave = async (data) => {
-
-    let dataTransaction = await props.arweaveClient.createTransaction({ data: data });
+    let dataTransaction = await props.arweaveClient.createTransaction({
+      data: data,
+    });
 
     console.log(
       "pre-tags",
@@ -291,11 +295,14 @@ export default function ModifyDescription(props) {
     );
 
     if (data) {
-      dataTransaction.addTag("Primary-Content", `https://arweave.net/${dataTransaction.id}`)
+      dataTransaction.addTag(
+        "Primary-Content",
+        `https://arweave.net/${dataTransaction.id}`
+      );
       const vals = Object.values(data);
       const keys = Object.keys(data);
 
-      keys.forEach(key=>dataTransaction.addTag(tag, String(vals[i])))
+      keys.forEach((key) => dataTransaction.addTag(tag, String(vals[i])));
     }
 
     console.log(
@@ -308,9 +315,7 @@ export default function ModifyDescription(props) {
     console.log(dataTransaction);
 
     // eslint-disable-next-line react/prop-types
-    await props.arweaveClient.transactions.sign(
-      dataTransaction
-    );
+    await props.arweaveClient.transactions.sign(dataTransaction);
     // eslint-disable-next-line react/prop-types
     const statusBeforePost = await props.arweaveClient.transactions.getStatus(
       dataTransaction.id
@@ -321,9 +326,11 @@ export default function ModifyDescription(props) {
       // eslint-disable-next-line react/prop-types
 
       setIpfsActive(false);
-      props.prufClient.utils.arweaveTxToB32(dataTransaction.id).then(hashes=>{
-        updateAssetMS(hashes)
-      })
+      props.prufClient.utils
+        .arweaveTxToB32(dataTransaction.id)
+        .then((hashes) => {
+          updateAssetMS(hashes);
+        });
     });
   };
 
@@ -332,98 +339,197 @@ export default function ModifyDescription(props) {
 
     while (!uploader.isComplete) {
       await uploader.uploadChunk();
-      console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
+      console.log(
+        `${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`
+      );
     }
-  }
+  };
+
+  const editElement = (key) => {
+    if (!key) key = `Mutable Element #${Object.values(asset.mutableStorage).length + 1}`
+    let value = ""
+    swalReact({
+      buttons : {
+        back: {
+          text: "⬅️ Go Back",
+          value: "confirm",
+          className: "delegationButtonBack",
+        },
+        confirm: {
+          text: "Submit ✅",
+          value: "confirm",
+          className: "delegationButtonBack",
+        }
+      },
+      content: 
+      <Card className="delegationCard">
+          <CustomInput
+            labelText={`Title (Optional)`}
+            id="model"
+            formControlProps={{
+              onChange: e=>key = e.target.value,
+              fullWidth: true,
+            }}
+            inputProps={{
+              disabled: false,
+            }}
+          />
+          <CustomInput
+            labelText={`Content`}
+            id="model"
+            formControlProps={{
+              fullWidth: true,
+              onChange: e=>value = e.target.value,
+            }}
+            inputProps={{
+              disabled: false,
+            }}
+          />
+        </Card>
+    }).then(val=>{
+      if(val === "confirm") handleChanges(key, value)
+    })
+  };
 
   const updateAssetMS = (hashes) => {
     setHelp(false);
     if (!hash || !id) {
       return;
     }
-      // eslint-disable-next-line react/prop-types
+    // eslint-disable-next-line react/prop-types
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     console.log("id", id);
-        // eslint-disable-next-line react/prop-types
-        console.log("addr: ", props.addr);
-        let tempTxHash;
-        setShowHelp(false);
-        setTxStatus(false);
-        setTxHash("");
-        setError(undefined);
-    
-        setTransactionActive(true);
-        props.prufClient.do
-          .asset.modifyMutableStorage(id, hashes[0], hashes[1])
-          // eslint-disable-next-line react/prop-types
-          .send({ from: props.addr })
-          .on("error", function (_error) {
-            setTransactionActive(false);
-            setTxStatus(false);
-            setTxHash(Object.values(_error)[0].transactionHash);
-            tempTxHash = Object.values(_error)[0].transactionHash;
-            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-            let str2 = "' target='_blank'>here</a>";
-            link.innerHTML = String(str1 + tempTxHash + str2);
-            setError(Object.values(_error)[0]);
-            if (tempTxHash !== undefined) {
-              swal({
-                title: "Something went wrong!",
-                content: link,
-                icon: "warning",
-                button: "Close",
-              });
-            }
-            if (tempTxHash === undefined) {
-              swal({
-                title: "Something went wrong!",
-                icon: "warning",
-                button: "Close",
-              });
-            }
-          })
-          .on("receipt", (receipt) => {
-            setTransactionActive(false);
-            setTxStatus(receipt.status);
-            tempTxHash = receipt.transactionHash;
-            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-            let str2 = "' target='_blank'>here</a>";
-            link.innerHTML = String(str1 + tempTxHash + str2);
-            setTxHash(receipt.transactionHash);
-            swal({
-              title: "Information Successfully Updated!",
-              content: link,
-              icon: "success",
-              button: "Close",
-            }).then(() => {
-              //refreshBalances()
-              window.newDescObj = JSON.parse(JSON.stringify(newMutableStorage));
-              window.backIndex = asset.dBIndex;
-              window.location.href = asset.lastRef;
-              window.replaceAssetData = {
-                key: pageKey,
-                newMutableStorage: newMutableStorage,
-                assetAction: "mod"
-              };
-              window.replaceAssetData.refreshBals = true
-            window.dispatchEvent(props.refresh)
-            });
-          });
+    // eslint-disable-next-line react/prop-types
+    console.log("addr: ", props.addr);
+    let tempTxHash;
+    setShowHelp(false);
+    setTxStatus(false);
+    setTxHash("");
+    setError(undefined);
 
+    setTransactionActive(true);
+    props.prufClient.do.asset
+      .modifyMutableStorage(id, hashes[0], hashes[1])
+      // eslint-disable-next-line react/prop-types
+      .send({ from: props.addr })
+      .on("error", function (_error) {
+        setTransactionActive(false);
+        setTxStatus(false);
+        setTxHash(Object.values(_error)[0].transactionHash);
+        tempTxHash = Object.values(_error)[0].transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
+        setError(Object.values(_error)[0]);
+        if (tempTxHash !== undefined) {
+          swalReact({
+            title: "Something went wrong!",
+            content: link,
+            icon: "warning",
+            button: "Close",
+          });
+        }
+        if (tempTxHash === undefined) {
+          swalReact({
+            title: "Something went wrong!",
+            icon: "warning",
+            button: "Close",
+          });
+        }
+      })
+      .on("receipt", (receipt) => {
+        setTransactionActive(false);
+        setTxStatus(receipt.status);
+        tempTxHash = receipt.transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
+        setTxHash(receipt.transactionHash);
+        swalReact({
+          title: "Information Successfully Updated!",
+          content: link,
+          icon: "success",
+          button: "Close",
+        }).then(() => {
+          //refreshBalances()
+          window.newDescObj = JSON.parse(JSON.stringify(newMutableStorage));
+          window.backIndex = asset.dBIndex;
+          window.location.href = asset.lastRef;
+          window.replaceAssetData = {
+            key: pageKey,
+            newMutableStorage: newMutableStorage,
+            assetAction: "mod",
+          };
+          window.replaceAssetData.refreshBals = true;
+          window.dispatchEvent(props.refresh);
+        });
+      });
   };
 
-  const displayMutableData = (data) => {
-    if(!newMutableStorage) return []
-    let keys = Object.keys(data) 
-    let component = []
-    keys.forEach(key=>{
-      component.push(
+  const displaymutableStorage = () => {
+    let component = [
+      <span>
+        <Button onClick={() => editElement()}>
+          <NoteAddOutlined size="40px" />
+        </Button>
+      </span>,
+    ];
+    if (asset.mutableStorage === "") return component;
 
-      )
-    })
-    
-  }
+    let keys = Object.keys(asset.mutableStorage);
+
+    keys.forEach((key) => {
+      component.unshift(
+        <Accordion key={`AccordionStack${key}`}>
+          {/* <h4>{key}</h4> */}
+          <AccordionSummary
+            expandIcon={<ExpandMoreOutlined />}
+            aria-label="Expand"
+            aria-controls="additional-actions1-content"
+            id={`additional-actions1-header-${key}`}
+          >
+            <h4>{key}</h4>
+            {/* <FormControlLabel
+              aria-label="Acknowledge"
+              onClick={(event) => {
+                event.stopPropagation();
+              }}
+              onFocus={(event) => {
+                event.stopPropagation();
+              }}
+              // control={
+              //   <Checkbox
+              //     disabled={!(prufBalance > props.min)}
+              //     onClick={() =>
+              //       (isTierChecked[`chk${props.pos}`] =
+              //         !isTierChecked[`chk${props.pos}`])
+              //     }
+              //     classes={{
+              //       checked: classes.checked,
+              //       root: classes.checkRoot,
+              //     }}
+              //   />
+              // }
+              label={`${key} ${asset.mutableStorage[key].substring(0, 28)}...`}
+            /> */}
+          </AccordionSummary>
+          <AccordionDetails>
+            <div>
+              <div className="delegationTips">
+                <FiberManualRecordTwoTone className="delegationPin" />
+                <h5 className="delegationTipsContent">
+                  {asset.mutableStorage[key]}
+                </h5>
+              </div>
+            </div>
+          </AccordionDetails>
+        </Accordion>
+      );
+    });
+
+    return component;
+  };
 
   const thousandHashesOf = (varToHash) => {
     if (!window.web3) return (window.location.href = "/#/user/home");
@@ -435,106 +541,106 @@ export default function ModifyDescription(props) {
     return tempHash;
   };
 
-  const addImage = async (prefix, buffer, fileName, iteration) => {
-    if (!buffer) return;
-    if (!iteration) {
-      iteration = 1;
-    }
-    console.log(fileName);
+  // const addImage = async (prefix, buffer, fileName, iteration) => {
+  //   if (!buffer) return;
+  //   if (!iteration) {
+  //     iteration = 1;
+  //   }
+  //   console.log(fileName);
 
-    let tempObj = JSON.parse(JSON.stringify(newMutableStorage));
-    if (tempObj.photo[fileName]) {
-      //console.log("Already exists, adding copy")
-      let tempFN = fileName;
-      tempFN += "_(" + iteration + ")";
-      if (tempObj.photo[tempFN]) {
-        return addImage(buffer, fileName, iteration + 1);
-      } else {
-        fileName = tempFN;
-      }
-    }
+  //   let tempObj = JSON.parse(JSON.stringify(newMutableStorage));
+  //   if (tempObj.photo[fileName]) {
+  //     //console.log("Already exists, adding copy")
+  //     let tempFN = fileName;
+  //     tempFN += "_(" + iteration + ")";
+  //     if (tempObj.photo[tempFN]) {
+  //       return addImage(buffer, fileName, iteration + 1);
+  //     } else {
+  //       fileName = tempFN;
+  //     }
+  //   }
 
-    let tempBuffer = buffer;
+  //   let tempBuffer = buffer;
 
-    var i = new Image();
+  //   var i = new Image();
 
-    i.onload = function () {
-      console.log(i.height, i.width);
-      if (i.height > maxImageSize || i.width > maxImageSize) {
-        let newH, newW, ar;
-        if (i.width > i.height) {
-          ar = i.height / i.width;
-          newW = maxImageSize;
-          newH = ar * newW;
-        } else {
-          ar = i.width / i.height;
-          newH = maxImageSize;
-          newW = ar * newH;
-        }
-        console.log("Resizing image... ");
-        resizeImg(tempBuffer, {
-          height: newH,
-          width: newW,
-          format: "jpg",
-        }).then((e) => {
-          console.log("Resized to ", newH, "x", newW);
-          tempObj.photo[fileName] = prefix + base64.encode(e);
+  //   i.onload = function () {
+  //     console.log(i.height, i.width);
+  //     if (i.height > maxImageSize || i.width > maxImageSize) {
+  //       let newH, newW, ar;
+  //       if (i.width > i.height) {
+  //         ar = i.height / i.width;
+  //         newW = maxImageSize;
+  //         newH = ar * newW;
+  //       } else {
+  //         ar = i.width / i.height;
+  //         newH = maxImageSize;
+  //         newW = ar * newH;
+  //       }
+  //       console.log("Resizing image... ");
+  //       resizeImg(tempBuffer, {
+  //         height: newH,
+  //         width: newW,
+  //         format: "jpg",
+  //       }).then((e) => {
+  //         console.log("Resized to ", newH, "x", newW);
+  //         tempObj.photo[fileName] = prefix + base64.encode(e);
 
-          window.ipfs.add(prefix + base64.encode(e)).then((hash) => {
-            if (!hash) {
-              //console.error(err)
-              return setIsUploading(false);
-            } else {
-              let url = `https://ipfs.io/ipfs/${hash.cid}`;
-              console.log(`Url --> ${url}`);
-              tempObj.photoUrls[fileName] = url;
-              setnewMutableStorage(tempObj);
-              if (selectedImage === "") {
-                setSelectedImage(tempObj.photo[fileName]);
-                setSelectedKey(fileName);
-              }
-              setIsUploading(false);
-              return forceUpdate();
-            }
-          });
-        });
-      } else {
-        resizeImg(tempBuffer, {
-          height: i.height,
-          width: i.width,
-          format: "jpg",
-        }).then((e) => {
-          console.log("Converted to .JPG");
-          tempObj.photo[fileName] = prefix + base64.encode(e);
+  //         window.ipfs.add(prefix + base64.encode(e)).then((hash) => {
+  //           if (!hash) {
+  //             //console.error(err)
+  //             return setIsUploading(false);
+  //           } else {
+  //             let url = `https://ipfs.io/ipfs/${hash.cid}`;
+  //             console.log(`Url --> ${url}`);
+  //             tempObj.photoUrls[fileName] = url;
+  //             setNewMutableStorage(tempObj);
+  //             if (selectedImage === "") {
+  //               setSelectedImage(tempObj.photo[fileName]);
+  //               setSelectedKey(fileName);
+  //             }
+  //             setIsUploading(false);
+  //             return forceUpdate();
+  //           }
+  //         });
+  //       });
+  //     } else {
+  //       resizeImg(tempBuffer, {
+  //         height: i.height,
+  //         width: i.width,
+  //         format: "jpg",
+  //       }).then((e) => {
+  //         console.log("Converted to .JPG");
+  //         tempObj.photo[fileName] = prefix + base64.encode(e);
 
-          window.ipfs.add(prefix + base64.encode(e)).then((hash) => {
-            if (!hash) {
-              //console.error(err)
-              return setIsUploading(false);
-            } else {
-              let url = `https://ipfs.io/ipfs/${hash.cid}`;
-              console.log(`Url --> ${url}`);
-              tempObj.photoUrls[fileName] = url;
-              setnewMutableStorage(tempObj);
-              if (selectedImage === "") {
-                setSelectedImage(tempObj.photo[fileName]);
-                setSelectedKey(fileName);
-              }
-              setIsUploading(false);
-              return forceUpdate();
-            }
-          });
-        });
-      }
-    };
+  //         window.ipfs.add(prefix + base64.encode(e)).then((hash) => {
+  //           if (!hash) {
+  //             //console.error(err)
+  //             return setIsUploading(false);
+  //           } else {
+  //             let url = `https://ipfs.io/ipfs/${hash.cid}`;
+  //             console.log(`Url --> ${url}`);
+  //             tempObj.photoUrls[fileName] = url;
+  //             setNewMutableStorage(tempObj);
+  //             if (selectedImage === "") {
+  //               setSelectedImage(tempObj.photo[fileName]);
+  //               setSelectedKey(fileName);
+  //             }
+  //             setIsUploading(false);
+  //             return forceUpdate();
+  //           }
+  //         });
+  //       });
+  //     }
+  //   };
 
-    i.src = prefix + base64.encode(tempBuffer);
-  };
+  //   i.src = prefix + base64.encode(tempBuffer);
+  // };
 
   const copyTextSnippet = (temp) => {
     navigator.clipboard.writeText(temp);
     if (isMobile && !isAndroid) {
-      swal("Asset ID Copied to Clipboard!");
+      swalReact("Asset ID Copied to Clipboard!");
     } else if (!isMobile) {
       setCopyText(true);
       setTimeout(() => {
@@ -543,64 +649,64 @@ export default function ModifyDescription(props) {
     }
   };
 
-  const useCustomJSON = (e) => {
-    if (!e.target.files[0]) return;
-    let newObj;
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const str = reader.result;
-      try {
-        newObj = JSON.parse(str);
-      } catch (file) {
-        return console.log("Error converting file to JSON.", file);
-      }
+  // const useCustomJSON = (e) => {
+  //   if (!e.target.files[0]) return;
+  //   let newObj;
+  //   const reader = new FileReader();
+  //   reader.onloadend = () => {
+  //     const str = reader.result;
+  //     try {
+  //       newObj = JSON.parse(str);
+  //     } catch (file) {
+  //       return console.log("Error converting file to JSON.", file);
+  //     }
 
-      if (newObj) {
-        newObj.photoUrls = newMutableStorage.photoUrls;
-        console.log(newObj);
-        if (newObj.name && newObj.text && newObj.photo && newObj.urls) {
-          console.log("Setting new JSON config into state");
-          setnewMutableStorage(newObj);
-          forceUpdate();
-        } else {
-          return console.log("Does not contain the requisite keys");
-        }
-        // forceUpdate()
-        // return e.target.value = null;
-      }
-    };
-    //const photo = document.getElementById("photo");
-    reader.readAsText(e.target.files[0]); // Read Provided File
-  };
+  //     if (newObj) {
+  //       newObj.photoUrls = newMutableStorage.photoUrls;
+  //       console.log(newObj);
+  //       if (newObj.name && newObj.text && newObj.photo && newObj.urls) {
+  //         console.log("Setting new JSON config into state");
+  //         setNewMutableStorage(newObj);
+  //         forceUpdate();
+  //       } else {
+  //         return console.log("Does not contain the requisite keys");
+  //       }
+  //       // forceUpdate()
+  //       // return e.target.value = null;
+  //     }
+  //   };
+  //   //const photo = document.getElementById("photo");
+  //   reader.readAsText(e.target.files[0]); // Read Provided File
+  // };
 
-  const createBackupJSON = () => {
-    let filename;
-    if (newMutableStorage.name !== "") {
-      filename = newMutableStorage.name.replace(/ /g, "_") + "_Backup.json";
-    } else {
-      filename = "unnamed_asset_backup.json";
-    }
+  // const createBackupJSON = () => {
+  //   let filename;
+  //   if (newMutableStorage.name !== "") {
+  //     filename = newMutableStorage.name.replace(/ /g, "_") + "_Backup.json";
+  //   } else {
+  //     filename = "unnamed_asset_backup.json";
+  //   }
 
-    let tempObj = JSON.parse(JSON.stringify(newMutableStorage));
-    tempObj.photo = tempObj.photoUrls;
-    delete tempObj.photoUrls;
+  //   let tempObj = JSON.parse(JSON.stringify(newMutableStorage));
+  //   tempObj.photo = tempObj.photoUrls;
+  //   delete tempObj.photoUrls;
 
-    const data = new Blob([JSON.stringify(tempObj, null, 5)], {
-      type: "application/json",
-    });
-    const fileURL = URL.createObjectURL(data);
-    const anchorTag = document.createElement("a");
-    anchorTag.href = fileURL;
-    anchorTag.target = "_blank";
-    anchorTag.className = "imageInput";
-    anchorTag.download = filename;
-    document.body.appendChild(anchorTag);
-    anchorTag.click();
-    document.body.removeChild(anchorTag);
-  };
+  //   const data = new Blob([JSON.stringify(tempObj, null, 5)], {
+  //     type: "application/json",
+  //   });
+  //   const fileURL = URL.createObjectURL(data);
+  //   const anchorTag = document.createElement("a");
+  //   anchorTag.href = fileURL;
+  //   anchorTag.target = "_blank";
+  //   anchorTag.className = "imageInput";
+  //   anchorTag.download = filename;
+  //   document.body.appendChild(anchorTag);
+  //   anchorTag.click();
+  //   document.body.removeChild(anchorTag);
+  // };
 
   // const settings = () => {
-  //   swal("What would you like to do with this image?", {
+  //   swalReact("What would you like to do with this image?", {
   //     buttons: {
   //       delete: {
   //         text: "Delete",
@@ -622,9 +728,9 @@ export default function ModifyDescription(props) {
   //           newMutableStorage.photo.displayImage === undefined &&
   //           Object.values(newMutableStorage.photo).length === 0
   //         ) {
-  //           return swal("Cannot delete asset identicon.");
+  //           return swalReact("Cannot delete asset identicon.");
   //         }
-  //         swal("Are you sure you want to delete this image?", {
+  //         swalReact("Are you sure you want to delete this image?", {
   //           buttons: {
   //             yes: {
   //               text: "Delete",
@@ -639,11 +745,11 @@ export default function ModifyDescription(props) {
   //           switch (value) {
   //             case "yes":
   //               removeElement(image, selectedKey);
-  //               swal("Image Deleted!");
+  //               swalReact("Image Deleted!");
   //               break;
 
   //             case "no":
-  //               swal("Image not Deleted");
+  //               swalReact("Image not Deleted");
   //               break;
 
   //             default:
@@ -657,10 +763,10 @@ export default function ModifyDescription(props) {
   //           newMutableStorage.photo.displayImage === undefined &&
   //           Object.values(newMutableStorage.photo).length === 0
   //         ) {
-  //           return swal("Cannot set asset identicon as default image.");
+  //           return swalReact("Cannot set asset identicon as default image.");
   //         }
   //         setDisplayImage(selectedImage, selectedKey);
-  //         swal("Default image set!");
+  //         swalReact("Default image set!");
   //         break;
 
   //       case "back":
@@ -673,7 +779,7 @@ export default function ModifyDescription(props) {
   // };
 
   // const deleteURL = (key) => {
-  //   swal("Delete this URL?", {
+  //   swalReact("Delete this URL?", {
   //     buttons: {
   //       delete: {
   //         text: "delete",
@@ -687,7 +793,7 @@ export default function ModifyDescription(props) {
   //   }).then((value) => {
   //     switch (value) {
   //       case "delete":
-  //         swal("Are you sure you want to delete this URL?", {
+  //         swalReact("Are you sure you want to delete this URL?", {
   //           buttons: {
   //             yes: {
   //               text: "Delete",
@@ -1087,138 +1193,139 @@ export default function ModifyDescription(props) {
               className={engravingClasses.engraving}
             />
           )}
+          {displaymutableStorage()}
           {/*@dev URLs go here*/}
           <br />
-            </CardBody>
-            <CardFooter>
-              {!isMobile && (
-                <>
-                  {!copyText && (
-                    <Tooltip title="Copy to Clipboard">
-                      <div className={classes.stats}>
-                        Asset ID:
-                        <button
-                          className="IDText"
-                          onClick={() => {
-                            copyTextSnippet(asset.id);
-                          }}
-                        >
-                          {asset.id}
-                        </button>
-                      </div>
-                    </Tooltip>
-                  )}
-                  {copyText && (
-                    <Tooltip title="Copied to Clipboard">
-                      <div className={classes.stats}>
-                        Asset ID:
-                        <button
-                          className="IDText"
-                          onClick={() => {
-                            copyTextSnippet(asset.id);
-                          }}
-                        >
-                          {asset.id}
-                        </button>
-                      </div>
-                    </Tooltip>
-                  )}
-                </>
-              )}
-              {isMobile && !isAndroid && (
-                <>
-                  {!copyText && (
-                    <Tooltip title="Copy to Clipboard">
-                      <div className={classes.stats}>
-                        Asset ID:
-                        <button
-                          className="IDText"
-                          onClick={() => {
-                            copyTextSnippet(asset.id);
-                          }}
-                        >
-                          {asset.id.substring(0, 10) +
-                            "..." +
-                            asset.id.substring(56, 66)}
-                        </button>
-                      </div>
-                    </Tooltip>
-                  )}
-                  {copyText && (
-                    <Tooltip title="Copied to Clipboard">
-                      <div className={classes.stats}>
-                        Asset ID:
-                        <button
-                          className="IDText"
-                          onClick={() => {
-                            copyTextSnippet(asset.id);
-                          }}
-                        >
-                          {asset.id.substring(0, 10) +
-                            "..." +
-                            asset.id.substring(56, 66)}
-                        </button>
-                      </div>
-                    </Tooltip>
-                  )}
-                </>
-              )}
-              {isMobile && isAndroid && (
+        </CardBody>
+        <CardFooter>
+          {!isMobile && (
+            <>
+              {!copyText && (
                 <Tooltip title="Copy to Clipboard">
-                  <CopyToClipboard
-                    text={asset.id}
-                    onCopy={() => {
-                      swal("Asset ID Copied to Clipboard!");
-                    }}
-                  >
-                    <span>
-                      Asset ID:
+                  <div className={classes.stats}>
+                    Asset ID:
+                    <button
+                      className="IDText"
+                      onClick={() => {
+                        copyTextSnippet(asset.id);
+                      }}
+                    >
+                      {asset.id}
+                    </button>
+                  </div>
+                </Tooltip>
+              )}
+              {copyText && (
+                <Tooltip title="Copied to Clipboard">
+                  <div className={classes.stats}>
+                    Asset ID:
+                    <button
+                      className="IDText"
+                      onClick={() => {
+                        copyTextSnippet(asset.id);
+                      }}
+                    >
+                      {asset.id}
+                    </button>
+                  </div>
+                </Tooltip>
+              )}
+            </>
+          )}
+          {isMobile && !isAndroid && (
+            <>
+              {!copyText && (
+                <Tooltip title="Copy to Clipboard">
+                  <div className={classes.stats}>
+                    Asset ID:
+                    <button
+                      className="IDText"
+                      onClick={() => {
+                        copyTextSnippet(asset.id);
+                      }}
+                    >
                       {asset.id.substring(0, 10) +
                         "..." +
                         asset.id.substring(56, 66)}
-                    </span>
-                  </CopyToClipboard>
+                    </button>
+                  </div>
                 </Tooltip>
               )}
-              <div className="icons">
-                <RWebShare
-                  className="shareMenu"
-                  data={{
-                    text: "Check out my PRüF-verified asset!",
-                    url: URL,
-                    title: "Share Asset Link",
-                  }}
-                >
-                  <Tooltip title="Share Asset URL">
-                    <Icon className="footerIcon">
-                      <Share />
-                    </Icon>
-                  </Tooltip>
-                </RWebShare>
-                <Tooltip title="View QR">
-                  <Icon
-                    className="footerIcon"
-                    onClick={() => {
-                      swalReact({
-                        content: (
-                          <QRCode
-                            value={URL}
-                            size="160"
-                            fgColor="#002a40"
-                            quietZone="2"
-                            ecLevel="M"
-                          />
-                        ),
-                        buttons: "close",
-                      });
-                    }}
-                  >
-                    qr_code
-                  </Icon>
+              {copyText && (
+                <Tooltip title="Copied to Clipboard">
+                  <div className={classes.stats}>
+                    Asset ID:
+                    <button
+                      className="IDText"
+                      onClick={() => {
+                        copyTextSnippet(asset.id);
+                      }}
+                    >
+                      {asset.id.substring(0, 10) +
+                        "..." +
+                        asset.id.substring(56, 66)}
+                    </button>
+                  </div>
                 </Tooltip>
-              </div>
-            </CardFooter>
-          </Card>
+              )}
+            </>
+          )}
+          {isMobile && isAndroid && (
+            <Tooltip title="Copy to Clipboard">
+              <CopyToClipboard
+                text={asset.id}
+                onCopy={() => {
+                  swalReact("Asset ID Copied to Clipboard!");
+                }}
+              >
+                <span>
+                  Asset ID:
+                  {asset.id.substring(0, 10) +
+                    "..." +
+                    asset.id.substring(56, 66)}
+                </span>
+              </CopyToClipboard>
+            </Tooltip>
+          )}
+          <div className="icons">
+            <RWebShare
+              className="shareMenu"
+              data={{
+                text: "Check out my PRüF-verified asset!",
+                url: URL,
+                title: "Share Asset Link",
+              }}
+            >
+              <Tooltip title="Share Asset URL">
+                <Icon className="footerIcon">
+                  <Share />
+                </Icon>
+              </Tooltip>
+            </RWebShare>
+            <Tooltip title="View QR">
+              <Icon
+                className="footerIcon"
+                onClick={() => {
+                  swalReact({
+                    content: (
+                      <QRCode
+                        value={URL}
+                        size="160"
+                        fgColor="#002a40"
+                        quietZone="2"
+                        ecLevel="M"
+                      />
+                    ),
+                    buttons: "close",
+                  });
+                }}
+              >
+                qr_code
+              </Icon>
+            </Tooltip>
+          </div>
+        </CardFooter>
+      </Card>
     </div>
   );
 }

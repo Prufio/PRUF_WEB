@@ -3,7 +3,8 @@ import React from "react";
 import "../../assets/css/custom.css";
 import QrReader from "react-qr-reader";
 import { isMobile } from "react-device-detect";
-import swal from "sweetalert";
+import swalReact from "@sweetalert/with-react";
+
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -118,7 +119,7 @@ export default function Recycle(props) {
   }
 
   if (assetInfo.statusNum !== "60") {
-    swal({
+    swalReact({
       title: "Asset not in correct status!",
       text:
         "This asset is not in a recyclable status, please set asset into a discarded status before attempting to recycle.",
@@ -277,7 +278,7 @@ export default function Recycle(props) {
       });
 
     if (receiptVal === "Match confirmed") {
-      swal({
+      swalReact({
         title: "Match Confirmed!",
         text: "Check out your TX here:" + tempTxHash,
         icon: "success",
@@ -287,7 +288,7 @@ export default function Recycle(props) {
     }
 
     if (receiptVal !== "Match confirmed") {
-      swal({
+      swalReact({
         title: "Match Failed!",
         text:
           "Please make sure all forms are filled out correctly. Check out your TX here:" +
@@ -905,7 +906,7 @@ export default function Recycle(props) {
                       </Button>
                     </div>
                   )}
-                  {/* <Button color="info" className="MLBGradient" onClick={() => swal({
+                  {/* <Button color="info" className="MLBGradient" onClick={() => swalReact({
                 title: "Match Confirmed!",
                 text: "Check your TX here:" + txHash,
                 icon: "success",

@@ -54,7 +54,7 @@ export default function Transfer(props) {
             //window.location.reload()
         }
         else if (assetInfo.statusNum && assetInfo.statusNum !== '51') {
-            swal({
+            swalReact({
                 title: 'Asset not in correct status!',
                 text:
                     'This asset is not in a transferable status, please set asset into transferable status before attempting to transfer.',
@@ -97,7 +97,7 @@ export default function Transfer(props) {
         const pageKey = thousandHashesOf(props.addr, props.winKey) //thousandHashesOf(props.addr, props.winKey)
 
         if (!window.web3.utils.isAddress(address)) {
-            return swal({
+            return swalReact({
                 title: 'Submitted address is not valid!',
                 text: 'Please check form and input a valid ethereum address.',
                 icon: 'warning',
@@ -134,7 +134,7 @@ export default function Transfer(props) {
                 link.innerHTML = String(str1 + tempTxHash + str2)
                 setError(Object.values(_error)[0])
                 if (tempTxHash !== undefined) {
-                    swal({
+                    swalReact({
                         title: 'Something went wrong!',
                         content: link,
                         icon: 'warning',
@@ -142,7 +142,7 @@ export default function Transfer(props) {
                     })
                 }
                 if (tempTxHash === undefined) {
-                    swal({
+                    swalReact({
                         title: 'Something went wrong!',
                         icon: 'warning',
                         button: 'Close',
@@ -159,7 +159,7 @@ export default function Transfer(props) {
                 let str2 = "' target='_blank'>here</a>"
                 link.innerHTML = String(str1 + tempTxHash + str2)
                 setTxHash(receipt.transactionHash)
-                swal({
+                swalReact({
                     title: 'Transfer Successful!',
                     content: link,
                     icon: 'success',

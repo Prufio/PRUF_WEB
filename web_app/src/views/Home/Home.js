@@ -1,6 +1,7 @@
 import React from "react";
 import "../../assets/css/custom.css";
-import swal from "sweetalert";
+import swalReact from "@sweetalert/with-react";
+
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -110,7 +111,7 @@ export default function Home(props) {
         link.innerHTML = String(str1 + tempTxHash + str2);
         setError(Object.values(_error)[0]);
         if (tempTxHash !== undefined) {
-          swal({
+          swalReact({
             title: "Something went wrong!",
             content: link,
             icon: "warning",
@@ -118,7 +119,7 @@ export default function Home(props) {
           });
         }
         if (tempTxHash === undefined) {
-          swal({
+          swalReact({
             title: "Something went wrong!",
             icon: "warning",
             button: "Close",
@@ -134,7 +135,7 @@ export default function Home(props) {
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         setTxHash(receipt.transactionHash);
-        swal({
+        swalReact({
           title: "PRUF Successfully Minted!",
           content: link,
           icon: "success",
@@ -367,7 +368,7 @@ export default function Home(props) {
                                     <CardIcon
                                         className="headerIconBack"
                                         onClick={() => {
-                                            swal({
+                                            swalReact({
                                                 title:
                                                     'User address is already verified.',
                                                 button: 'Okay',
@@ -497,7 +498,7 @@ export default function Home(props) {
                             window.web3.utils.toChecksumAddress(accounts[0])
                           );
                         });
-                    } else swal("No ethereum provider detected");
+                    } else swalReact("No ethereum provider detected");
                   }}
                 >
                   connect
