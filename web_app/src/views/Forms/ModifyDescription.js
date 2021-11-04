@@ -15,7 +15,12 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import TextField from "@material-ui/core/TextField";
 import CardBody from "components/Card/CardBody.js";
 import CardIcon from "components/Card/CardIcon.js";
-import {AddPhotoAlternateOutlined, DeleteForever, Settings, KeyboardArrowLeft,} from "@material-ui/icons";
+import {
+  AddPhotoAlternateOutlined,
+  DeleteForever,
+  Settings,
+  KeyboardArrowLeft,
+} from "@material-ui/icons";
 import Share from "@material-ui/icons/Share";
 import Icon from "@material-ui/core/Icon";
 import FormControl from "@material-ui/core/FormControl";
@@ -36,10 +41,10 @@ const useFormStyles = makeStyles(formStyles);
 const useEngravingStyles = makeStyles(engravingStyles);
 
 export default function ModifyDescription(props) {
-  if(!window.sentPacket) window.sentPacket = {}
+  if (!window.sentPacket) window.sentPacket = {};
 
   const [asset] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)));
-  console.log(window.sentPacket)
+  console.log(window.sentPacket);
 
   const [id] = React.useState(window.sentPacket.id);
 
@@ -78,7 +83,7 @@ export default function ModifyDescription(props) {
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
   const link = document.createElement("div");
   const image = "photo",
-  // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
     text = "text",
     url = "urls";
   const maxImageSize = 1000;
@@ -107,9 +112,7 @@ export default function ModifyDescription(props) {
       console.log("No asset found. Rerouting...");
       window.location.href = "/#/user/home";
       window.location.reload();
-    }
-
-    else if (asset.statusNum && !hasMounted && asset !== undefined) {
+    } else if (asset.statusNum && !hasMounted && asset !== undefined) {
       if (
         asset.statusNum === "50" ||
         asset.statusNum === "56" ||
@@ -117,8 +120,7 @@ export default function ModifyDescription(props) {
       ) {
         swal({
           title: "Asset not in correct status!",
-          text:
-            "This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.",
+          text: "This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.",
           icon: "warning",
           button: "Close",
         }).then(() => {
@@ -143,11 +145,10 @@ export default function ModifyDescription(props) {
       // setSelectedImage(
       //   asset.photo.displayImage || Object.values(asset.photo)[0] || ""
       // );
-      setSelectedImage(asset.displayImage)
+      setSelectedImage(asset.displayImage);
       setHasMounted(true);
     }
   }, []);
-
 
   let fileInput = React.createRef();
   let fileInputJSON = React.createRef();
@@ -287,7 +288,7 @@ export default function ModifyDescription(props) {
       return;
     }
 
-      // eslint-disable-next-line react/prop-types
+    // eslint-disable-next-line react/prop-types
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     console.log("id", id);
@@ -300,8 +301,8 @@ export default function ModifyDescription(props) {
     setError(undefined);
 
     setTransactionActive(true);
-    props.prufClient.do
-      .asset.modifyMutableStorage(id, hash)
+    props.prufClient.do.asset
+      .modifyMutableStorage(id, hash)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
@@ -350,10 +351,10 @@ export default function ModifyDescription(props) {
           window.replaceAssetData = {
             key: pageKey,
             newAsset: newAsset,
-            assetAction: "mod"
+            assetAction: "mod",
           };
-          window.replaceAssetData.refreshBals = true
-        window.dispatchEvent(props.refresh)
+          window.replaceAssetData.refreshBals = true;
+          window.dispatchEvent(props.refresh);
         });
       });
   };
@@ -851,13 +852,12 @@ export default function ModifyDescription(props) {
   //   setSelectedKey(key);
   // };
 
-  if(!props.prufClient){
-    return <>
-      <Card>
+  if (!props.prufClient) {
+    return (
+      <>
+        <Card>
           <CardHeader icon>
-            <CardIcon className="headerIconBack">
-              
-            </CardIcon>
+            <CardIcon className="headerIconBack"></CardIcon>
             <Button
               color="info"
               className="MLBGradient"
@@ -865,14 +865,14 @@ export default function ModifyDescription(props) {
             >
               Go Back
             </Button>
-            
           </CardHeader>
           <CardBody>
             <h2>Oops, something went wrong...</h2>
           </CardBody>
           <br />
         </Card>
-    </>
+      </>
+    );
   }
 
   return (
@@ -881,12 +881,12 @@ export default function ModifyDescription(props) {
         Go Back
       </Button>
       <Card>
-            <>
-              {!isMobile && (
-                <CardHeader image className={classes.cardHeaderHoverCustom}>
-                  {asset.displayImage !== "" && (
-                    <>
-                      {/* <Tooltip
+        <>
+          {!isMobile && (
+            <CardHeader image className={classes.cardHeaderHoverCustom}>
+              {asset.displayImage !== "" && (
+                <>
+                  {/* <Tooltip
                         id="tooltip-top"
                         title="Back"
                         placement="bottom"
@@ -901,121 +901,115 @@ export default function ModifyDescription(props) {
                           <KeyboardArrowLeft />
                         </Button> 
                       </Tooltip> */}
-                      {asset.nodeData.storageProvider === "2" && (
-                        <Tooltip title="See it on ARweave">
-                          <a
-                            href={`${asset.displayImage}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <img src={selectedImage} alt="" />
-                          </a>
-                        </Tooltip>
-                      )}
-                      {asset.nodeData.storageProvider === "1" && (
+                  {asset.nodeData.storageProvider === "2" && (
+                    <Tooltip title="See it on ARweave">
+                      <a
+                        href={`${asset.displayImage}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <img src={selectedImage} alt="" />
-                      )}
-                    </>
+                      </a>
+                    </Tooltip>
                   )}
-                  {asset.displayImage === "" && (
-                    <>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Back"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Button
-                          onClick={() => moreInfo("back")}
-                          color="info"
-                          justIcon
-                          className="back"
-                        >
-                          <KeyboardArrowLeft />
-                        </Button>
-                      </Tooltip>
-                      <div className="jdenticonMoreInfo">
-                        <Jdenticon value={asset.id} />
-                      </div>
-                    </>
+                  {asset.nodeData.storageProvider === "1" && (
+                    <img src={selectedImage} alt="" />
                   )}
-                </CardHeader>
+                </>
               )}
-              {isMobile && (
-                <CardHeader
-                  image
-                  onClick={() => moreInfo("back")}
-                  className={classes.cardHeaderHover}
-                >
-                  {asset.displayImage !== "" && (
-                    <>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Back"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Button
-                          onClick={() => moreInfo("back")}
-                          color="info"
-                          justIcon
-                          className="back"
-                        >
-                          <KeyboardArrowLeft />
-                        </Button>
-                      </Tooltip>
-                      <img src={selectedImage} alt="..." />
-                    </>
-                  )}
-                  {asset.displayImage === "" && (
-                    <>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Back"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Button
-                          onClick={() => moreInfo("back")}
-                          color="info"
-                          justIcon
-                          className="back"
-                        >
-                          <KeyboardArrowLeft />
-                        </Button>
-                      </Tooltip>
-                      <div className="jdenticonMoreInfo">
-                        <Jdenticon className="jdenticonMoreInfo" value={asset.id} />
-                      </div>
-                    </>
-                  )}
-                </CardHeader>
+              {asset.displayImage === "" && (
+                <>
+                  <Tooltip
+                    id="tooltip-top"
+                    title="Back"
+                    placement="bottom"
+                    classes={{ tooltip: classes.tooltip }}
+                  >
+                    <Button
+                      onClick={() => moreInfo("back")}
+                      color="info"
+                      justIcon
+                      className="back"
+                    >
+                      <KeyboardArrowLeft />
+                    </Button>
+                  </Tooltip>
+                  <div className="jdenticonMoreInfo">
+                    <Jdenticon value={asset.id} />
+                  </div>
+                </>
               )}
-            </>
-            <CardBody>
-              {/* {Object.values(asset.photo).length > 1 && (
+            </CardHeader>
+          )}
+          {isMobile && (
+            <CardHeader
+              image
+              onClick={() => moreInfo("back")}
+              className={classes.cardHeaderHover}
+            >
+              {asset.displayImage !== "" && (
+                <>
+                  <Tooltip
+                    id="tooltip-top"
+                    title="Back"
+                    placement="bottom"
+                    classes={{ tooltip: classes.tooltip }}
+                  >
+                    <Button
+                      onClick={() => moreInfo("back")}
+                      color="info"
+                      justIcon
+                      className="back"
+                    >
+                      <KeyboardArrowLeft />
+                    </Button>
+                  </Tooltip>
+                  <img src={selectedImage} alt="..." />
+                </>
+              )}
+              {asset.displayImage === "" && (
+                <>
+                  <Tooltip
+                    id="tooltip-top"
+                    title="Back"
+                    placement="bottom"
+                    classes={{ tooltip: classes.tooltip }}
+                  >
+                    <Button
+                      onClick={() => moreInfo("back")}
+                      color="info"
+                      justIcon
+                      className="back"
+                    >
+                      <KeyboardArrowLeft />
+                    </Button>
+                  </Tooltip>
+                  <div className="jdenticonMoreInfo">
+                    <Jdenticon className="jdenticonMoreInfo" value={asset.id} />
+                  </div>
+                </>
+              )}
+            </CardHeader>
+          )}
+        </>
+        <CardBody>
+          {/* {Object.values(asset.photo).length > 1 && (
                 <div className="imageSelector">
                   {generateThumbs(asset)}
                 </div>
               )} */}
-              <div className="horizontal">
-                <h4 className={classes.cardTitleContent}>
-                  Name:&nbsp;
+          <div className="horizontal">
+            <h4 className={classes.cardTitleContent}>Name:&nbsp;</h4>
+            <h4 className={classes.cardTitle}>
+              {asset.nonMutableStorage.name}
             </h4>
-                <h4 className={classes.cardTitle}>
-                  {asset.nonMutableStorage.name}
-                </h4>
-              </div>
-              <div className="horizontal">
-                <h4 className={classes.cardTitleContent}>
-                  Node:&nbsp;
-            </h4>
-                <h4 className={classes.cardTitle}>
-                  {asset.nodeName}
-                </h4>
-              </div>
+          </div>
+          <div className="horizontal">
+            <h4 className={classes.cardTitleContent}>Node:&nbsp;</h4>
+            <h4 className={classes.cardTitle}>{asset.nodeName}</h4>
+          </div>
 
-              {/* {asset.currency === "0" && (
+          {/* {asset.currency === "0" && (
                 <div className="horizontal">
                   <h4 className={classes.cardTitleContent}>
                     Status:&nbsp;
@@ -1057,167 +1051,168 @@ export default function ModifyDescription(props) {
                   </>
                 )} */}
 
+          <br />
+          {asset.nonMutableStorage.engraving !== undefined && (
+            <>
               <br />
-              {asset.nonMutableStorage.engraving !== undefined && (
-                <>
-                  <br />
-                  <TextField
-                    id="outlined-multiline"
-                    label="Engraving"
-                    multiline
-                    rows={2}
-                    defaultValue={asset.nonMutableStorage.engraving}
-                    variant="outlined"
-                    fullWidth
-                    disabled
-                  />
-                </>
-              )}
-              {asset.nonMutableStorage.engraving === undefined && (
-                <TextField
-                  // id="outlined-multiline"
-                  label="Engraving"
-                  // multiline
-                  rows={2}
-                  defaultValue="None"
-                  variant="outlined"
-                  fullWidth
-                  disabled
-                  className={engravingClasses.engraving}
-                />
-              )}
-              {/*@dev URLs go here*/}
-              <br />
-            </CardBody>
-            <CardFooter>
-              {!isMobile && (
-                <>
-                  {!copyText && (
-                    <Tooltip title="Copy to Clipboard">
-                      <div className={classes.stats}>
-                        Asset ID:
-                        <button
-                          className="IDText"
-                          onClick={() => {
-                            copyTextSnippet(asset.id);
-                          }}
-                        >
-                          {asset.id}
-                        </button>
-                      </div>
-                    </Tooltip>
-                  )}
-                  {copyText && (
-                    <Tooltip title="Copied to Clipboard">
-                      <div className={classes.stats}>
-                        Asset ID:
-                        <button
-                          className="IDText"
-                          onClick={() => {
-                            copyTextSnippet(asset.id);
-                          }}
-                        >
-                          {asset.id}
-                        </button>
-                      </div>
-                    </Tooltip>
-                  )}
-                </>
-              )}
-              {isMobile && !isAndroid && (
-                <>
-                  {!copyText && (
-                    <Tooltip title="Copy to Clipboard">
-                      <div className={classes.stats}>
-                        Asset ID:
-                        <button
-                          className="IDText"
-                          onClick={() => {
-                            copyTextSnippet(asset.id);
-                          }}
-                        >
-                          {asset.id.substring(0, 10) +
-                            "..." +
-                            asset.id.substring(56, 66)}
-                        </button>
-                      </div>
-                    </Tooltip>
-                  )}
-                  {copyText && (
-                    <Tooltip title="Copied to Clipboard">
-                      <div className={classes.stats}>
-                        Asset ID:
-                        <button
-                          className="IDText"
-                          onClick={() => {
-                            copyTextSnippet(asset.id);
-                          }}
-                        >
-                          {asset.id.substring(0, 10) +
-                            "..." +
-                            asset.id.substring(56, 66)}
-                        </button>
-                      </div>
-                    </Tooltip>
-                  )}
-                </>
-              )}
-              {isMobile && isAndroid && (
+              <TextField
+                // id="outlined-multiline"
+                label="Engraving"
+                // multiline
+                rows={2}
+                defaultValue={asset.nonMutableStorage.engraving}
+                variant="outlined"
+                fullWidth
+                disabled
+                className={engravingClasses.engraving}
+              />
+            </>
+          )}
+          {asset.nonMutableStorage.engraving === undefined && (
+            <TextField
+              // id="outlined-multiline"
+              label="Engraving"
+              // multiline
+              rows={2}
+              defaultValue="None"
+              variant="outlined"
+              fullWidth
+              disabled
+              className={engravingClasses.engraving}
+            />
+          )}
+          {/*@dev URLs go here*/}
+          <br />
+        </CardBody>
+        <CardFooter>
+          {!isMobile && (
+            <>
+              {!copyText && (
                 <Tooltip title="Copy to Clipboard">
-                  <CopyToClipboard
-                    text={asset.id}
-                    onCopy={() => {
-                      swal("Asset ID Copied to Clipboard!");
-                    }}
-                  >
-                    <span>
-                      Asset ID:
+                  <div className={classes.stats}>
+                    Asset ID:
+                    <button
+                      className="IDText"
+                      onClick={() => {
+                        copyTextSnippet(asset.id);
+                      }}
+                    >
+                      {asset.id}
+                    </button>
+                  </div>
+                </Tooltip>
+              )}
+              {copyText && (
+                <Tooltip title="Copied to Clipboard">
+                  <div className={classes.stats}>
+                    Asset ID:
+                    <button
+                      className="IDText"
+                      onClick={() => {
+                        copyTextSnippet(asset.id);
+                      }}
+                    >
+                      {asset.id}
+                    </button>
+                  </div>
+                </Tooltip>
+              )}
+            </>
+          )}
+          {isMobile && !isAndroid && (
+            <>
+              {!copyText && (
+                <Tooltip title="Copy to Clipboard">
+                  <div className={classes.stats}>
+                    Asset ID:
+                    <button
+                      className="IDText"
+                      onClick={() => {
+                        copyTextSnippet(asset.id);
+                      }}
+                    >
                       {asset.id.substring(0, 10) +
                         "..." +
                         asset.id.substring(56, 66)}
-                    </span>
-                  </CopyToClipboard>
+                    </button>
+                  </div>
                 </Tooltip>
               )}
-              <div className="icons">
-                <RWebShare
-                  className="shareMenu"
-                  data={{
-                    text: "Check out my PRüF-verified asset!",
-                    url: URL,
-                    title: "Share Asset Link",
-                  }}
-                >
-                  <Tooltip title="Share Asset URL">
-                    <Icon className="footerIcon">
-                      <Share />
-                    </Icon>
-                  </Tooltip>
-                </RWebShare>
-                <Tooltip title="View QR">
-                  <Icon
-                    className="footerIcon"
-                    onClick={() => {
-                      swalReact({
-                        content: (
-                          <QRCode
-                            value={URL}
-                            size="160"
-                            fgColor="#002a40"
-                            quietZone="2"
-                            ecLevel="M"
-                          />
-                        ),
-                        buttons: "close",
-                      });
-                    }}
-                  >
-                    qr_code
-                  </Icon>
+              {copyText && (
+                <Tooltip title="Copied to Clipboard">
+                  <div className={classes.stats}>
+                    Asset ID:
+                    <button
+                      className="IDText"
+                      onClick={() => {
+                        copyTextSnippet(asset.id);
+                      }}
+                    >
+                      {asset.id.substring(0, 10) +
+                        "..." +
+                        asset.id.substring(56, 66)}
+                    </button>
+                  </div>
                 </Tooltip>
-              </div>
-            </CardFooter>
-          </Card>
+              )}
+            </>
+          )}
+          {isMobile && isAndroid && (
+            <Tooltip title="Copy to Clipboard">
+              <CopyToClipboard
+                text={asset.id}
+                onCopy={() => {
+                  swal("Asset ID Copied to Clipboard!");
+                }}
+              >
+                <span>
+                  Asset ID:
+                  {asset.id.substring(0, 10) +
+                    "..." +
+                    asset.id.substring(56, 66)}
+                </span>
+              </CopyToClipboard>
+            </Tooltip>
+          )}
+          <div className="icons">
+            <RWebShare
+              className="shareMenu"
+              data={{
+                text: "Check out my PRüF-verified asset!",
+                url: URL,
+                title: "Share Asset Link",
+              }}
+            >
+              <Tooltip title="Share Asset URL">
+                <Icon className="footerIcon">
+                  <Share />
+                </Icon>
+              </Tooltip>
+            </RWebShare>
+            <Tooltip title="View QR">
+              <Icon
+                className="footerIcon"
+                onClick={() => {
+                  swalReact({
+                    content: (
+                      <QRCode
+                        value={URL}
+                        size="160"
+                        fgColor="#002a40"
+                        quietZone="2"
+                        ecLevel="M"
+                      />
+                    ),
+                    buttons: "close",
+                  });
+                }}
+              >
+                qr_code
+              </Icon>
+            </Tooltip>
+          </div>
+        </CardFooter>
+      </Card>
     </div>
   );
 }

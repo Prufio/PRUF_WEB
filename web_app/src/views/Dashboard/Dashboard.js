@@ -33,6 +33,7 @@ import CardFooter from "components/Card/CardFooter.js";
 
 import placeholder from "../../assets/img/placeholder.jpg";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
+import engravingStyles from "../../assets/css/custom";
 import {
   ArrowBackIos,
   ArrowForwardIos,
@@ -46,6 +47,7 @@ import ARweavePNG from "../../assets/img/arweave.png";
 import IPFSPNG from "../../assets/img/ipfs.png";
 
 const useStyles = makeStyles(styles);
+const useEngravingStyles = makeStyles(engravingStyles);
 
 export default function Dashboard(props) {
   React.useEffect(() => {
@@ -77,11 +79,13 @@ export default function Dashboard(props) {
   const [selectedImage, setSelectedImage] = React.useState("");
   const [copyText, setCopyText] = React.useState(false);
   const [pageNum, setPageNum] = React.useState(1);
-  const [assetsPerPage, setAssetsPerPage] = React.useState(props.assetsPerPage || 8);
+  const [assetsPerPage, setAssetsPerPage] = React.useState(
+    props.assetsPerPage || 8
+  );
   // eslint-disable-next-line no-unused-vars
   const [currency, setCurrency] = React.useState("ü");
 
-  const assetArr = Object.values(props.assetObj)
+  const assetArr = Object.values(props.assetObj);
 
   // eslint-disable-next-line react/prop-types
   const numOfPages = Math.ceil(assetArr.length / props.assetsPerPage);
@@ -183,16 +187,16 @@ export default function Dashboard(props) {
       if (window.newStat) {
         newObj.statusNum = window.newStat.num;
         newObj.status = window.newStat.str;
-        window.newStat = {}
+        window.newStat = {};
       }
 
       if (window.costInfo) {
-        newObj.currency = window.costInfo.currency
-        newObj.price = window.costInfo.price
-        window.costInfo = {}
+        newObj.currency = window.costInfo.currency;
+        newObj.price = window.costInfo.price;
+        window.costInfo = {};
       }
 
-      newObj.dBIndex = backIndex
+      newObj.dBIndex = backIndex;
 
       window.newStat = null;
       window.newDescObj = null;
@@ -306,8 +310,12 @@ export default function Dashboard(props) {
                   </div>
                 )}
                 <h4 className={classes.cardTitle}>{arr[i].name}</h4>
-                  <h5 className={classes.cardTitleMain}>Node:&nbsp;{arr[i].nodeData.name}</h5>
-                  <h5 className={classes.cardTitle}>Name:&nbsp;{arr[i].nonMutableStorage.name}</h5>
+                <h5 className={classes.cardTitleMain}>
+                  Node:&nbsp;{arr[i].nodeData.name}
+                </h5>
+                <h5 className={classes.cardTitle}>
+                  Name:&nbsp;{arr[i].nonMutableStorage.name}
+                </h5>
                 {/* {arr[i].currency === "0" && (
                   <h5 className={classes.cardTitle}>Status:&nbsp;{arr[i].status}</h5>
                 )} */}
@@ -332,48 +340,41 @@ export default function Dashboard(props) {
         //}
       }
 
-      if(props.showPlaceHolder === true) component.push(
-        <GridItem key={"loadingAsset"} xs={12} sm={6} md={6} lg={3}>
-        <Card chart className={classes.cardHover}>
-          <>
-            {!isMobile && (
-              <CardHeader
-                image
-                className={classes.cardHeaderHoverDashboard}
-              >
-                      <img
-                        title="View Asset"
-                        src={placeholder}
-                        alt=""
-                      />
-              </CardHeader>
-            )}
-            {isMobile && (
-              <CardHeader image className={classes.cardHeaderHover}>
-                <img
-                        title="View Asset"
-                        src={placeholder}
-                        alt=""
-                      />
-              </CardHeader>
-            )}
-          </>
+      if (props.showPlaceHolder === true)
+        component.push(
+          <GridItem key={"loadingAsset"} xs={12} sm={6} md={6} lg={3}>
+            <Card chart className={classes.cardHover}>
+              <>
+                {!isMobile && (
+                  <CardHeader
+                    image
+                    className={classes.cardHeaderHoverDashboard}
+                  >
+                    <img title="View Asset" src={placeholder} alt="" />
+                  </CardHeader>
+                )}
+                {isMobile && (
+                  <CardHeader image className={classes.cardHeaderHover}>
+                    <img title="View Asset" src={placeholder} alt="" />
+                  </CardHeader>
+                )}
+              </>
 
-          <CardBody>
-          <div className="lds-ellipsis">
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-          </CardBody>
-          {/* <CardFooter chart>
+              <CardBody>
+                <div className="lds-ellipsis">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              </CardBody>
+              {/* <CardFooter chart>
             <div className={classes.stats}>
               <AccessTime /> updated 4 minutes ago
             </div>
           </CardFooter> */}
-        </Card>
-      </GridItem>
-      )
+            </Card>
+          </GridItem>
+        );
 
       return component;
       // eslint-disable-next-line react/prop-types
@@ -398,45 +399,34 @@ export default function Dashboard(props) {
         //   </div>
         // </>
         <GridItem key={"loadingAsset"} xs={12} sm={6} md={6} lg={3}>
-        <Card chart className={classes.cardHover}>
-          <>
-            {!isMobile && (
-              <CardHeader
-                image
-                className={classes.cardHeaderHoverDashboard}
-              >
-                      <img
-                        title="View Asset"
-                        src={placeholder}
-                        alt=""
-                      />
-              </CardHeader>
-            )}
-            {isMobile && (
-              <CardHeader image className={classes.cardHeaderHover}>
-                <img
-                        title="View Asset"
-                        src={placeholder}
-                        alt=""
-                      />
-              </CardHeader>
-            )}
-          </>
+          <Card chart className={classes.cardHover}>
+            <>
+              {!isMobile && (
+                <CardHeader image className={classes.cardHeaderHoverDashboard}>
+                  <img title="View Asset" src={placeholder} alt="" />
+                </CardHeader>
+              )}
+              {isMobile && (
+                <CardHeader image className={classes.cardHeaderHover}>
+                  <img title="View Asset" src={placeholder} alt="" />
+                </CardHeader>
+              )}
+            </>
 
-          <CardBody>
-          <div className="lds-ellipsis">
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-          </CardBody>
-          {/* <CardFooter chart>
+            <CardBody>
+              <div className="lds-ellipsis">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </CardBody>
+            {/* <CardFooter chart>
             <div className={classes.stats}>
               <AccessTime /> updated 4 minutes ago
             </div>
           </CardFooter> */}
-        </Card>
-      </GridItem>
+          </Card>
+        </GridItem>
       );
     }
   };
@@ -453,7 +443,7 @@ export default function Dashboard(props) {
   };
 
   const handleShowNum = (e) => {
-    if(!e) return
+    if (!e) return;
     let _pageNum = pageNum;
 
     const getNewNum = () => {
@@ -468,16 +458,16 @@ export default function Dashboard(props) {
 
     setPageNum(_pageNum);
     setAssetsPerPage(e);
-    window.replaceAssetData.assetsPerPage = e
-    window.dispatchEvent(props.refresh)
+    window.replaceAssetData.assetsPerPage = e;
+    window.dispatchEvent(props.refresh);
   };
 
   const renderOptions = (status) => {
     if (!status) return;
-    let na = '(Not Available in this Status)'
-    let opt
-    switch(status) {
-      case "50" : {
+    let na = "(Not Available in this Status)";
+    let opt;
+    switch (status) {
+      case "50": {
         opt = [
           // {
           //   dis: true,
@@ -488,14 +478,14 @@ export default function Dashboard(props) {
           {
             dis: true,
             msg: `Transfer ${na}`,
-            key: "txrOption", 
-            val: "transfer"
+            key: "txrOption",
+            val: "transfer",
           },
           {
             dis: false,
             msg: "Verify",
             key: "verOption",
-            val: "verify"
+            val: "verify",
           },
           // {
           //   dis: true,
@@ -519,22 +509,24 @@ export default function Dashboard(props) {
             dis: true,
             msg: `Change Status ${na}`,
             key: "chsOption",
-            val: "modify-status"
+            val: "modify-status",
           },
           {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
-            val: "edit-information"
+            val: "edit-information",
           },
           {
             dis: true,
             msg: `Update Owner Info ${na}`,
-            key: 'uoiOption',
-            val: 'edit-rightsholder'
-          }
-        ]; break
-      } case "51" : {
+            key: "uoiOption",
+            val: "edit-rightsholder",
+          },
+        ];
+        break;
+      }
+      case "51": {
         opt = [
           // {
           //   dis: false,
@@ -545,14 +537,14 @@ export default function Dashboard(props) {
           {
             dis: false,
             msg: `Transfer`,
-            key: "txrOption", 
-            val: "transfer"
+            key: "txrOption",
+            val: "transfer",
           },
           {
             dis: false,
             msg: "Verify",
             key: "verOption",
-            val: "verify"
+            val: "verify",
           },
           // {
           //   dis: true,
@@ -576,22 +568,24 @@ export default function Dashboard(props) {
             dis: false,
             msg: `Change Status`,
             key: "chsOption",
-            val: "modify-status"
+            val: "modify-status",
           },
           {
             dis: false,
             msg: `Update Mutable Info`,
             key: "umiOption",
-            val: "edit-information"
+            val: "edit-information",
           },
           {
             dis: false,
             msg: `Update Owner Info`,
-            key: 'uoiOption',
-            val: 'edit-rightsholder'
-          }
-        ]; break
-      } case "52" : {
+            key: "uoiOption",
+            val: "edit-rightsholder",
+          },
+        ];
+        break;
+      }
+      case "52": {
         opt = [
           // {
           //   dis: false,
@@ -602,14 +596,14 @@ export default function Dashboard(props) {
           {
             dis: true,
             msg: `Transfer ${na}`,
-            key: "txrOption", 
-            val: "transfer"
+            key: "txrOption",
+            val: "transfer",
           },
           {
             dis: false,
             msg: "Verify",
             key: "verOption",
-            val: "verify"
+            val: "verify",
           },
           // {
           //   dis: true,
@@ -633,22 +627,24 @@ export default function Dashboard(props) {
             dis: false,
             msg: `Change Status`,
             key: "chsOption",
-            val: "modify-status"
+            val: "modify-status",
           },
           {
             dis: false,
             msg: `Update Mutable Info`,
             key: "umiOption",
-            val: "edit-information"
+            val: "edit-information",
           },
           {
             dis: false,
             msg: `Update Owner Info`,
-            key: 'uoiOption',
-            val: 'edit-rightsholder'
-          }
-        ]; break
-      } case "53" : {
+            key: "uoiOption",
+            val: "edit-rightsholder",
+          },
+        ];
+        break;
+      }
+      case "53": {
         opt = [
           // {
           //   dis: true,
@@ -659,14 +655,14 @@ export default function Dashboard(props) {
           {
             dis: true,
             msg: `Transfer ${na}`,
-            key: "txrOption", 
-            val: "transfer"
+            key: "txrOption",
+            val: "transfer",
           },
           {
             dis: false,
             msg: "Verify",
             key: "verOption",
-            val: "verify"
+            val: "verify",
           },
           // {
           //   dis: true,
@@ -690,22 +686,24 @@ export default function Dashboard(props) {
             dis: false,
             msg: `Change Status`,
             key: "chsOption",
-            val: "modify-status"
+            val: "modify-status",
           },
           {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
-            val: "edit-information"
+            val: "edit-information",
           },
           {
             dis: false,
             msg: `Update Owner Info`,
-            key: 'uoiOption',
-            val: 'edit-rightsholder'
-          }
-        ]; break
-      } case "54" : {
+            key: "uoiOption",
+            val: "edit-rightsholder",
+          },
+        ];
+        break;
+      }
+      case "54": {
         opt = [
           // {
           //   dis: true,
@@ -716,14 +714,14 @@ export default function Dashboard(props) {
           {
             dis: true,
             msg: `Transfer ${na}`,
-            key: "txrOption", 
-            val: "transfer"
+            key: "txrOption",
+            val: "transfer",
           },
           {
             dis: false,
             msg: "Verify",
             key: "verOption",
-            val: "verify"
+            val: "verify",
           },
           // {
           //   dis: true,
@@ -747,22 +745,24 @@ export default function Dashboard(props) {
             dis: false,
             msg: `Change Status`,
             key: "chsOption",
-            val: "modify-status"
+            val: "modify-status",
           },
           {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
-            val: "edit-information"
+            val: "edit-information",
           },
           {
             dis: false,
             msg: `Update Owner Info`,
-            key: 'uoiOption',
-            val: 'edit-rightsholder'
-          }
-        ]; break
-      } case "56" : {
+            key: "uoiOption",
+            val: "edit-rightsholder",
+          },
+        ];
+        break;
+      }
+      case "56": {
         opt = [
           // {
           //   dis: true,
@@ -773,14 +773,14 @@ export default function Dashboard(props) {
           {
             dis: true,
             msg: `Transfer ${na}`,
-            key: "txrOption", 
-            val: "transfer"
+            key: "txrOption",
+            val: "transfer",
           },
           {
             dis: false,
             msg: "Verify",
             key: "verOption",
-            val: "verify"
+            val: "verify",
           },
           // {
           //   dis: true,
@@ -804,22 +804,24 @@ export default function Dashboard(props) {
             dis: true,
             msg: `Change Status ${na}`,
             key: "chsOption",
-            val: "modify-status"
+            val: "modify-status",
           },
           {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
-            val: "edit-information"
+            val: "edit-information",
           },
           {
             dis: true,
             msg: `Update Owner Info ${na}`,
-            key: 'uoiOption',
-            val: 'edit-rightsholder'
-          }
-        ]; break
-      } case "57" : {
+            key: "uoiOption",
+            val: "edit-rightsholder",
+          },
+        ];
+        break;
+      }
+      case "57": {
         opt = [
           // {
           //   dis: false,
@@ -830,14 +832,14 @@ export default function Dashboard(props) {
           {
             dis: true,
             msg: `Transfer ${na}`,
-            key: "txrOption", 
-            val: "transfer"
+            key: "txrOption",
+            val: "transfer",
           },
           {
             dis: false,
             msg: "Verify",
             key: "verOption",
-            val: "verify"
+            val: "verify",
           },
           // {
           //   dis: true,
@@ -861,22 +863,24 @@ export default function Dashboard(props) {
             dis: false,
             msg: `Change Status`,
             key: "chsOption",
-            val: "modify-status"
+            val: "modify-status",
           },
           {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
-            val: "edit-information"
+            val: "edit-information",
           },
           {
             dis: false,
             msg: `Update Owner Info`,
-            key: 'uoiOption',
-            val: 'edit-rightsholder'
-          }
-        ]; break
-      } case "58" : {
+            key: "uoiOption",
+            val: "edit-rightsholder",
+          },
+        ];
+        break;
+      }
+      case "58": {
         opt = [
           // {
           //   dis: false,
@@ -887,14 +891,14 @@ export default function Dashboard(props) {
           {
             dis: true,
             msg: `Transfer ${na}`,
-            key: "txrOption", 
-            val: "transfer"
+            key: "txrOption",
+            val: "transfer",
           },
           {
             dis: false,
             msg: "Verify",
             key: "verOption",
-            val: "verify"
+            val: "verify",
           },
           // {
           //   dis: true,
@@ -918,22 +922,24 @@ export default function Dashboard(props) {
             dis: false,
             msg: `Change Status`,
             key: "chsOption",
-            val: "modify-status"
+            val: "modify-status",
           },
           {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
-            val: "edit-information"
+            val: "edit-information",
           },
           {
             dis: false,
             msg: `Update Owner Info`,
-            key: 'uoiOption',
-            val: 'edit-rightsholder'
-          }
-        ]; break
-      } case "59" : {
+            key: "uoiOption",
+            val: "edit-rightsholder",
+          },
+        ];
+        break;
+      }
+      case "59": {
         opt = [
           // {
           //   dis: false,
@@ -944,14 +950,14 @@ export default function Dashboard(props) {
           {
             dis: true,
             msg: `Transfer ${na}`,
-            key: "txrOption", 
-            val: "transfer"
+            key: "txrOption",
+            val: "transfer",
           },
           {
             dis: false,
             msg: "Verify",
             key: "verOption",
-            val: "verify"
+            val: "verify",
           },
           // {
           //   dis: false,
@@ -975,22 +981,24 @@ export default function Dashboard(props) {
             dis: false,
             msg: `Change Status`,
             key: "chsOption",
-            val: "modify-status"
+            val: "modify-status",
           },
           {
             dis: false,
             msg: `Update Mutable Info`,
             key: "umiOption",
-            val: "edit-information"
+            val: "edit-information",
           },
           {
             dis: false,
             msg: `Update Owner Info`,
-            key: 'uoiOption',
-            val: 'edit-rightsholder'
-          }
-        ]; break
-      } case "70" : {
+            key: "uoiOption",
+            val: "edit-rightsholder",
+          },
+        ];
+        break;
+      }
+      case "70": {
         opt = [
           // {
           //   dis: false,
@@ -1001,14 +1009,14 @@ export default function Dashboard(props) {
           {
             dis: true,
             msg: `Transfer ${na}`,
-            key: "txrOption", 
-            val: "transfer"
+            key: "txrOption",
+            val: "transfer",
           },
           {
             dis: false,
             msg: "Verify",
             key: "verOption",
-            val: "verify"
+            val: "verify",
           },
           // {
           //   dis: true,
@@ -1032,61 +1040,63 @@ export default function Dashboard(props) {
             dis: true,
             msg: `Change Status ${na}`,
             key: "chsOption",
-            val: "modify-status"
+            val: "modify-status",
           },
           {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
-            val: "edit-information"
+            val: "edit-information",
           },
           {
             dis: true,
             msg: `Update Owner Info ${na}`,
-            key: 'uoiOption',
-            val: 'edit-rightsholder'
-          }
-        ]; break
-      } default: {
+            key: "uoiOption",
+            val: "edit-rightsholder",
+          },
+        ];
+        break;
+      }
+      default: {
         console.log("Error in option switch");
       }
     }
 
     let options = opt.map((option) => {
-      
-      return (             
-      <MenuItem
-      key={option.key}
-      disabled={option.dis}
-      value={option.val}
-      classes={{
-        root: classes.selectMenuItem,
-        selected: classes.selectMenuItemSelected,
-      }}
-    >
-      {option.msg}
-    </MenuItem>)
-    })
+      return (
+        <MenuItem
+          key={option.key}
+          disabled={option.dis}
+          value={option.val}
+          classes={{
+            root: classes.selectMenuItem,
+            selected: classes.selectMenuItemSelected,
+          }}
+        >
+          {option.msg}
+        </MenuItem>
+      );
+    });
 
-    return(
+    return (
       <Select
-            key="OptionSelect"
-            MenuProps={{
-              className: classes.selectMenu,
-            }}
-            classes={{
-              select: classes.select,
-            }}
-            value={simpleSelect}
-            onChange={(e) => handleSimple(e)}
-            inputProps={{
-              name: "simpleSelect",
-              id: "simple-select",
-            }}
-          >
-            {options}
-          </Select>
-    )
+        key="OptionSelect"
+        MenuProps={{
+          className: classes.selectMenu,
+        }}
+        classes={{
+          select: classes.select,
+        }}
+        value={simpleSelect}
+        onChange={(e) => handleSimple(e)}
+        inputProps={{
+          name: "simpleSelect",
+          id: "simple-select",
+        }}
+      >
+        {options}
+      </Select>
+    );
   };
 
   const handleSimple = (event) => {
@@ -1165,14 +1175,14 @@ export default function Dashboard(props) {
     if (costId !== null) {
       props.prufClient.get.node
         .invoiceForOperation(selectedAssetObj.nodeId, costId)
-        .then(e => {
-            tempObj.opCost = e.total
-            window.sentPacket = JSON.parse(JSON.stringify(tempObj))
-            window.assetsPerPage = props.assetsPerPage
-            console.log(tempObj)
-            console.log(window.sentPacket)
-            setSimpleSelect(event.target.value)
-            return (window.location.href = href)
+        .then((e) => {
+          tempObj.opCost = e.total;
+          window.sentPacket = JSON.parse(JSON.stringify(tempObj));
+          window.assetsPerPage = props.assetsPerPage;
+          console.log(tempObj);
+          console.log(window.sentPacket);
+          setSimpleSelect(event.target.value);
+          return (window.location.href = href);
         });
     } else {
       window.sentPacket = JSON.parse(JSON.stringify(tempObj));
@@ -1186,6 +1196,7 @@ export default function Dashboard(props) {
   };
 
   const classes = useStyles();
+  const engravingClasses = useEngravingStyles();
   return (
     <div>
       {/* <GridContainer> */}
@@ -1208,8 +1219,8 @@ export default function Dashboard(props) {
                   <Icon
                     className="MLBGradientRefresh"
                     onClick={() => {
-                      window.replaceAssetData.refreshAssets = true
-                      window.dispatchEvent(props.refresh)
+                      window.replaceAssetData.refreshAssets = true;
+                      window.dispatchEvent(props.refresh);
                     }}
                   >
                     <Refresh />
@@ -1368,7 +1379,10 @@ export default function Dashboard(props) {
                         </Button>
                       </Tooltip>
                       <div className="jdenticonMoreInfo">
-                        <Jdenticon className="jdenticonMoreInfo" value={selectedAssetObj.id} />
+                        <Jdenticon
+                          className="jdenticonMoreInfo"
+                          value={selectedAssetObj.id}
+                        />
                       </div>
                     </>
                   )}
@@ -1382,17 +1396,13 @@ export default function Dashboard(props) {
                 </div>
               )} */}
               <div className="horizontal">
-                <h4 className={classes.cardTitleContent}>
-                  Name:&nbsp;
-            </h4>
+                <h4 className={classes.cardTitleContent}>Name:&nbsp;</h4>
                 <h4 className={classes.cardTitle}>
                   {selectedAssetObj.nonMutableStorage.name}
                 </h4>
               </div>
               <div className="horizontal">
-                <h4 className={classes.cardTitleContent}>
-                  Node:&nbsp;
-            </h4>
+                <h4 className={classes.cardTitleContent}>Node:&nbsp;</h4>
                 <h4 className={classes.cardTitle}>
                   {selectedAssetObj.nodeName}
                 </h4>
@@ -1439,31 +1449,31 @@ export default function Dashboard(props) {
                     </div>
                   </>
                 )} */}
+              <br />
               {selectedAssetObj.nonMutableStorage.engraving !== undefined && (
-                <>
-                  <br />
-                  <TextField
-                    id="outlined-multiline-static"
-                    label="Engraving"
-                    multiline
-                    rows={4}
-                    defaultValue={selectedAssetObj.nonMutableStorage.engraving}
-                    variant="outlined"
-                    fullWidth
-                    disabled
-                  />
-                </>
+                <TextField
+                  // id="outlined-multiline"
+                  label="Engraving"
+                  // multiline
+                  rows={2}
+                  defaultValue={selectedAssetObj.nonMutableStorage.engraving}
+                  variant="outlined"
+                  fullWidth
+                  disabled
+                  className={engravingClasses.engraving}
+                />
               )}
               {selectedAssetObj.nonMutableStorage.engraving === undefined && (
                 <TextField
-                  id="outlined-multiline-static"
+                  // id="outlined-multiline"
                   label="Engraving"
-                  multiline
-                  rows={4}
+                  // multiline
+                  rows={2}
                   defaultValue="None"
                   variant="outlined"
                   fullWidth
                   disabled
+                  className={engravingClasses.engraving}
                 />
               )}
               {selectedAssetObj.nodeData.storageProvider === "2" && (
@@ -1641,12 +1651,8 @@ export default function Dashboard(props) {
 
       {!viewAsset && (
         <Card className="dashboardFooter">
-          {isMobile && (
-            <h6>Assets Per Page: </h6>
-          )}
-          {!isMobile && (
-            <h4>Assets Per Page: </h4>
-          )}
+          {isMobile && <h6>Assets Per Page: </h6>}
+          {!isMobile && <h4>Assets Per Page: </h4>}
           <br />
           <Select
             MenuProps={{
