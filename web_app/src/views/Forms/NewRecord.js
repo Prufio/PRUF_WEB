@@ -210,9 +210,7 @@ export default function NewRecord(props) {
       await uploader.uploadChunk();
       console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
     }
-
-  };
-
+  }
   const rootLogin = (e) => {
     if (!e.target.value) return setRootSelect("");
     // eslint-disable-next-line react/prop-types
@@ -224,7 +222,7 @@ export default function NewRecord(props) {
     // }
   };
 
-  const ACLogin = (event) => {
+  const nodeLogin = (event) => {
     document.body.style.cursor = 'wait'
     console.log(event.target.value);
     props.prufClient.get
@@ -1144,7 +1142,7 @@ export default function NewRecord(props) {
                               select: classes.select,
                             }}
                             value={rootSelect}
-                            // onChange={(e) => { ACLogin(e) }}
+                            // onChange={(e) => { nodeLogin(e) }}
                             inputProps={{
                               name: "rootSelect",
                               id: "root-select",
@@ -1179,7 +1177,7 @@ export default function NewRecord(props) {
                               }}
                               value={classSelect}
                               onChange={(e) => {
-                                ACLogin(e);
+                                nodeLogin(e);
                               }}
                               inputProps={{
                                 name: "classSelect",

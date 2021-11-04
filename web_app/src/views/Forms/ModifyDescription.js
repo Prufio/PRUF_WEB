@@ -35,6 +35,7 @@ import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle
 import formStyles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import engravingStyles from "../../assets/css/custom";
 import Danger from "components/Typography/Danger";
+import { updateDefaultClause } from "typescript";
 
 const useStyles = makeStyles(styles);
 const useFormStyles = makeStyles(formStyles);
@@ -75,6 +76,7 @@ export default function ModifyDescription(props) {
   // eslint-disable-next-line no-unused-vars
   const [loginURLTitle, setloginURLTitle] = React.useState("");
   const [loginURLTitleState, setloginURLTitleState] = React.useState("");
+  const [newMutableStorage, setNewMutableStorage] = React.useState({})
   // const [downloadName, setDownloadName] = React.useState("");
   // const [downloadLink, setDownloadLink] = React.useState("");
   const [copyText, setCopyText] = React.useState(false);
@@ -150,18 +152,17 @@ export default function ModifyDescription(props) {
     }
   }, []);
 
-  let fileInput = React.createRef();
-  let fileInputJSON = React.createRef();
+  const handleChanges = (key, value) => {
+    if (value === "delete") {
+      let obj = JSON.parse(JSON.stringify(newMutableStorage)) 
+      delete obj[key]
+    } else {
+      let obj = JSON.parse(JSON.stringify(newMutableStorage)) 
+      obj[key] = value
+    }
 
-  const handleClick = () => {
-    fileInput.current.value = "";
-    fileInput.current.click();
-  };
-
-  const handleJSON = () => {
-    fileInputJSON.current.value = "";
-    fileInputJSON.current.click();
-  };
+    setNewMutableStorage(obj)
+  }
 
   const getRandomInt = () => {
     return Math.floor(Math.random() * Math.floor(99999));
@@ -179,7 +180,7 @@ export default function ModifyDescription(props) {
   };
 
   const removeElement = (type, rem) => {
-    let tempObj = JSON.parse(JSON.stringify(newasset));
+    let tempObj = JSON.parse(JSON.stringify(newMutableStorage));
     delete tempObj[type][rem];
     //console.log(tempObj)
     if (type === image) {
@@ -200,13 +201,13 @@ export default function ModifyDescription(props) {
         setSelectedKey("");
       }
     }
-    setNewasset(tempObj);
+    setnewMutableStorage(tempObj);
     return forceUpdate();
   };
 
   const setDisplayImage = (img, key) => {
     // console.log("Deleting: ", key);
-    // let tempObj = JSON.parse(JSON.stringify(newasset));
+    // let tempObj = JSON.parse(JSON.stringify(newMutableStorage));
     // if (key === "displayImage") {
     //   return console.log("Nothing was done. Already set.");
     // }
@@ -220,57 +221,209 @@ export default function ModifyDescription(props) {
     // delete tempObj.photo[key];
     // delete tempObj.photoUrls[key];
     // //console.log(tempObj);
-    // setNewasset(tempObj);
+    // setnewMutableStorage(tempObj);
     // setSelectedImage(tempObj.photo.displayImage);
     // setSelectedKey("displayImage");
     // return forceUpdate();
   };
 
   // const resetChanges = () => {
-  //   setNewasset(asset);
+  //   setnewMutableStorage(asset);
   //   return forceUpdate();
   // };
 
   const submitChanges = async () => {
-    if (JSON.stringify(newasset) === JSON.stringify(asset)) {
+
+    if (JSON.stringify(newMutableStorage) === JSON.stringify(asset.mutableStorage)) {
       return swal({
         title: "New data matches old! No changes made.",
         icon: "warning",
         button: "Close",
       });
     }
-    let tempObj = JSON.parse(JSON.stringify(newasset));
-    tempObj.photo = tempObj.photoUrls;
-    delete tempObj.photoUrls;
 
-    let payload = JSON.stringify(tempObj, null, 5);
-    let fileSize = Buffer.byteLength(payload, "utf8");
+    let tempObj = await JSON.parse(JSON.stringify(newMutableStorage));
+    let payload = await JSON.stringify(tempObj, null, 5);
+    let fileSize = await Buffer.byteLength(payload, "utf8");
 
-    if (fileSize > 1000000) {
-      return swal({
-        title:
-          "Document size exceeds 1 MB limit! (" + String(fileSize) + "Bytes)",
-        icon: "warning",
-        button: "Close",
-      });
-    }
+    if (asset.nodeData.storageProvider === "1") {
+      if (fileSize > 10000000) {
+        return swal({
+          title:
+            "Document size exceeds 10 MB demo limit! (" + String(fileSize) + "Bytes)",
+          icon: "warning",
+          button: "Close",
+        });
+      }
+  
+      setIpfsActive(true);
+      postToIpfs(payload)
+    } else if (asset.nodeData.storageProvider === "2") {
+      postToArweave(payload)
+    } 
 
-    setIpfsActive(true);
-    console.log("Submitting changes. Parsed Payload: ", tempObj);
+  };
 
-    window.ipfs.add(payload).then((hash) => {
+  const postToIpfs = async (data) => {
+    window.ipfs.add(data).then((hash) => {
       if (!hash) {
-        console.error("error sending to ipfs");
-        return setIpfsActive(false);
-      } else {
-        let url = `https://ipfs.io/ipfs/${hash.cid}`;
-        console.log(`Url --> ${url}`);
-        let b32Hash = window.utils.getBytes32FromIPFSHash(String(hash.cid));
+        console.log("Something went wrong. Unable to upload to ipfs");
         setIpfsActive(false);
-        updateasset(b32Hash, tempObj);
+      } else {
+        console.log("uploaded at hash: ", hash.cid.string);
+        props.prufClient.utils.ipfsToB32(hash.cid.string).then(hash=>{
+          setIpfsActive(false);
+          updateAssetMS([hash, "0x0000000000000000000000000000000000000000000000000000000000000000"])
+        })
       }
     });
+  }
+
+  const postToArweave = async (data) => {
+
+    let dataTransaction = await props.arweaveClient.createTransaction({ data: data });
+
+    console.log(
+      "pre-tags",
+      dataTransaction.tags,
+      "Size:",
+      Buffer.from(JSON.stringify(dataTransaction.tags)).length
+    );
+
+    if (data) {
+      dataTransaction.addTag("Primary-Content", `https://arweave.net/${dataTransaction.id}`)
+      const vals = Object.values(data);
+      const keys = Object.keys(data);
+
+      keys.forEach(key=>dataTransaction.addTag(tag, String(vals[i])))
+    }
+
+    console.log(
+      "post-tags",
+      dataTransaction.tags,
+      "Size:",
+      Buffer.from(JSON.stringify(dataTransaction.tags)).length
+    );
+
+    console.log(dataTransaction);
+
+    // eslint-disable-next-line react/prop-types
+    await props.arweaveClient.transactions.sign(
+      dataTransaction
+    );
+    // eslint-disable-next-line react/prop-types
+    const statusBeforePost = await props.arweaveClient.transactions.getStatus(
+      dataTransaction.id
+    );
+    console.log(statusBeforePost); // this will return 404
+
+    mineTx(dataTransaction).then(async () => {
+      // eslint-disable-next-line react/prop-types
+
+      setIpfsActive(false);
+      props.prufClient.utils.arweaveTxToB32(dataTransaction.id).then(hashes=>{
+        updateAssetMS(hashes)
+      })
+    });
   };
+
+  const mineTx = async (tx) => {
+    let uploader = await props.arweaveClient.transactions.getUploader(tx);
+
+    while (!uploader.isComplete) {
+      await uploader.uploadChunk();
+      console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
+    }
+  }
+
+  const updateAssetMS = (hashes) => {
+    setHelp(false);
+    if (!hash || !id) {
+      return;
+    }
+      // eslint-disable-next-line react/prop-types
+    const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
+
+    console.log("id", id);
+        // eslint-disable-next-line react/prop-types
+        console.log("addr: ", props.addr);
+        let tempTxHash;
+        setShowHelp(false);
+        setTxStatus(false);
+        setTxHash("");
+        setError(undefined);
+    
+        setTransactionActive(true);
+        props.prufClient.do
+          .asset.modifyMutableStorage(id, hashes[0], hashes[1])
+          // eslint-disable-next-line react/prop-types
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash;
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str2 = "' target='_blank'>here</a>";
+            link.innerHTML = String(str1 + tempTxHash + str2);
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash;
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str2 = "' target='_blank'>here</a>";
+            link.innerHTML = String(str1 + tempTxHash + str2);
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Information Successfully Updated!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            }).then(() => {
+              //refreshBalances()
+              window.newDescObj = JSON.parse(JSON.stringify(newMutableStorage));
+              window.backIndex = asset.dBIndex;
+              window.location.href = asset.lastRef;
+              window.replaceAssetData = {
+                key: pageKey,
+                newMutableStorage: newMutableStorage,
+                assetAction: "mod"
+              };
+              window.replaceAssetData.refreshBals = true
+            window.dispatchEvent(props.refresh)
+            });
+          });
+
+  };
+
+  const displayMutableData = (data) => {
+    if(!newMutableStorage) return []
+    let keys = Object.keys(data) 
+    let component = []
+    keys.forEach(key=>{
+      component.push(
+
+      )
+    })
+    
+  }
 
   const thousandHashesOf = (varToHash) => {
     if (!window.web3) return (window.location.href = "/#/user/home");
@@ -282,126 +435,6 @@ export default function ModifyDescription(props) {
     return tempHash;
   };
 
-  const updateasset = (hash, newAsset) => {
-    setHelp(false);
-    if (!hash || !id) {
-      return;
-    }
-
-    // eslint-disable-next-line react/prop-types
-    const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
-
-    console.log("id", id);
-    // eslint-disable-next-line react/prop-types
-    console.log("addr: ", props.addr);
-    let tempTxHash;
-    setShowHelp(false);
-    setTxStatus(false);
-    setTxHash("");
-    setError(undefined);
-
-    setTransactionActive(true);
-    props.prufClient.do.asset
-      .modifyMutableStorage(id, hash)
-      // eslint-disable-next-line react/prop-types
-      .send({ from: props.addr })
-      .on("error", function (_error) {
-        setTransactionActive(false);
-        setTxStatus(false);
-        setTxHash(Object.values(_error)[0].transactionHash);
-        tempTxHash = Object.values(_error)[0].transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
-        setError(Object.values(_error)[0]);
-        if (tempTxHash !== undefined) {
-          swal({
-            title: "Something went wrong!",
-            content: link,
-            icon: "warning",
-            button: "Close",
-          });
-        }
-        if (tempTxHash === undefined) {
-          swal({
-            title: "Something went wrong!",
-            icon: "warning",
-            button: "Close",
-          });
-        }
-      })
-      .on("receipt", (receipt) => {
-        setTransactionActive(false);
-        setTxStatus(receipt.status);
-        tempTxHash = receipt.transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
-        setTxHash(receipt.transactionHash);
-        swal({
-          title: "Information Successfully Updated!",
-          content: link,
-          icon: "success",
-          button: "Close",
-        }).then(() => {
-          //refreshBalances()
-          window.newDescObj = JSON.parse(JSON.stringify(newasset));
-          window.backIndex = asset.dBIndex;
-          window.location.href = asset.lastRef;
-          window.replaceAssetData = {
-            key: pageKey,
-            newAsset: newAsset,
-            assetAction: "mod",
-          };
-          window.replaceAssetData.refreshBals = true;
-          window.dispatchEvent(props.refresh);
-        });
-      });
-  };
-
-  const urlKeyIsGood = (e) => {
-    if (newasset.urls) {
-      if (newasset.urls[e] || e === "") {
-        return false;
-      }
-    }
-    return true;
-  };
-
-  const submitCurrentUrl = () => {
-    let url = assetURL,
-      key = URLTitle,
-      tempObj = JSON.parse(JSON.stringify(newasset));
-    if ((url === "" && key !== "") || (url !== "" && key === "")) {
-      if (url === "") {
-        return setloginURLState("error");
-      }
-      if (key === "") {
-        return setloginURLTitleState("error");
-      }
-    }
-    if (!tempObj.urls) {
-      tempObj.urls = {};
-    }
-    if (!url.includes("http")) {
-      url = "http://" + url;
-    }
-    tempObj.urls[key] = url;
-    console.log(tempObj);
-    setNewasset(tempObj);
-    setAssetURL("");
-    setURLTitle("");
-    setloginURLState("");
-    setloginURLTitleState("");
-    return forceUpdate();
-  };
-
-  const handleDescription = (e) => {
-    let tempObj = JSON.parse(JSON.stringify(newasset));
-    tempObj.text.Description = e;
-    setNewasset(tempObj);
-  };
-
   const addImage = async (prefix, buffer, fileName, iteration) => {
     if (!buffer) return;
     if (!iteration) {
@@ -409,7 +442,7 @@ export default function ModifyDescription(props) {
     }
     console.log(fileName);
 
-    let tempObj = JSON.parse(JSON.stringify(newasset));
+    let tempObj = JSON.parse(JSON.stringify(newMutableStorage));
     if (tempObj.photo[fileName]) {
       //console.log("Already exists, adding copy")
       let tempFN = fileName;
@@ -455,7 +488,7 @@ export default function ModifyDescription(props) {
               let url = `https://ipfs.io/ipfs/${hash.cid}`;
               console.log(`Url --> ${url}`);
               tempObj.photoUrls[fileName] = url;
-              setNewasset(tempObj);
+              setnewMutableStorage(tempObj);
               if (selectedImage === "") {
                 setSelectedImage(tempObj.photo[fileName]);
                 setSelectedKey(fileName);
@@ -482,7 +515,7 @@ export default function ModifyDescription(props) {
               let url = `https://ipfs.io/ipfs/${hash.cid}`;
               console.log(`Url --> ${url}`);
               tempObj.photoUrls[fileName] = url;
-              setNewasset(tempObj);
+              setnewMutableStorage(tempObj);
               if (selectedImage === "") {
                 setSelectedImage(tempObj.photo[fileName]);
                 setSelectedKey(fileName);
@@ -496,33 +529,6 @@ export default function ModifyDescription(props) {
     };
 
     i.src = prefix + base64.encode(tempBuffer);
-  };
-
-  const uploadImage = (e) => {
-    e.preventDefault();
-    if (!e.target.files[0]) return;
-    let file;
-    //console.log(e.target.files[0]);
-    file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      if (!file.type.includes("image")) {
-        //setIsUploading(false)
-        return swal({
-          title: "Unsupported File Type",
-          button: "Close",
-        });
-      }
-      setIsUploading(true);
-      const fileType = file.type;
-      const fileName = file.name;
-      const prefix = `data:${fileType};base64,`;
-      const buf = Buffer(reader.result);
-      //const base64buf = prefix + base64.encode(buf);
-      addImage(prefix, buf, fileName);
-    };
-    //const photo = document.getElementById("photo");
-    reader.readAsArrayBuffer(e.target.files[0]); // Read Provided File
   };
 
   const copyTextSnippet = (temp) => {
@@ -550,11 +556,11 @@ export default function ModifyDescription(props) {
       }
 
       if (newObj) {
-        newObj.photoUrls = newasset.photoUrls;
+        newObj.photoUrls = newMutableStorage.photoUrls;
         console.log(newObj);
         if (newObj.name && newObj.text && newObj.photo && newObj.urls) {
           console.log("Setting new JSON config into state");
-          setNewasset(newObj);
+          setnewMutableStorage(newObj);
           forceUpdate();
         } else {
           return console.log("Does not contain the requisite keys");
@@ -569,13 +575,13 @@ export default function ModifyDescription(props) {
 
   const createBackupJSON = () => {
     let filename;
-    if (newasset.name !== "") {
-      filename = newasset.name.replace(/ /g, "_") + "_Backup.json";
+    if (newMutableStorage.name !== "") {
+      filename = newMutableStorage.name.replace(/ /g, "_") + "_Backup.json";
     } else {
       filename = "unnamed_asset_backup.json";
     }
 
-    let tempObj = JSON.parse(JSON.stringify(newasset));
+    let tempObj = JSON.parse(JSON.stringify(newMutableStorage));
     tempObj.photo = tempObj.photoUrls;
     delete tempObj.photoUrls;
 
@@ -613,8 +619,8 @@ export default function ModifyDescription(props) {
   //     switch (value) {
   //       case "delete":
   //         if (
-  //           newasset.photo.displayImage === undefined &&
-  //           Object.values(newasset.photo).length === 0
+  //           newMutableStorage.photo.displayImage === undefined &&
+  //           Object.values(newMutableStorage.photo).length === 0
   //         ) {
   //           return swal("Cannot delete asset identicon.");
   //         }
@@ -648,8 +654,8 @@ export default function ModifyDescription(props) {
 
   //       case "default":
   //         if (
-  //           newasset.photo.displayImage === undefined &&
-  //           Object.values(newasset.photo).length === 0
+  //           newMutableStorage.photo.displayImage === undefined &&
+  //           Object.values(newMutableStorage.photo).length === 0
   //         ) {
   //           return swal("Cannot set asset identicon as default image.");
   //         }
@@ -1117,11 +1123,84 @@ export default function ModifyDescription(props) {
                   </div>
                 </Tooltip>
               )}
-            </>
-          )}
-          {isMobile && !isAndroid && (
-            <>
-              {!copyText && (
+              {displayMutableData(newMutableStorage)}
+              {/*@dev URLs go here*/}
+              <br />
+            </CardBody>
+            <CardFooter>
+              {!isMobile && (
+                <>
+                  {!copyText && (
+                    <Tooltip title="Copy to Clipboard">
+                      <div className={classes.stats}>
+                        Asset ID:
+                        <button
+                          className="IDText"
+                          onClick={() => {
+                            copyTextSnippet(asset.id);
+                          }}
+                        >
+                          {asset.id}
+                        </button>
+                      </div>
+                    </Tooltip>
+                  )}
+                  {copyText && (
+                    <Tooltip title="Copied to Clipboard">
+                      <div className={classes.stats}>
+                        Asset ID:
+                        <button
+                          className="IDText"
+                          onClick={() => {
+                            copyTextSnippet(asset.id);
+                          }}
+                        >
+                          {asset.id}
+                        </button>
+                      </div>
+                    </Tooltip>
+                  )}
+                </>
+              )}
+              {isMobile && !isAndroid && (
+                <>
+                  {!copyText && (
+                    <Tooltip title="Copy to Clipboard">
+                      <div className={classes.stats}>
+                        Asset ID:
+                        <button
+                          className="IDText"
+                          onClick={() => {
+                            copyTextSnippet(asset.id);
+                          }}
+                        >
+                          {asset.id.substring(0, 10) +
+                            "..." +
+                            asset.id.substring(56, 66)}
+                        </button>
+                      </div>
+                    </Tooltip>
+                  )}
+                  {copyText && (
+                    <Tooltip title="Copied to Clipboard">
+                      <div className={classes.stats}>
+                        Asset ID:
+                        <button
+                          className="IDText"
+                          onClick={() => {
+                            copyTextSnippet(asset.id);
+                          }}
+                        >
+                          {asset.id.substring(0, 10) +
+                            "..." +
+                            asset.id.substring(56, 66)}
+                        </button>
+                      </div>
+                    </Tooltip>
+                  )}
+                </>
+              )}
+              {isMobile && isAndroid && (
                 <Tooltip title="Copy to Clipboard">
                   <div className={classes.stats}>
                     Asset ID:
