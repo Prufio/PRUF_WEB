@@ -82,7 +82,7 @@ export default function Dashboard(props) {
   const [currentACPrice, setCurrentACPrice] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");
   const [nodeBalance, setNodeBalance] = React.useState("~");
-  const [showPlaceHolder, setShowPlaceHolder] = React.useState(false)
+  const [showPlaceHolder, setShowPlaceHolder] = React.useState(false);
   const [heldNodeData, setHeldNodeData] = React.useState([
     ["Loading Nodes...", "~", "~", "~"],
   ]);
@@ -145,12 +145,11 @@ export default function Dashboard(props) {
 
     if (cookies) checkForCookies();
 
-    window.addEventListener("refresh", () =>{
-      console.log(replaceAssetData)
-      let newNum = replaceAssetData + 1
-      setReplaceAssetData(newNum)
-    }
-    );
+    window.addEventListener("refresh", () => {
+      console.log(replaceAssetData);
+      let newNum = replaceAssetData + 1;
+      setReplaceAssetData(newNum);
+    });
     window.addEventListener("connectArweave", () => {
       if (!window.arweaveWallet) {
         return swalReact(
@@ -187,22 +186,22 @@ export default function Dashboard(props) {
       assetBalance: assetBalance,
       assetsLen: Object.keys(assets).length,
     });
-    if(window.countDown) {
-      window.countDown = false
-      setAssetBalance(assetBalance - 1)
+    if (window.countDown) {
+      window.countDown = false;
+      setAssetBalance(assetBalance - 1);
     } else if (Number(assetBalance) > Object.keys(assets).length) {
       getAssetAtIndex(Object.keys(assets).length);
     } else if (Number(assetBalance) < Object.keys(assets).length) {
       setAssetBalance(Object.keys(assets).length);
-      setShowPlaceHolder(false)
+      setShowPlaceHolder(false);
     } else if (Number(assetBalance) === Object.keys(assets).length) {
-      setShowPlaceHolder(false)
+      setShowPlaceHolder(false);
     }
   }, [assets]);
 
   React.useEffect(() => {
     if (heldNodeData.length !== nodeBalance) {
-      setNodeBalance(heldNodeData.length)
+      setNodeBalance(heldNodeData.length);
     }
   }, [heldNodeData]);
 
@@ -278,12 +277,12 @@ export default function Dashboard(props) {
 
         //setupTokenVals(arweaveClient, addr, prufClient, { justAssets: true });
 
-        if ((action === "mod")) {
+        if (action === "mod") {
           // newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
-          tempObj[newAsset.id] = newAsset
-          setAssets(tempObj)
+          tempObj[newAsset.id] = newAsset;
+          setAssets(tempObj);
           // getAsset(newAsset.id)
-        } else if ((action === "rem")) {
+        } else if (action === "rem") {
           window.countDown = true;
           console.log("Old Assets", assets);
           delete tempObj[newAsset.id];
@@ -298,8 +297,8 @@ export default function Dashboard(props) {
 
   //console.log("pre-load href", window.location.href)
   const initArweave = async () => {
-    const _arweave = Arweave;
-    const arweave = _arweave.init({
+    const _arweaveClient = Arweave;
+    const arweave = _arweaveClient.init({
       host: "arweave.net",
       port: 443,
       protocol: "https",
@@ -770,7 +769,7 @@ export default function Dashboard(props) {
   };
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
-  const setupTokenVals = (_arweave, _addr, _prufClient, options) => {
+  const setupTokenVals = (_arweaveClient, _addr, _prufClient, options) => {
     console.log({ addr: _addr });
     if (!_addr) return swalReact("Unable to reach user's wallet.");
     if (!options) options = {};
@@ -793,7 +792,7 @@ export default function Dashboard(props) {
         if (Number(e) > 0) {
           setIsAssetHolder(true);
           if (!options.justCount)
-            getAssetAtIndex(0, _arweave, _addr, _prufClient, e);
+            getAssetAtIndex(0, _arweaveClient, _addr, _prufClient, e);
         } else {
           setIsAssetHolder(false);
         }
@@ -810,7 +809,7 @@ export default function Dashboard(props) {
         setAssetBalance(e);
         if (Number(e) > 0) {
           if (!options.justCount)
-            getAssetAtIndex(0, _arweave, _addr, _prufClient, e);
+            getAssetAtIndex(0, _arweaveClient, _addr, _prufClient, e);
         }
       });
 
@@ -1193,7 +1192,7 @@ export default function Dashboard(props) {
     _addr = addr,
     _prufClient = prufClient
   ) => {
-    if (!showPlaceHolder) setShowPlaceHolder(true)
+    if (!showPlaceHolder) setShowPlaceHolder(true);
     _prufClient.get.asset
       .heldAssetAtIndex(_addr, String(index))
       .then((id) => getAsset(id, _arweaveClient, _addr, _prufClient));
@@ -1212,7 +1211,7 @@ export default function Dashboard(props) {
     });
   };
 
-  const getNonMutableOf = async (rec, _prufClient, _arweave) => {
+  const getNonMutableOf = async (rec, _prufClient, _arweaveClient) => {
     rec.identicon = <Jdenticon value={rec.id} />;
     rec.statusNum = rec.status;
     rec.status = await _prufClient.utils.stringifyStatus(rec.status);
@@ -1228,7 +1227,7 @@ export default function Dashboard(props) {
           "0x0000000000000000000000000000000000000000000000000000000000000000"
         ) {
           rec.nonMutableStorage = "";
-          getMutableOf(rec, _prufClient, _arweave);
+          getMutableOf(rec, _prufClient, _arweaveClient);
         } else if (rec.nodeData.storageProvider === "1") {
           _prufClient.utils
             .ipfsFromB32(rec.nonMutableStorage1)
@@ -1238,7 +1237,7 @@ export default function Dashboard(props) {
               if (cookies[window.web3.utils.soliditySha3(query)]) {
                 rec.nonMutableStorage =
                   cookies[window.web3.utils.soliditySha3(query)];
-                  getMutableOf(rec, _prufClient, _arweave);
+                getMutableOf(rec, _prufClient, _arweaveClient);
               } else {
                 for await (const chunk of window.ipfs.cat(query)) {
                   let str = new TextDecoder("utf-8").decode(chunk);
@@ -1251,7 +1250,7 @@ export default function Dashboard(props) {
                   } catch {
                     rec.nonMutableStorage = str;
                   }
-                  getMutableOf(rec, _prufClient, _arweave);
+                  getMutableOf(rec, _prufClient, _arweaveClient);
                 }
               }
             });
@@ -1263,13 +1262,19 @@ export default function Dashboard(props) {
               if (cookies[window.web3.utils.soliditySha3(query)]) {
                 rec.nonMutableStorage =
                   cookies[window.web3.utils.soliditySha3(query)];
-                getMutableOf(rec, _prufClient, _arweave);
+                getMutableOf(rec, _prufClient, _arweaveClient);
               } else {
                 let xhr = new XMLHttpRequest();
+                xhr.responseType = "text";
                 xhr.onload = () => {
                   if (xhr.status !== 404 && xhr.status !== 202) {
                     rec.nonMutableStorage = {};
-                    _arweave.transactions
+                    // console.log(xhr.response);
+                    if (xhr.response === "Pending") {
+                      rec.nonMutableStorage = { Pending: "" };
+                      return getMutableOf(rec, _prufClient, _arweaveClient);
+                    }
+                    _arweaveClient.transactions
                       .get(query)
                       .then((e) => {
                         console.log(e);
@@ -1288,24 +1293,24 @@ export default function Dashboard(props) {
                           window.web3.utils.soliditySha3(query),
                           rec.nonMutableStorage
                         );
-                        getMutableOf(rec, _prufClient, _arweave);
+                        getMutableOf(rec, _prufClient, _arweaveClient);
                       })
                       .catch((e) => {
                         console.log(e);
                         rec.nonMutableStorage = "";
-                        getMutableOf(rec, _prufClient, _arweave);
+                        getMutableOf(rec, _prufClient, _arweaveClient);
                       });
                   } else {
                     console.log("Id returned 404");
                     rec.nonMutableStorage = "";
-                    getMutableOf(rec, _prufClient, _arweave);
+                    getMutableOf(rec, _prufClient, _arweaveClient);
                   }
                 };
 
                 xhr.onerror = () => {
                   console.log("Gateway returned 404");
                   rec.nonMutableStorage = "";
-                  getMutableOf(rec, _prufClient, _arweave);
+                  getMutableOf(rec, _prufClient, _arweaveClient);
                 };
 
                 xhr.open("GET", `https://arweave.net/${query}`);
@@ -1317,7 +1322,7 @@ export default function Dashboard(props) {
     });
   };
 
-  const getMutableOf = async (rec, _prufClient, _arweave) => {
+  const getMutableOf = async (rec, _prufClient, _arweaveClient) => {
     if (
       rec.mutableStorage1 ===
       "0x0000000000000000000000000000000000000000000000000000000000000000"
@@ -1343,16 +1348,23 @@ export default function Dashboard(props) {
       _prufClient.utils
         .arweaveTxFromB32(rec.mutableStorage1, rec.mutableStorage2)
         .then((query) => {
-          rec.contentUrl = `https://arweave.net/${query}`;
+          console.log({ query });
+          //rec.contentUrl = `https://arweave.net/${query}`;
           if (cookies[window.web3.utils.soliditySha3(query)]) {
             rec.mutableStorage = cookies[window.web3.utils.soliditySha3(query)];
             finalize(rec, _prufClient);
           } else {
             let xhr = new XMLHttpRequest();
+            xhr.responseType = "text";
             xhr.onload = () => {
               if (xhr.status !== 404 && xhr.status !== 202) {
                 rec.mutableStorage = {};
-                _arweave.transactions
+                // console.log(xhr.response);
+                if (xhr.response === "Pending") {
+                  rec.mutableStorage = { Pending: "" };
+                  return finalize(rec, _prufClient);
+                }
+                _arweaveClient.transactions
                   .get(query)
                   .then((e) => {
                     console.log(e);
@@ -1376,7 +1388,7 @@ export default function Dashboard(props) {
                   .catch((e) => {
                     console.log(e);
                     rec.mutableStorage = "";
-                    finalize(rec, _prufClient, _arweave);
+                    finalize(rec, _prufClient);
                   });
               } else {
                 console.log("Id returned 404");
@@ -1402,35 +1414,25 @@ export default function Dashboard(props) {
     let obj = JSON.parse(JSON.stringify(assets));
 
     if (rec.nodeData.storageProvider === "1") {
-      // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",rec.nonMutableStorage.displayImage.substring(rec.nonMutableStorage.displayImage.indexOf("/ipfs/") + 6, rec.nonMutableStorage.displayImage.length))
-      // let query = rec.nonMutableStorage.displayImage.substring(rec.nonMutableStorage.displayImage.indexOf("/ipfs/") + 6, rec.nonMutableStorage.displayImage.length)
-      // for await (const chunk of window.ipfs.cat(query)) {
-      //   console.log(str)
-      //   let str = new TextDecoder("utf-8").decode(chunk);
-      //   rec.displayImage = str
-      //   obj[rec.id] = rec;
-      //   setAssets(obj);
-      // }
-
       const req = new XMLHttpRequest();
-        req.responseType = "text";
+      req.responseType = "text";
 
-        req.onload = function () {
-            console.log("response", this.response);
-            rec.displayImage = this.response;
-            obj[rec.id] = rec;
-            setAssets(obj);
-        };
+      req.onload = function () {
+        console.log("response", this.response);
+        rec.displayImage = this.response;
+        obj[rec.id] = rec;
+        setAssets(obj);
+      };
 
-        req.onerror = function (e) {
-          //console.log("http request error")
-          console.log("error");
-          rec.displayImage = "";
-          obj[rec.id] = rec;
-          setAssets(obj);
-        };
-        req.open("GET", rec.nonMutableStorage.displayImage, true);
-        req.send();
+      req.onerror = function (e) {
+        //console.log("http request error")
+        console.log("error");
+        rec.displayImage = "";
+        obj[rec.id] = rec;
+        setAssets(obj);
+      };
+      req.open("GET", rec.nonMutableStorage.displayImage, true);
+      req.send();
     } else if (rec.nodeData.storageProvider === "2") {
       _prufClient.get.asset.URI(rec.id).then((uri) => {
         rec.displayImage = uri;
@@ -1439,7 +1441,7 @@ export default function Dashboard(props) {
       });
     } else {
       _prufClient.get.asset.URI(rec.id).then((uri) => {
-        rec.displayImage = uri
+        rec.displayImage = uri;
         obj[rec.id] = rec;
         setAssets(obj);
       });

@@ -242,10 +242,7 @@ export default function ModifyDescription(props) {
 
     // eslint-disable-next-line react/prop-types
     await props.arweaveClient.transactions.sign(dataTransaction);
-    dataTransaction.addTag(
-      "Primary-Content",
-      `https://arweave.net/${dataTransaction.id}`
-    );
+    
     // eslint-disable-next-line react/prop-types
     const statusBeforePost = await props.arweaveClient.transactions.getStatus(
       dataTransaction.id
@@ -254,6 +251,7 @@ export default function ModifyDescription(props) {
 
     mineTx(dataTransaction).then(async () => {
       // eslint-disable-next-line react/prop-types
+      console.log(dataTransaction.id);
 
       setIpfsActive(false);
       props.prufClient.utils
