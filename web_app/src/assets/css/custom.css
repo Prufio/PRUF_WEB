@@ -1520,3 +1520,11 @@ max-width: 80px !important;
 .like{
   height: 35px;
 }
+
+.deleteIcon {
+  color:#005480;
+}
+.deleteIcon:hover {
+  cursor: pointer;
+  color:#ff1500;
+}

@@ -15,6 +15,7 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import TextField from "@material-ui/core/TextField";
 import CardBody from "components/Card/CardBody.js";
 import CardIcon from "components/Card/CardIcon.js";
+import InputAdornment from "@material-ui/core/InputAdornment";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Accordion from "@material-ui/core/Accordion";
@@ -28,6 +29,7 @@ import {
   Check,
   ExpandMoreOutlined,
   FiberManualRecordTwoTone,
+  Edit,
 } from "@material-ui/icons";
 import Icon from "@material-ui/core/Icon";
 import FormControl from "@material-ui/core/FormControl";
@@ -50,7 +52,15 @@ const useEngravingStyles = makeStyles(engravingStyles);
 export default function ModifyDescription(props) {
   if (!window.sentPacket) window.sentPacket = {};
 
-  const [asset, setAsset] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)));
+  const [asset, setAsset] = React.useState(
+    JSON.parse(JSON.stringify(window.sentPacket))
+  );
+  const [oldAsset] = React.useState(
+    JSON.stringify(window.sentPacket)
+  );
+  const [stringifiedAsset, setStringifiedAsset] = React.useState(
+    JSON.stringify(window.sentPacket)
+  )
   console.log(window.sentPacket);
 
   const [id] = React.useState(window.sentPacket.id);
@@ -160,18 +170,21 @@ export default function ModifyDescription(props) {
 
   const handleChanges = (key, value) => {
     let obj = JSON.parse(JSON.stringify(asset));
-    console.log(obj.mutableStorage)
-    if (obj.mutableStorage === "") obj.mutableStorage = {}
+    console.log(obj.mutableStorage);
+    if (obj.mutableStorage === "") obj.mutableStorage = {};
     if (value === "delete") {
       delete obj.mutableStorage[key];
     } else {
       obj.mutableStorage[key] = value;
     }
     setAsset(obj);
+    if(Object.values(obj.mutableStorage).length < 1){
+      obj.mutableStorage = ""
+    }
+    setStringifiedAsset(JSON.stringify(obj));
   };
 
   const submitChanges = async () => {
-
     let tempObj = await JSON.parse(JSON.stringify(asset.mutableStorage));
     let payload = await JSON.stringify(tempObj, null, 5);
     let fileSize = await Buffer.byteLength(payload, "utf8");
@@ -275,11 +288,14 @@ export default function ModifyDescription(props) {
     }
   };
 
-  const editElement = (key) => {
-    if (!key) key = `Mutable Element #${Object.values(asset.mutableStorage).length + 1}`
-    let value = ""
+  const addElement = (key) => {
+    if (!key)
+      key = `Mutable Element #${
+        Object.values(asset.mutableStorage).length + 1
+      }`;
+    let value = "";
     swalReact({
-      buttons : {
+      buttons: {
         back: {
           text: "⬅️ Go Back",
           value: "back",
@@ -289,15 +305,15 @@ export default function ModifyDescription(props) {
           text: "Submit ✅",
           value: "confirm",
           className: "delegationButtonBack",
-        }
+        },
       },
-      content: 
-      <Card className="delegationCard">
+      content: (
+        <Card className="delegationCard">
           <CustomInput
             labelText={`Title (Optional)`}
             id="model"
             formControlProps={{
-              onChange: e=>key = e.target.value,
+              onChange: (e) => (key = e.target.value),
               fullWidth: true,
             }}
             inputProps={{
@@ -309,18 +325,69 @@ export default function ModifyDescription(props) {
             id="model"
             formControlProps={{
               fullWidth: true,
-              onChange: e=>value = e.target.value,
+              onChange: (e) => (value = e.target.value),
             }}
             inputProps={{
               disabled: false,
             }}
           />
         </Card>
-    }).then(val=>{
-      if(val === "confirm" && value.length > 0) handleChanges(key, value)
-    })
+      ),
+    }).then((val) => {
+      if (val === "confirm" && value.length > 0) handleChanges(key, value);
+    });
   };
 
+  const editElement = (key, value) => {
+    // if (!key)
+    //   key = `Mutable Element #${
+    //     Object.values(asset.mutableStorage).length + 1
+    //   }`;
+    // let value = "";
+    swalReact({
+      buttons: {
+        back: {
+          text: "⬅️ Go Back",
+          value: "back",
+          className: "delegationButtonBack",
+        },
+        confirm: {
+          text: "Submit ✅",
+          value: "confirm",
+          className: "delegationButtonBack",
+        },
+      },
+      content: (
+        <Card className="delegationCard">
+          <CustomInput
+            // labelText={key}
+            id="model"
+            formControlProps={{
+              onChange: (e) => (key = e.target.value),
+              fullWidth: true,
+            }}
+            inputProps={{
+              disabled:true, 
+              defaultValue:key
+            }}
+          />
+          <CustomInput
+            // labelText={value}
+            id="model"
+            formControlProps={{
+              fullWidth: true,
+              onChange: (e) => (value = e.target.value),
+            }}
+            inputProps={{
+              defaultValue:value
+            }}
+          />
+        </Card>
+      ),
+    }).then((val) => {
+      if (val === "confirm" && value.length > 0) handleChanges(key, value);
+    });
+  }
 
   const updateAssetMS = (hashes) => {
     setHelp(false);
@@ -328,7 +395,7 @@ export default function ModifyDescription(props) {
       return;
     }
 
-    console.log({hashes})
+    console.log({ hashes });
     // eslint-disable-next-line react/prop-types
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
@@ -399,88 +466,111 @@ export default function ModifyDescription(props) {
       });
   };
 
-  const displaymutableStorage = () => {
-    let component = []
-    if (asset.mutableStorage === "") return [
-        <Button className="MLBGradientInlineLeft" onClick={() => editElement()}>
-          <span>
-          <NoteAddOutlined/>
-          </span>
-        </Button>
-    ]
+  const displayMutableStorage = () => {
+    let component = [];
+    // if (asset.mutableStorage === "")
+    //   return [
+    //     <Button className="MLBGradientInlineLeft" onClick={() => addElement()}>
+    //       <NoteAddOutlined />
+    //     </Button>,
+    //   ];
 
     let keys = Object.keys(asset.mutableStorage);
 
     keys.forEach((key) => {
       component.push(
-        <Accordion key={`AccordionStack${key}`}>
-          {/* <h4>{key}</h4> */}
-          <AccordionSummary
-            expandIcon={<ExpandMoreOutlined />}
-            aria-label="Expand"
-            aria-controls="additional-actions1-content"
-            id={`additional-actions1-header-${key}`}
-          >
-            
-            <div className="flexRowWithGap">
-              <span onClick={()=>handleChanges(key, "delete")}><DeleteForever/></span> <h4>{key}</h4> <br/> <h4 className="">{asset.mutableStorage[key]}</h4>
-            </div>
-            {/* <FormControlLabel
-              aria-label="Acknowledge"
-              onClick={(event) => {
-                event.stopPropagation();
-              }}
-              onFocus={(event) => {
-                event.stopPropagation();
-              }}
-              // control={
-              //   <Checkbox
-              //     disabled={!(prufBalance > props.min)}
-              //     onClick={() =>
-              //       (isTierChecked[`chk${props.pos}`] =
-              //         !isTierChecked[`chk${props.pos}`])
-              //     }
-              //     classes={{
-              //       checked: classes.checked,
-              //       root: classes.checkRoot,
-              //     }}
-              //   />
-              // }
-              label={`${key} ${asset.mutableStorage[key].substring(0, 28)}...`}
-            /> */}
-          </AccordionSummary>
-          <AccordionDetails>
-            <div>
-              <div className="delegationTips">
-                <FiberManualRecordTwoTone className="delegationPin" />
-                <h5 className="delegationTipsContent">
-                  {asset.mutableStorage[key]}
-                </h5>
-              </div>
-            </div>
-          </AccordionDetails>
-        </Accordion>
+        <>
+          <br />
+          <br />
+
+          <TextField
+            key={`AccordionStack${key}`}
+            // id="outlined-multiline"
+            label={key}
+            disabled={!transactionActive ? false : true}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  {!transactionActive && (
+                    <>
+                    <DeleteForever
+                      className="deleteIcon"
+                      onClick={() => handleChanges(key, "delete")}
+                    />
+                  {/* <Edit
+                    className="deleteIcon"
+                    onClick={() => handleChanges(key, "delete")}
+                  /> */}
+                  </>
+                  )}
+                  {transactionActive && (
+                  <DeleteForever
+                    // className="deleteIcon"
+                    // onClick={() => handleChanges(key, "delete")}
+                  />
+                  )}
+                </InputAdornment>
+              ),
+            }}
+            rows={2}
+            defaultValue={asset.mutableStorage[key]}
+            variant="outlined"
+            fullWidth
+            // className={engravingClasses.engraving}
+            onChange={e => handleChanges(key, e.target.value)}
+          />
+        </>
+        // <Accordion key={`AccordionStack${key}`}>
+        // {/* <h4>{key}</h4> */}
+        // {/* <AccordionSummary
+        //   expandIcon={<ExpandMoreOutlined />}
+        //   aria-label="Expand"
+        //   aria-controls="additional-actions1-content"
+        //   id={`additional-actions1-header-${key}`}
+        // > */}
+        // <div className="flexRowWithGap">
+        //     <DeleteForever onClick={() => handleChanges(key, "delete")}/>
+        //   <h4>{key}</h4>
+        //   <h4 className="">{asset.mutableStorage[key]}</h4>
+        // </div>
+        // {/* </AccordionSummary> */}
+        // {/* <AccordionDetails>
+        //   <div>
+        //     <div className="delegationTips">
+        //       <FiberManualRecordTwoTone className="delegationPin" />
+        //       <h5 className="delegationTipsContent">
+        //         {asset.mutableStorage[key]}
+        //       </h5>
+        //     </div>
+        //   </div>
+        // </AccordionDetails> */}
+        // </Accordion>
       );
     });
-
-    component.push(
-      <div className="flexRow">
-      
-        <Button className="MLBGradientInlineLeft" onClick={() => editElement()}>
-        <span>
-          <NoteAddOutlined/>
-          </span>
-        </Button>
-      
-      <Button className="MLBGradientInlineRight" onClick={() => submitChanges()}>
-        Save Changes
-      </Button>
-{/* 
+    // component.push(
+    // <div className="flexRow">
+    //   <Button
+    //     className="MLBGradientInlineLeft"
+    //     onClick={() => addElement()}
+    //   >
+    //     <NoteAddOutlined />
+    //   </Button>
+    //   {asset.mutableStorage !== "" && (
+    //     <Button
+    //       className="MLBGradientInlineRight"
+    //       onClick={() => submitChanges()}
+    //     >
+    //       Save Changes
+    //     </Button>
+    //   )}
+    {
+      /* 
       <Button className="MLBGradientInlineRight" onClick={() => updateAssetMS(["0x0", "0x0"])}>
         Save Changes
-      </Button> */}
-      </div>
-    )
+      </Button> */
+    }
+    // </div>
+    // );
 
     return component;
   };
@@ -1147,7 +1237,35 @@ export default function ModifyDescription(props) {
               className={engravingClasses.engraving}
             />
           )}
-          {displaymutableStorage()}
+          {displayMutableStorage()}
+          {!transactionActive && (
+          <div className="flexRow">
+            <Button
+              className="MLBGradientInlineLeft"
+              onClick={() => addElement()}
+            >
+              <NoteAddOutlined />
+            </Button>
+            {oldAsset !== stringifiedAsset && (
+              <Button
+                className="MLBGradientInlineRight"
+                onClick={() => submitChanges()}
+              >
+                Save Changes
+              </Button>
+            )}
+          </div>
+          )}
+          {transactionActive && (
+              <h3>
+                  Updating mutable data
+                  <div className="lds-ellipsisIF">
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                  </div>
+              </h3>
+          )}
           {/*@dev URLs go here*/}
           <br />
         </CardBody>
