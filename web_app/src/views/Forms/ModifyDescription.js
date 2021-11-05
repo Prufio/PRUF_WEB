@@ -167,77 +167,8 @@ export default function ModifyDescription(props) {
     } else {
       obj.mutableStorage[key] = value;
     }
-
     setAsset(obj);
   };
-
-  const getRandomInt = () => {
-    return Math.floor(Math.random() * Math.floor(99999));
-  };
-
-  const generateNewKey = (obj) => {
-    let key =
-      "PRAT_Image_" + String(Object.values(obj.photo).length + getRandomInt());
-
-    if (obj.photo[key]) {
-      return generateNewKey(obj);
-    } else {
-      return key;
-    }
-  };
-
-  const removeElement = (type, rem) => {
-    let tempObj = JSON.parse(JSON.stringify(newMutableStorage));
-    delete tempObj[type][rem];
-    //console.log(tempObj)
-    if (type === image) {
-      delete tempObj.photoUrls[rem];
-      //console.log(rem)
-      //console.log(tempObj)
-      if (rem === "displayImage" && Object.values(tempObj.photo)[0]) {
-        setSelectedImage(Object.values(tempObj.photo)[0]);
-        setSelectedKey(Object.keys(tempObj.photo)[0]);
-      } else if (rem !== "displayImage" && tempObj.photo.displayImage) {
-        setSelectedImage(tempObj.photo.displayImage);
-        setSelectedKey("displayImage");
-      } else if (rem !== "displayImage" && Object.values(tempObj.photo)[0]) {
-        setSelectedImage(Object.values(tempObj.photo)[0]);
-        setSelectedKey(Object.keys(tempObj.photo)[0]);
-      } else {
-        setSelectedImage("");
-        setSelectedKey("");
-      }
-    }
-    setNewMutableStorage(tempObj);
-    return forceUpdate();
-  };
-
-  const setDisplayImage = (img, key) => {
-    // console.log("Deleting: ", key);
-    // let tempObj = JSON.parse(JSON.stringify(newMutableStorage));
-    // if (key === "displayImage") {
-    //   return console.log("Nothing was done. Already set.");
-    // }
-    // let newKey = generateNewKey(tempObj);
-    // if (tempObj.photo.displayImage) {
-    //   tempObj.photo[newKey] = tempObj.photo.displayImage;
-    //   tempObj.photoUrls[newKey] = tempObj.photoUrls.displayImage;
-    // }
-    // tempObj.photo.displayImage = img;
-    // tempObj.photoUrls.displayImage = tempObj.photoUrls[key];
-    // delete tempObj.photo[key];
-    // delete tempObj.photoUrls[key];
-    // //console.log(tempObj);
-    // setNewMutableStorage(tempObj);
-    // setSelectedImage(tempObj.photo.displayImage);
-    // setSelectedKey("displayImage");
-    // return forceUpdate();
-  };
-
-  // const resetChanges = () => {
-  //   setNewMutableStorage(asset);
-  //   return forceUpdate();
-  // };
 
   const submitChanges = async () => {
 
@@ -258,9 +189,9 @@ export default function ModifyDescription(props) {
       }
 
       setIpfsActive(true);
-      postToIpfs(payload);
+      postToIpfs(JSON.stringify(payload));
     } else if (asset.nodeData.storageProvider === "2") {
-      postToArweave(payload);
+      postToArweave(tempObj);
     }
   };
 
@@ -284,7 +215,7 @@ export default function ModifyDescription(props) {
 
   const postToArweave = async (data) => {
     let dataTransaction = await props.arweaveClient.createTransaction({
-      data: data,
+      data: JSON.stringify(data, null, 5),
     });
 
     console.log(
@@ -295,14 +226,9 @@ export default function ModifyDescription(props) {
     );
 
     if (data) {
-      dataTransaction.addTag(
-        "Primary-Content",
-        `https://arweave.net/${dataTransaction.id}`
-      );
-      const vals = Object.values(data);
       const keys = Object.keys(data);
 
-      keys.forEach((key) => dataTransaction.addTag(tag, String(vals[i])));
+      keys.forEach((key) => dataTransaction.addTag(key, data[key]));
     }
 
     console.log(
@@ -316,6 +242,10 @@ export default function ModifyDescription(props) {
 
     // eslint-disable-next-line react/prop-types
     await props.arweaveClient.transactions.sign(dataTransaction);
+    dataTransaction.addTag(
+      "Primary-Content",
+      `https://arweave.net/${dataTransaction.id}`
+    );
     // eslint-disable-next-line react/prop-types
     const statusBeforePost = await props.arweaveClient.transactions.getStatus(
       dataTransaction.id
@@ -352,7 +282,7 @@ export default function ModifyDescription(props) {
       buttons : {
         back: {
           text: "⬅️ Go Back",
-          value: "confirm",
+          value: "back",
           className: "delegationButtonBack",
         },
         confirm: {
@@ -387,15 +317,18 @@ export default function ModifyDescription(props) {
           />
         </Card>
     }).then(val=>{
-      if(val === "confirm") handleChanges(key, value)
+      if(val === "confirm" && value.length > 0) handleChanges(key, value)
     })
   };
 
+
   const updateAssetMS = (hashes) => {
     setHelp(false);
-    if (!hash || !id) {
+    if (!hashes || !id) {
       return;
     }
+
+    console.log({hashes})
     // eslint-disable-next-line react/prop-types
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
@@ -453,12 +386,11 @@ export default function ModifyDescription(props) {
           button: "Close",
         }).then(() => {
           //refreshBalances()
-          window.newDescObj = JSON.parse(JSON.stringify(newMutableStorage));
           window.backIndex = asset.dBIndex;
           window.location.href = asset.lastRef;
           window.replaceAssetData = {
             key: pageKey,
-            newMutableStorage: newMutableStorage,
+            newAsset: asset,
             assetAction: "mod",
           };
           window.replaceAssetData.refreshBals = true;
@@ -468,19 +400,19 @@ export default function ModifyDescription(props) {
   };
 
   const displaymutableStorage = () => {
-    let component = [
-      <span>
-        <Button onClick={() => editElement()}>
-          <NoteAddOutlined size="40px" />
+    let component = []
+    if (asset.mutableStorage === "") return [
+        <Button className="MLBGradientInlineLeft" onClick={() => editElement()}>
+          <span>
+          <NoteAddOutlined/>
+          </span>
         </Button>
-      </span>,
-    ];
-    if (asset.mutableStorage === "") return component;
+    ]
 
     let keys = Object.keys(asset.mutableStorage);
 
     keys.forEach((key) => {
-      component.unshift(
+      component.push(
         <Accordion key={`AccordionStack${key}`}>
           {/* <h4>{key}</h4> */}
           <AccordionSummary
@@ -489,7 +421,10 @@ export default function ModifyDescription(props) {
             aria-controls="additional-actions1-content"
             id={`additional-actions1-header-${key}`}
           >
-            <h4>{key}</h4>
+            
+            <div className="flexRowWithGap">
+              <span onClick={()=>handleChanges(key, "delete")}><DeleteForever/></span> <h4>{key}</h4> <br/> <h4 className="">{asset.mutableStorage[key]}</h4>
+            </div>
             {/* <FormControlLabel
               aria-label="Acknowledge"
               onClick={(event) => {
@@ -527,6 +462,25 @@ export default function ModifyDescription(props) {
         </Accordion>
       );
     });
+
+    component.push(
+      <div className="flexRow">
+      
+        <Button className="MLBGradientInlineLeft" onClick={() => editElement()}>
+        <span>
+          <NoteAddOutlined/>
+          </span>
+        </Button>
+      
+      <Button className="MLBGradientInlineRight" onClick={() => submitChanges()}>
+        Save Changes
+      </Button>
+{/* 
+      <Button className="MLBGradientInlineRight" onClick={() => updateAssetMS(["0x0", "0x0"])}>
+        Save Changes
+      </Button> */}
+      </div>
+    )
 
     return component;
   };
