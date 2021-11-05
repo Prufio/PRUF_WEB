@@ -102,9 +102,29 @@ body {
   justify-content: center;
 }
 
+.flexRow {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .MLBGradientSubmit {
+  color: #017ec0;
+  cursor: pointer;
   display: flex !important;
   flex-direction: row-reverse !important;
+}
+
+.MLBGradientInlineRight {
+  background: linear-gradient(0deg, #017ec0, #02a1f7) !important;  
+  cursor: pointer;
+  justify-self: right!important;
+}
+
+.MLBGradientInlineLeft {
+  background: linear-gradient(0deg, #017ec0, #02a1f7) !important;  
+  cursor: pointer;
+  justify-self: left!important;
 }
 
 .MLBGradientRefresh {

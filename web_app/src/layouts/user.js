@@ -279,8 +279,10 @@ export default function Dashboard(props) {
         //setupTokenVals(arweaveClient, addr, prufClient, { justAssets: true });
 
         if ((action === "mod")) {
-          newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
-          getAsset(newAsset.id)
+          // newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
+          tempObj[newAsset.id] = newAsset
+          setAssets(tempObj)
+          // getAsset(newAsset.id)
         } else if ((action === "rem")) {
           window.countDown = true;
           console.log("Old Assets", assets);

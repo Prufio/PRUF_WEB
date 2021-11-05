@@ -159,7 +159,6 @@ export default function NewRecord(props) {
     );
 
     if (metaData) {
-      dataTransaction.addTag("Primary-Content", `https://arweave.net/${dataTransaction.id}`)
       const vals = Object.values(metaData);
       const keys = Object.keys(metaData);
 
@@ -181,6 +180,7 @@ export default function NewRecord(props) {
     await props.arweaveClient.transactions.sign(
       dataTransaction
     );
+    dataTransaction.addTag("Primary-Content", `https://arweave.net/${dataTransaction.id}`)
     // eslint-disable-next-line react/prop-types
     const statusBeforePost = await props.arweaveClient.transactions.getStatus(
       dataTransaction.id

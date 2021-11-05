@@ -15,6 +15,9 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Icon from "@material-ui/core/Icon";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import Accordion from "@material-ui/core/Accordion";
 
 // @material-ui/icons
 import Refresh from "@material-ui/icons/Refresh";
@@ -39,6 +42,8 @@ import {
   ArrowForwardIos,
   DashboardOutlined,
   KeyboardArrowLeft,
+  FiberManualRecordTwoTone,
+  ExpandMoreOutlined,
   Settings,
 } from "@material-ui/icons";
 import TextField from "@material-ui/core/TextField";
@@ -1099,6 +1104,68 @@ export default function Dashboard(props) {
     );
   };
 
+  const displayMutableStorage = (asset) => {
+    if(!asset.mutableStorage || asset.mutableStorage === "") {
+      console.log("Bad inputs")
+      return []
+    }
+    let component = []
+    let keys = Object.keys(asset.mutableStorage);
+
+    keys.forEach((key) => {
+      component.push(
+        <Accordion key={`AccordionStack${key}`}>
+          {/* <h4>{key}</h4> */}
+          <AccordionSummary
+            expandIcon={<ExpandMoreOutlined />}
+            aria-label="Expand"
+            aria-controls="additional-actions1-content"
+            id={`additional-actions1-header-${key}`}
+          >
+            <div className="flexRowWithGap">
+              <h4>{key}</h4> <br/> <h4 className="">{asset.mutableStorage[key]}</h4>
+            </div>
+            {/* <FormControlLabel
+              aria-label="Acknowledge"
+              onClick={(event) => {
+                event.stopPropagation();
+              }}
+              onFocus={(event) => {
+                event.stopPropagation();
+              }}
+              // control={
+              //   <Checkbox
+              //     disabled={!(prufBalance > props.min)}
+              //     onClick={() =>
+              //       (isTierChecked[`chk${props.pos}`] =
+              //         !isTierChecked[`chk${props.pos}`])
+              //     }
+              //     classes={{
+              //       checked: classes.checked,
+              //       root: classes.checkRoot,
+              //     }}
+              //   />
+              // }
+              label={`${key} ${asset.mutableStorage[key].substring(0, 28)}...`}
+            /> */}
+          </AccordionSummary>
+          <AccordionDetails>
+            <div>
+              <div className="delegationTips">
+                <FiberManualRecordTwoTone className="delegationPin" />
+                <h5 className="delegationTipsContent">
+                  {asset.mutableStorage[key]}
+                </h5>
+              </div>
+            </div>
+          </AccordionDetails>
+        </Accordion>
+      );
+    });
+
+    return component
+  }
+
   const handleSimple = (event) => {
     // eslint-disable-next-line react/prop-types
     if (props.ps) {
@@ -1476,6 +1543,7 @@ export default function Dashboard(props) {
                   className={engravingClasses.engraving}
                 />
               )}
+              {displayMutableStorage(selectedAssetObj)}
               {selectedAssetObj.nodeData.storageProvider === "2" && (
                 <h6 className="storageProviderText">
                   See it on&nbsp;
