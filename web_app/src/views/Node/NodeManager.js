@@ -75,7 +75,7 @@ export default function NodeManager(props) {
   const [beneficiaryAddress, setBeneficiaryAddress] =
     React.useState(0x0000000000000000000000000000000000000000);
   const [loginOperationState, setloginOperationState] = React.useState({});
-
+  const link = document.createElement("div");
   const classes = useStyles();
   const chartClasses = useChartStyles();
 
@@ -263,60 +263,36 @@ export default function NodeManager(props) {
     });
   };
 
-  const changeCosts = (obj, tempObj, _beneficiaryAddress, index, iteration) => {
-    if (!index) {
-      index = 1;
-    }
-    console.log(costPacket);
-    console.log(Object.values(costPacket).length);
-    if (obj.costs[index - 1]) {
-      console.log(obj.costs[index - 1]);
-    }
+  const changeCosts = async (obj, tempObj, _beneficiaryAddress, iteration) => {
     console.log(obj);
-    console.log(_beneficiaryAddress);
-    if (obj.formChanged === false) {
+
+    if (Object.values(obj.changedCosts).length === 0) {
       return swal("Costs not changed");
     }
 
     if (!tempObj) {
-      tempObj = JSON.parse(JSON.stringify(obj));
+      Object.values(obj.changedCosts).forEach((cost) => {
+        if (cost.value === "") cost.value = 0;
+        if (obj[cost.id] === cost.value) {
+          delete obj.changedCosts[cost.id];
+        }
+      });
+
+      tempObj = obj.changedCosts;
     }
 
     if (!iteration) {
-      iteration = 1;
+      iteration = 0;
     }
 
     if (!_beneficiaryAddress) {
       _beneficiaryAddress = obj.beneficiaryAddress;
     }
 
-    if (index > obj.costs.length) {
-      return console.log("OOOOPPPPSSSSIIIIEEEE")
-    }
-
-    console.log(obj.costs[index - 1].beneficiary);
-    console.log(_beneficiaryAddress);
-    console.log(Object.values(tempObj).length, iteration, index);
-    console.log(obj.costs[index - 1].beneficiary === _beneficiaryAddress);
-    console.log(tempObj);
-
-    console.log(
-      !tempObj[String(index)] &&
-      obj.costs[index - 1].beneficiary === _beneficiaryAddress
-    );
-
-    if (
-      !tempObj[String(index)] &&
-      obj.costs[index - 1].beneficiary === _beneficiaryAddress
-    ) {
-      return changeCosts(obj, tempObj, _beneficiaryAddress, index + 1, iteration);
-    }
+    if(!Object.values(tempObj)[iteration]) return console.log("DONE CHANGING COSTS");
 
     let tempTxHash;
-    // setShowHelp(false);
-    // setTxStatus(false);
-    // setTxHash("");
-    // setError(undefined);
+
     if (!transactionActive) {
       setTransactionActive(true);
     }
@@ -331,40 +307,39 @@ export default function NodeManager(props) {
       });
     }
 
-    setOperationIndex(index);
-
-    let newCost = tempObj[String(index)] || obj.costs[index - 1].node;
+    setOperationIndex(Object.values(tempObj)[iteration].id);
 
     console.log(
-      obj.id,
-      String(index),
-      window.web3.utils.toWei(String(newCost)),
-      _beneficiaryAddress
+      `Setting cost ${Object.values(tempObj)[iteration].id} to ${
+        Object.values(tempObj)[iteration].value
+      }`
     );
+
+    let calculatedCost = await window.web3.utils.toWei(
+      String(Object.values(tempObj)[iteration].value)
+    );
+    
     props.prufClient.do.node
       .setOperationCost(
         obj.id,
-        String(index),
-        window.web3.utils.toWei(String(newCost)),
+        Object.values(tempObj)[iteration].id,
+        calculatedCost,
         _beneficiaryAddress
       )
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
-      .on("error", function (_error) {
+      .on("error", (_error) => {
         setFormChanged(false);
         setBeneficiaryAddress("");
-        setloginOperation(obj.costs[iteration].acthCost);
-        // setOperation(nodeInfo.costs[`cost${iteration}`].acthCost)
         setTransactionActive(false);
-        // setTxStatus(false);
-        // setTxHash(Object.values(_error)[0].transactionHash);
+        console.error(_error)
         tempTxHash = Object.values(_error)[0].transactionHash;
         let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         // setError(Object.values(_error)[0]);
         if (tempTxHash !== undefined) {
-          swal({
+          swalReact({
             title: "Something went wrong!",
             content: link,
             icon: "warning",
@@ -372,13 +347,18 @@ export default function NodeManager(props) {
           });
         }
         if (tempTxHash === undefined) {
-          swal({
+          swalReact({
             title: "Something went wrong!",
             icon: "warning",
             button: "Close",
           });
         }
-        return changeCosts(obj, tempObj, _beneficiaryAddress, index + 1, iteration + 1);
+        return changeCosts(
+          obj,
+          tempObj,
+          _beneficiaryAddress,
+          iteration + 1
+        );
       })
       .on("receipt", (receipt) => {
         setTransactionActive(false);
@@ -389,28 +369,21 @@ export default function NodeManager(props) {
         link.innerHTML = String(str1 + tempTxHash + str2);
         window.replaceAssetData.refreshBals = true;
         window.dispatchEvent(props.refresh);
-        // setTxHash(receipt.transactionHash);
-        if (
-          !obj.costs[index] &&
-          iteration + 1 > Object.values(tempObj).length
-        ) {
-          console.log("exit");
-          return swal("Cost updates complete!")
-        } else if (
-          obj.costs[index].beneficiary === _beneficiaryAddress &&
-          iteration + 1 > Object.values(tempObj).length
-        ) {
-          console.log("exit");
-          return swal("Cost updates complete!")
-        } else {
+
+        swalReact({
+          title: `Changed cost of id ${Object.values(tempObj)[iteration].id} to ü${Object.values(tempObj)[iteration].value}`,
+          content: link,
+          icon: "success",
+          button: "close",
+        }).then(()=>{
           return changeCosts(
             obj,
             tempObj,
             _beneficiaryAddress,
-            index + 1,
             iteration + 1
           );
-        }
+        });
+        // setTxHash(receipt.transactionHash);
       });
   };
 
@@ -491,7 +464,9 @@ export default function NodeManager(props) {
 
   const changeCostsSwal = (e) => {
     let index = e.index;
+    let changedCosts = {};
     e.beneficiaryAddress = e.costs[1].beneficiary;
+    // return console.log(e)
     swalReact({
       content: (
         <Card>
@@ -507,7 +482,47 @@ export default function NodeManager(props) {
                 {props.nodeExtData[index].id})
               </h4>
               <>
-                {generateCostForm(e)}
+                {Object.values(e.costs).map((prop, key) => {
+                  // console.log(key, prop)
+                  return (
+                    <>
+                      {!transactionActive ? (
+                        <CustomInput
+                          // success={loginOperationState[key + 1] === 'success'}
+                          // error={loginOperationState[key + 1] === 'error'}
+                          labelText={`Operation ${key + 1}`}
+                          id={`cost${key + 1}`}
+                          formControlProps={{
+                            fullWidth: true,
+                          }}
+                          inputProps={{
+                            type: "number",
+                            defaultValue: prop.node,
+                            onChange: (e) => {
+                              changedCosts[`${key + 1}`] = {
+                                id: key + 1,
+                                value: e.target.value,
+                              };
+                              console.log(changedCosts);
+                            },
+                          }}
+                        />
+                      ) : (
+                        <CustomInput
+                          labelText={`Operation ${key + 1}`}
+                          id=""
+                          formControlProps={{
+                            fullWidth: true,
+                          }}
+                          inputProps={{
+                            defaultValue: prop.node,
+                            disabled: true,
+                          }}
+                        />
+                      )}
+                    </>
+                  );
+                })}
                 {!transactionActive ? (
                   <CustomInput
                     labelText="Beneficiary Address *"
@@ -520,8 +535,8 @@ export default function NodeManager(props) {
                       onChange: (event) => {
                         // setFormChanged(true);
                         // setBeneficiaryAddress(event.target.value.trim());
-                        e.formChanged = true
-                        e.beneficiaryAddress = event.target.value.trim()
+                        e.formChanged = true;
+                        e.beneficiaryAddress = event.target.value.trim();
                         // BeneficiaryAddress(event.target.value);
                       },
                     }}
@@ -564,6 +579,7 @@ export default function NodeManager(props) {
           break;
 
         case "updateCosts":
+          e.changedCosts = changedCosts;
           changeCosts(e);
           break;
 
@@ -571,18 +587,18 @@ export default function NodeManager(props) {
           break;
       }
     });
-  }
+  };
 
   const handleSimple = (e) => {
     switch (e.value) {
       case "change-costs":
-        changeCostsSwal(e);
+        getAllCosts(e);
         break;
       case "authorize-user":
         authorizeUserSwal(e);
         break;
       case "transfer-node":
-        transferNodeSwal(e)
+        transferNodeSwal(e);
         break;
     }
 
@@ -611,7 +627,7 @@ export default function NodeManager(props) {
 
   const getAllCosts = (obj, costs, iteration) => {
     if (!obj) return;
-    if (!costs) costs = [];
+    if (!costs) costs = {};
     if (!iteration) iteration = 1;
 
     if (iteration > 8) {
@@ -619,14 +635,14 @@ export default function NodeManager(props) {
       console.log("In GETALLCOSTS", obj);
       // console.log(window.sentPacket);
       setSimpleSelect(obj);
-      return handleSimple(obj);
+      return changeCostsSwal(obj);
       // return obj
     }
 
     props.prufClient.get.node
       .invoiceForOperation(String(obj.id), String(iteration))
       .then((e) => {
-        costs.push(e);
+        costs[`${iteration}`] = e;
         return getAllCosts(obj, costs, iteration + 1);
       });
   };
@@ -897,7 +913,7 @@ export default function NodeManager(props) {
                                     select: classes.select,
                                   }}
                                   onChange={(e) =>
-                                    getAllCosts({
+                                    handleSimple({
                                       name: prop[0],
                                       id: prop[1],
                                       index: key,
@@ -1089,7 +1105,7 @@ export default function NodeManager(props) {
                                   classes={{
                                     select: classes.select,
                                   }}
-                                  onChange={(e) => getAllCosts(e.target.value)}
+                                  onChange={(e) => handleSimple(e.target.value)}
                                   inputProps={{
                                     name: "simpleSelect",
                                     id: "",
