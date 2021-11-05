@@ -140,7 +140,7 @@ export default function AuthorizeUser(props) {
             switch (value) {
                 case 'authorize':
                     if (!window.web3.utils.isAddress(address)) {
-                        return swal({
+                        return swalReact({
                             title: 'Submitted address is not valid!',
                             text:
                                 'Please check form and input a valid ethereum address.',
@@ -165,7 +165,7 @@ export default function AuthorizeUser(props) {
                             let str2 = "' target='_blank'>here</a>"
                             link.innerHTML = String(str1 + tempTxHash + str2)
                             if (tempTxHash !== undefined) {
-                                swal({
+                                swalReact({
                                     title: 'Something went wrong!',
                                     content: link,
                                     icon: 'warning',
@@ -173,7 +173,7 @@ export default function AuthorizeUser(props) {
                                 })
                             }
                             if (tempTxHash === undefined) {
-                                swal({
+                                swalReact({
                                     title: 'Something went wrong!',
                                     icon: 'warning',
                                     button: 'Close',
@@ -188,7 +188,7 @@ export default function AuthorizeUser(props) {
                                 "Check out your TX <a href='https://kovan.etherscan.io/tx/"
                             let str2 = "' target='_blank'>here</a>"
                             link.innerHTML = String(str1 + tempTxHash + str2)
-                            swal({
+                            swalReact({
                                 title: 'User Authorized!',
                                 content: link,
                                 icon: 'success',

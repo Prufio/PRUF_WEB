@@ -1,6 +1,5 @@
 import React from "react";
 import "../../../assets/css/custom.css";
-import swal from "sweetalert";
 import swalReact from "@sweetalert/with-react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -313,7 +312,7 @@ export default function FinalizeNode(props) {
               let str2 = "' target='_blank'>here</a>";
               link.innerHTML = String(str1 + tempTxHash + str2);
               if (tempTxHash !== undefined) {
-                swal({
+                swalReact({
                   title: "Something went wrong!",
                   content: link,
                   icon: "warning",
@@ -321,7 +320,7 @@ export default function FinalizeNode(props) {
                 });
               }
               if (tempTxHash === undefined) {
-                swal({
+                swalReact({
                   title: "Something went wrong!",
                   icon: "warning",
                   button: "Close",
@@ -336,7 +335,7 @@ export default function FinalizeNode(props) {
                 "Check out your TX <a href='https://kovan.etherscan.io/tx/";
               let str2 = "' target='_blank'>here</a>";
               link.innerHTML = String(str1 + tempTxHash + str2);
-              swal({
+              swalReact({
                 title: "Node Finalized!",
                 content: link,
                 icon: "success",

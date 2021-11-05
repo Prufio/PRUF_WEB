@@ -72,7 +72,7 @@ export default function ModifyStatus(props) {
             assetInfo.statusNum === '56' ||
             assetInfo.statusNum === '70'
         ) {
-            swal({
+            swalReact({
                 title: 'Asset not in correct status!',
                 text:
                     'This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.',
@@ -163,7 +163,7 @@ export default function ModifyStatus(props) {
                     link.innerHTML = String(str1 + tempTxHash + str2)
                     setError(Object.values(_error)[0])
                     if (tempTxHash !== undefined) {
-                        swal({
+                        swalReact({
                             title: 'Something went wrong!',
                             content: link,
                             icon: 'warning',
@@ -171,7 +171,7 @@ export default function ModifyStatus(props) {
                         })
                     }
                     if (tempTxHash === undefined) {
-                        swal({
+                        swalReact({
                             title: 'Something went wrong!',
                             icon: 'warning',
                             button: 'Close',
@@ -187,7 +187,7 @@ export default function ModifyStatus(props) {
                     let str2 = "' target='_blank'>here</a>"
                     link.innerHTML = String(str1 + tempTxHash + str2)
                     setTxHash(receipt.transactionHash)
-                    swal({
+                    swalReact({
                         title: 'Status Modification Successful!',
                         content: link,
                         icon: 'success',
@@ -257,7 +257,7 @@ export default function ModifyStatus(props) {
                     link.innerHTML = String(str1 + tempTxHash + str2)
                     setError(Object.values(_error)[0])
                     if (tempTxHash !== undefined) {
-                        swal({
+                        swalReact({
                             title: 'Something went wrong!',
                             content: link,
                             icon: 'warning',
@@ -265,7 +265,7 @@ export default function ModifyStatus(props) {
                         })
                     }
                     if (tempTxHash === undefined) {
-                        swal({
+                        swalReact({
                             title: 'Something went wrong!',
                             icon: 'warning',
                             button: 'Close',
@@ -281,7 +281,7 @@ export default function ModifyStatus(props) {
                     let str2 = "' target='_blank'>here</a>"
                     link.innerHTML = String(str1 + tempTxHash + str2)
                     setTxHash(receipt.transactionHash)
-                    swal({
+                    swalReact({
                         title: 'Status Modification Successful!',
                         content: link,
                         icon: 'success',

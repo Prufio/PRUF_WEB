@@ -3,7 +3,7 @@ import "../../assets/css/custom.css";
 import { isMobile, isAndroid } from "react-device-detect";
 import { RWebShare } from "react-web-share";
 import swalReact from "@sweetalert/with-react";
-import swal from "sweetalert";
+
 import Jdenticon from "react-jdenticon";
 import { QRCode } from "react-qrcode-logo";
 // @material-ui/core components
@@ -148,7 +148,7 @@ export default function Dashboard(props) {
   const copyTextSnippet = (temp) => {
     navigator.clipboard.writeText(temp);
     if (isMobile) {
-      swal("Asset ID Copied to Clipboard!");
+      swalReact("Asset ID Copied to Clipboard!");
     }
     if (!isMobile) {
       setCopyText(true);
@@ -1586,7 +1586,7 @@ export default function Dashboard(props) {
                   <CopyToClipboard
                     text={selectedAssetObj.id}
                     onCopy={() => {
-                      swal("Asset ID Copied to Clipboard!");
+                      swalReact("Asset ID Copied to Clipboard!");
                     }}
                   >
                     <span>

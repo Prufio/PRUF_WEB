@@ -106,7 +106,7 @@ export default function ChangeNodeName(props) {
                         link.innerHTML = String(str1 + tempTxHash + str2)
                         setError(Object.values(_error)[0])
                         if (tempTxHash !== undefined) {
-                            swal({
+                            swalReact({
                                 title: 'Something went wrong!',
                                 content: link,
                                 icon: 'warning',
@@ -114,7 +114,7 @@ export default function ChangeNodeName(props) {
                             })
                         }
                         if (tempTxHash === undefined) {
-                            swal({
+                            swalReact({
                                 title: 'Something went wrong!',
                                 icon: 'warning',
                                 button: 'Close',
@@ -130,7 +130,7 @@ export default function ChangeNodeName(props) {
                         let str2 = "' target='_blank'>here</a>"
                         link.innerHTML = String(str1 + tempTxHash + str2)
                         setTxHash(receipt.transactionHash)
-                        swal({
+                        swalReact({
                             title: 'Name Change Successful!',
                             content: link,
                             icon: 'success',
@@ -151,9 +151,9 @@ export default function ChangeNodeName(props) {
             } else if (loginName === nodeInfo.name || loginName === '') {
                 console.log('error2')
                 setloginNameState('error')
-                swal('Node name has not changed.')
+                swalReact('Node name has not changed.')
             } else if (nameAvailable === false) {
-                swal('Node name is already recorded in the system.')
+                swalReact('Node name is already recorded in the system.')
                 return
             }
         })

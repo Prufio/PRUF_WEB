@@ -1,7 +1,8 @@
 /*DS DEPRECATE*/
 import React from "react";
 import "../../assets/css/custom.css";
-import swal from "sweetalert";
+import swalReact from "@sweetalert/with-react";
+
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -70,7 +71,7 @@ export default function Import(props) {
     }
   
     else if (assetInfo.statusNum && assetInfo.statusNum !== "70") {
-      swal({
+      swalReact({
         title: "Asset not in correct status!",
         text:
           "This asset is not in exported status, please export asset before attempting to import it.",
@@ -168,7 +169,7 @@ export default function Import(props) {
         link.innerHTML = String(str1 + tempTxHash + str2);
         setError(Object.values(_error)[0]);
         if (tempTxHash !== undefined) {
-          swal({
+          swalReact({
             title: "Something went wrong!",
             content: link,
             icon: "warning",
@@ -176,7 +177,7 @@ export default function Import(props) {
           });
         }
         if (tempTxHash === undefined) {
-          swal({
+          swalReact({
             title: "Something went wrong!",
             icon: "warning",
             button: "Close",
@@ -192,7 +193,7 @@ export default function Import(props) {
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         setTxHash(receipt.transactionHash);
-        swal({
+        swalReact({
           title: "Import Successful!",
           content: link,
           icon: "success",

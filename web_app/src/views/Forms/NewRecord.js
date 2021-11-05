@@ -1,6 +1,7 @@
 import React from "react";
 import "../../assets/css/custom.css";
-import swal from "sweetalert";
+import swalReact from "@sweetalert/with-react";
+
 import base64 from "base64-arraybuffer";
 import Jdenticon from "react-jdenticon";
 //import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
@@ -210,9 +211,7 @@ export default function NewRecord(props) {
       await uploader.uploadChunk();
       console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
     }
-
-  };
-
+  }
   const rootLogin = (e) => {
     if (!e.target.value) return setRootSelect("");
     // eslint-disable-next-line react/prop-types
@@ -224,7 +223,7 @@ export default function NewRecord(props) {
     // }
   };
 
-  const ACLogin = (event) => {
+  const nodeLogin = (event) => {
     document.body.style.cursor = 'wait'
     console.log(event.target.value);
     props.prufClient.get
@@ -259,7 +258,7 @@ export default function NewRecord(props) {
   // const IDHolderPrompt = () => {
     // // eslint-disable-next-line react/prop-types
     // if (!props.addr) {
-    //   return swal({
+    //   return swalReact({
     //     title: "Could not get user address",
     //     icon: "warning",
     //     text: "Please connect to an Ethereum provider and try again.",
@@ -273,7 +272,7 @@ export default function NewRecord(props) {
     // }
     // let tempTxHash;
 
-    // swal({
+    // swalReact({
     //   title: "In order to mint asset tokens, you must first have an ID token.",
     //   icon: "warning",
     //   text: "If you would like to mint an ID token, please select Yes",
@@ -305,7 +304,7 @@ export default function NewRecord(props) {
     //           let str2 = "' target='_blank'>here</a>";
     //           link.innerHTML = String(str1 + tempTxHash + str2);
     //           if (tempTxHash !== undefined) {
-    //             swal({
+    //             swalReact({
     //               title: "Something went wrong!",
     //               content: link,
     //               icon: "warning",
@@ -313,7 +312,7 @@ export default function NewRecord(props) {
     //             });
     //           }
     //           if (tempTxHash === undefined) {
-    //             swal({
+    //             swalReact({
     //               title: "Something went wrong!",
     //               icon: "warning",
     //               button: "Close",
@@ -328,7 +327,7 @@ export default function NewRecord(props) {
     //             "Check out your TX <a href='https://kovan.etherscan.io/tx/";
     //           let str2 = "' target='_blank'>here</a>";
     //           link.innerHTML = String(str1 + tempTxHash + str2);
-    //           swal({
+    //           swalReact({
     //             title: "ID Token Minted!",
     //             content: link,
     //             icon: "success",
@@ -443,7 +442,7 @@ export default function NewRecord(props) {
           setDisplayImage(placeholder);
           setIsUploading(false);
         } else  {
-          swal(`File type '${_fileType}' not supported`)
+          swalReact(`File type '${_fileType}' not supported`)
           setIsUploading(false);
         }
       };
@@ -462,7 +461,7 @@ export default function NewRecord(props) {
         if (_fileType.includes("pdf") || _fileType.includes("zip") || _fileType.includes("image")) {
           addToIpfs(prefix, buffer)
         } else {
-          swal(`File type '${_fileType}' not supported`)
+          swalReact(`File type '${_fileType}' not supported`)
           setIsUploading(false);
         }
       };
@@ -555,7 +554,7 @@ export default function NewRecord(props) {
       props.prufClient.get.asset.tokenExists(idxHash).then(doesExist => {
 
         if (doesExist) {
-          return swal({
+          return swalReact({
             title: "Asset already exists!",
             icon: "warning",
             button: "Close",
@@ -603,7 +602,7 @@ export default function NewRecord(props) {
       let fileSize = Buffer.byteLength(payload, "utf8");
 
       if (fileSize > 50000000) {
-        return swal({
+        return swalReact({
           title:
             "Document size exceeds 50 MB limit! (" + String(fileSize) + "Bytes)",
           content: link,
@@ -719,7 +718,7 @@ export default function NewRecord(props) {
 
   const _newRecord = (dataTransaction, extDataA, extDataB, idx, ipfsObj) => {
     if (NRCost > props.pruf) {
-      return swal({
+      return swalReact({
         title: "Insufficient PRUF balance!",
         icon: "warning",
         button: "Close",
@@ -821,7 +820,7 @@ export default function NewRecord(props) {
             link.innerHTML = String(str1 + tempTxHash + str2);
             setError(Object.values(_error)[0]);
             if (tempTxHash !== undefined) {
-              swal({
+              swalReact({
                 title: "Something went wrong!",
                 content: link,
                 icon: "warning",
@@ -829,7 +828,7 @@ export default function NewRecord(props) {
               });
             }
             if (tempTxHash === undefined) {
-              swal({
+              swalReact({
                 title: "Something went wrong!",
                 icon: "warning",
                 button: "Close",
@@ -846,7 +845,7 @@ export default function NewRecord(props) {
             let str2 = "' target='_blank'>here</a>";
             link.innerHTML = String(str1 + tempTxHash + str2);
             setTxHash(receipt.transactionHash);
-            swal({
+            swalReact({
               title: "Asset Created!",
               content: link,
               icon: "success",
@@ -952,7 +951,7 @@ export default function NewRecord(props) {
             link.innerHTML = String(str1 + tempTxHash + str2);
             setError(Object.values(_error)[0]);
             if (tempTxHash !== undefined) {
-              swal({
+              swalReact({
                 title: "Something went wrong!",
                 content: link,
                 icon: "warning",
@@ -960,7 +959,7 @@ export default function NewRecord(props) {
               });
             }
             if (tempTxHash === undefined) {
-              swal({
+              swalReact({
                 title: "Something went wrong!",
                 icon: "warning",
                 button: "Close",
@@ -977,7 +976,7 @@ export default function NewRecord(props) {
             let str2 = "' target='_blank'>here</a>";
             link.innerHTML = String(str1 + tempTxHash + str2);
             setTxHash(receipt.transactionHash);
-            swal({
+            swalReact({
               title: "Asset Created!",
               content: link,
               icon: "success",
@@ -1144,7 +1143,7 @@ export default function NewRecord(props) {
                               select: classes.select,
                             }}
                             value={rootSelect}
-                            // onChange={(e) => { ACLogin(e) }}
+                            // onChange={(e) => { nodeLogin(e) }}
                             inputProps={{
                               name: "rootSelect",
                               id: "root-select",
@@ -1179,7 +1178,7 @@ export default function NewRecord(props) {
                               }}
                               value={classSelect}
                               onChange={(e) => {
-                                ACLogin(e);
+                                nodeLogin(e);
                               }}
                               inputProps={{
                                 name: "classSelect",

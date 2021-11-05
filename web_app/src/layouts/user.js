@@ -2,7 +2,8 @@
 import React from "react";
 import cx from "classnames";
 import Jdenticon from "react-jdenticon";
-import swal from "sweetalert";
+import swalReact from "@sweetalert/with-react";
+
 import Web3 from "web3";
 import Arweave from "arweave";
 import TestWeave from "testweave-sdk";
@@ -152,12 +153,12 @@ export default function Dashboard(props) {
     );
     window.addEventListener("connectArweave", () => {
       if (!window.arweaveWallet) {
-        return swal(
+        return swalReact(
           "We looked, but couldn't find an arweave web wallet. You may upload a keyfile from storage using the button below, or click cancel to go back."
         );
       }
 
-      swal(
+      swalReact(
         "You have selected a node which uses Arweave for storage. Please sign in to your arweave wallet."
       ).then(() => {
         window.arweaveWallet.connect([
@@ -322,7 +323,7 @@ export default function Dashboard(props) {
   };
 
   const handleNoEthereum = () => {
-    //if(isMobile) swal("No ethereum detected")
+    //if(isMobile) swalReact("No ethereum detected")
     console.log("No ethereum object available");
     let web3;
     web3 = require("web3");
@@ -348,7 +349,7 @@ export default function Dashboard(props) {
 
   const checkForCookies = () => {
     if (!cookies.hasBeenNotified && !hasBeenNotified) {
-      swal({
+      swalReact({
         title: "Cookies on pruf.io",
         text: "This site uses minimal cookies to offer you optimal performance and loading times. By using this application you agree to their use.",
         icon: "warning",
@@ -373,7 +374,7 @@ export default function Dashboard(props) {
             break;
 
           case "moreInfo":
-            swal({
+            swalReact({
               title: "Cookies on app.pruf.io",
               text: "Cookies are small packets of user data that are created and stored in the browser. We use cookes to provide a seamless and fast dApp experience while maintaining user privacy. We do not store or share your data with anyone.",
               buttons: {
@@ -521,7 +522,7 @@ export default function Dashboard(props) {
           setChainId(chainId);
           return setIsMounted(true);
         } else {
-          return swal({
+          return swalReact({
             title: "Connect to the Kovan Testnet!",
             text: "Please connect your ethereum provider to the Kovan Testnet and reload the page to access page functionality.",
             icon: "warning",
@@ -769,7 +770,7 @@ export default function Dashboard(props) {
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
   const setupTokenVals = (_arweave, _addr, _prufClient, options) => {
     console.log({ addr: _addr });
-    if (!_addr) return swal("Unable to reach user's wallet.");
+    if (!_addr) return swalReact("Unable to reach user's wallet.");
     if (!options) options = {};
 
     if (options.justNodes) {

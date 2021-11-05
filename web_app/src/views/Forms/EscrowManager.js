@@ -1,7 +1,8 @@
 /*DS DEPRECATE*/
 import React from "react";
 import "../../assets/css/custom.css";
-import swal from "sweetalert";
+import swalReact from "@sweetalert/with-react";
+
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -82,7 +83,7 @@ export default function EscrowManager(props) {
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         setError(Object.values(_error)[0]);
-        swal({
+        swalReact({
           title: "Transfer Failed!",
           content: link,
           icon: "Warning",
@@ -98,7 +99,7 @@ export default function EscrowManager(props) {
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         setTxHash(receipt.transactionHash);
-        swal({
+        swalReact({
           title: "Transfer Successful!",
           content: link,
           icon: "success",

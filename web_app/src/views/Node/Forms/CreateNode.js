@@ -1,6 +1,7 @@
 import React from "react";
 import "../../../assets/css/custom.css";
-import swal from "sweetalert";
+import swalReact from "@sweetalert/with-react";
+
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -260,7 +261,7 @@ export default function CreateNode(props) {
           }
         });
       } else {
-        swal({
+        swalReact({
           title:
             "That name has already been reserved! Try a differnet one, or contact the team: support@pruf.io",
           button: "Okay",
@@ -274,14 +275,14 @@ export default function CreateNode(props) {
 
     console.log({ name, root, extendedDataHash });
     if (root === "") {
-      return swal("Please input root node");
+      return swalReact("Please input root node");
     }
     if (name === "") {
-      return swal("Please input node name");
+      return swalReact("Please input node name");
     }
     if (Number(props.pruf) < Number(props.currentACPrice)) {
       console.log(props.pruf);
-      return swal("Insufficient PRUF Balance!");
+      return swalReact("Insufficient PRUF Balance!");
     }
     setTransactionActive(true);
     let tempTxHash;
@@ -304,7 +305,7 @@ export default function CreateNode(props) {
         link.innerHTML = String(str1 + tempTxHash + str2);
         setError(Object.values(_error)[0]);
         if (tempTxHash !== undefined) {
-          swal({
+          swalReact({
             title: "Something went wrong!",
             content: link,
             icon: "warning",
@@ -312,7 +313,7 @@ export default function CreateNode(props) {
           });
         }
         if (tempTxHash === undefined) {
-          swal({
+          swalReact({
             title: "Something went wrong!",
             icon: "warning",
             button: "Close",
@@ -327,7 +328,7 @@ export default function CreateNode(props) {
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         setTxHash(receipt.transactionHash);
-        swal({
+        swalReact({
           title: "Node Minting Successul!",
           content: link,
           icon: "success",
