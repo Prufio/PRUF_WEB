@@ -1113,6 +1113,7 @@ export default function Dashboard(props) {
     let keys = Object.keys(asset.mutableStorage);
 
     keys.forEach((key) => {
+      if (key !== "Signing-Client" && key !== "Signing-Client-Version")
       component.push(
         <Accordion key={`AccordionStack${key}`}>
           {/* <h4>{key}</h4> */}

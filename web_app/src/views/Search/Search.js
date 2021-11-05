@@ -14,6 +14,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Danger from "components/Typography/Danger.js";
 import Checkbox from "@material-ui/core/Checkbox";
 import Icon from "@material-ui/core/Icon";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import Accordion from "@material-ui/core/Accordion";
 
 // @material-ui/icons
 import Check from "@material-ui/icons/Check";
@@ -23,6 +26,8 @@ import {
   DashboardOutlined,
   KeyboardArrowLeft,
   Settings,
+  FiberManualRecordTwoTone,
+  ExpandMoreOutlined,
 } from "@material-ui/icons";
 import Category from "@material-ui/icons/Category";
 import AccountBox from "@material-ui/icons/AccountBox";
@@ -39,6 +44,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 
 import QrReader from "react-qr-reader";
 import Jdenticon from "react-jdenticon";
+import engravingStyles from "../../assets/css/custom";
 
 import imgStyles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
@@ -50,6 +56,7 @@ import IPFSPNG from "../../assets/img/ipfs.png";
 
 const useStyles = makeStyles(styles);
 const useImgStyles = makeStyles(imgStyles);
+const useEngravingStyles = makeStyles(engravingStyles);
 
 export default function Search(props) {
   const [simpleSelect, setSimpleSelect] = React.useState("");
@@ -235,6 +242,70 @@ export default function Search(props) {
 
   const showImage = (e) => {
     setSelectedImage(e);
+  };
+
+  const displayMutableStorage = (asset) => {
+    if (!asset.mutableStorage || asset.mutableStorage === "") {
+      console.log("Bad inputs");
+      return [];
+    }
+    let component = [];
+    let keys = Object.keys(asset.mutableStorage);
+
+    keys.forEach((key) => {
+      if (key !== "Signing-Client" && key !== "Signing-Client-Version")
+        component.push(
+          <Accordion key={`AccordionStack${key}`}>
+            {/* <h4>{key}</h4> */}
+            <AccordionSummary
+              expandIcon={<ExpandMoreOutlined />}
+              aria-label="Expand"
+              aria-controls="additional-actions1-content"
+              id={`additional-actions1-header-${key}`}
+            >
+              <div className="flexRowWithGap">
+                <h4>{key}</h4> <br />{" "}
+                <h4 className="">{asset.mutableStorage[key]}</h4>
+              </div>
+              {/* <FormControlLabel
+              aria-label="Acknowledge"
+              onClick={(event) => {
+                event.stopPropagation();
+              }}
+              onFocus={(event) => {
+                event.stopPropagation();
+              }}
+              // control={
+              //   <Checkbox
+              //     disabled={!(prufBalance > props.min)}
+              //     onClick={() =>
+              //       (isTierChecked[`chk${props.pos}`] =
+              //         !isTierChecked[`chk${props.pos}`])
+              //     }
+              //     classes={{
+              //       checked: classes.checked,
+              //       root: classes.checkRoot,
+              //     }}
+              //   />
+              // }
+              label={`${key} ${asset.mutableStorage[key].substring(0, 28)}...`}
+            /> */}
+            </AccordionSummary>
+            <AccordionDetails>
+              <div>
+                <div className="delegationTips">
+                  <FiberManualRecordTwoTone className="delegationPin" />
+                  <h5 className="delegationTipsContent">
+                    {asset.mutableStorage[key]}
+                  </h5>
+                </div>
+              </div>
+            </AccordionDetails>
+          </Accordion>
+        );
+    });
+
+    return component;
   };
 
   const renderOptions = (status) => {
@@ -1507,7 +1578,7 @@ export default function Search(props) {
     });
   };
 
-  const getNonMutableOf = async (rec, _prufClient, _arweave) => {
+  const getNonMutableOf = async (rec, _prufClient, _arweaveClient) => {
     rec.identicon = <Jdenticon value={rec.id} />;
     rec.statusNum = rec.status;
     rec.status = await _prufClient.utils.stringifyStatus(rec.status);
@@ -1523,7 +1594,7 @@ export default function Search(props) {
           "0x0000000000000000000000000000000000000000000000000000000000000000"
         ) {
           rec.nonMutableStorage = "";
-          getMutableOf(rec, _prufClient, _arweave);
+          getMutableOf(rec, _prufClient, _arweaveClient);
         } else if (rec.nodeData.storageProvider === "1") {
           _prufClient.utils
             .ipfsFromB32(rec.nonMutableStorage1)
@@ -1534,14 +1605,10 @@ export default function Search(props) {
                 let str = new TextDecoder("utf-8").decode(chunk);
                 try {
                   rec.nonMutableStorage = JSON.parse(str);
-                  setCookieTo(
-                    window.web3.utils.soliditySha3(query),
-                    rec.nonMutableStorage
-                  );
                 } catch {
                   rec.nonMutableStorage = str;
                 }
-                getMutableOf(rec, _prufClient, _arweave);
+                getMutableOf(rec, _prufClient, _arweaveClient);
               }
             });
         } else if (rec.nodeData.storageProvider === "2") {
@@ -1550,10 +1617,16 @@ export default function Search(props) {
             .then((query) => {
               rec.contentUrl = `https://arweave.net/${query}`;
               let xhr = new XMLHttpRequest();
+              xhr.responseType = "text";
               xhr.onload = () => {
                 if (xhr.status !== 404 && xhr.status !== 202) {
                   rec.nonMutableStorage = {};
-                  _arweave.transactions
+                  // console.log(xhr.response);
+                  if (xhr.response === "Pending") {
+                    rec.nonMutableStorage = { Pending: "" };
+                    return getMutableOf(rec, _prufClient, _arweaveClient);
+                  }
+                  _arweaveClient.transactions
                     .get(query)
                     .then((e) => {
                       console.log(e);
@@ -1568,28 +1641,24 @@ export default function Search(props) {
                         });
                         rec.nonMutableStorage[key] = value;
                       });
-                      setCookieTo(
-                        window.web3.utils.soliditySha3(query),
-                        rec.nonMutableStorage
-                      );
-                      getMutableOf(rec, _prufClient, _arweave);
+                      getMutableOf(rec, _prufClient, _arweaveClient);
                     })
                     .catch((e) => {
                       console.log(e);
                       rec.nonMutableStorage = "";
-                      getMutableOf(rec, _prufClient, _arweave);
+                      getMutableOf(rec, _prufClient, _arweaveClient);
                     });
                 } else {
                   console.log("Id returned 404");
                   rec.nonMutableStorage = "";
-                  getMutableOf(rec, _prufClient, _arweave);
+                  getMutableOf(rec, _prufClient, _arweaveClient);
                 }
               };
 
               xhr.onerror = () => {
                 console.log("Gateway returned 404");
                 rec.nonMutableStorage = "";
-                getMutableOf(rec, _prufClient, _arweave);
+                getMutableOf(rec, _prufClient, _arweaveClient);
               };
 
               xhr.open("GET", `https://arweave.net/${query}`);
@@ -1600,7 +1669,7 @@ export default function Search(props) {
     });
   };
 
-  const getMutableOf = async (rec, _prufClient, _arweave) => {
+  const getMutableOf = async (rec, _prufClient, _arweaveClient) => {
     if (
       rec.mutableStorage1 ===
       "0x0000000000000000000000000000000000000000000000000000000000000000"
@@ -1613,7 +1682,6 @@ export default function Search(props) {
         for await (const chunk of window.ipfs.cat(query)) {
           let str = new TextDecoder("utf-8").decode(chunk);
           rec.mutableStorage = JSON.parse(str);
-          setCookieTo(window.web3.utils.soliditySha3(query), JSON.parse(str));
           finalize(rec, _prufClient);
         }
       });
@@ -1621,12 +1689,17 @@ export default function Search(props) {
       _prufClient.utils
         .arweaveTxFromB32(rec.mutableStorage1, rec.mutableStorage2)
         .then((query) => {
-          rec.contentUrl = `https://arweave.net/${query}`;
           let xhr = new XMLHttpRequest();
+          xhr.responseType = "text";
           xhr.onload = () => {
             if (xhr.status !== 404 && xhr.status !== 202) {
               rec.mutableStorage = {};
-              _arweave.transactions
+              // console.log(xhr.response);
+              if (xhr.response === "Pending") {
+                rec.mutableStorage = { Pending: "" };
+                return finalize(rec, _prufClient);
+              }
+              _arweaveClient.transactions
                 .get(query)
                 .then((e) => {
                   console.log(e);
@@ -1641,16 +1714,12 @@ export default function Search(props) {
                     });
                     rec.mutableStorage[key] = value;
                   });
-                  setCookieTo(
-                    window.web3.utils.soliditySha3(query),
-                    rec.mutableStorage
-                  );
                   finalize(rec, _prufClient);
                 })
                 .catch((e) => {
                   console.log(e);
                   rec.mutableStorage = "";
-                  finalize(rec, _prufClient, _arweave);
+                  finalize(rec, _prufClient);
                 });
             } else {
               console.log("Id returned 404");
@@ -2309,6 +2378,7 @@ export default function Search(props) {
 
   const classes = useStyles();
   const imgClasses = useImgStyles();
+  const engravingClasses = useEngravingStyles();
   return (
     <>
       {props.prufClient === undefined && (
@@ -2796,7 +2866,9 @@ export default function Search(props) {
                         <h4 className={imgClasses.cardTitleContent}>
                           Name:&nbsp;
                         </h4>
-                        <h4 className={imgClasses.cardTitle}>{asset.name}</h4>
+                        <h4 className={imgClasses.cardTitle}>
+                          {asset.nonMutableStorage.name}
+                        </h4>
                       </div>
                       <div className="horizontal">
                         <h4 className={imgClasses.cardTitleContent}>
@@ -2812,37 +2884,34 @@ export default function Search(props) {
                         </h4>
                         <h4 className={imgClasses.cardTitle}>{asset.status}</h4>
                       </div>
-                      {asset.text !== undefined && (
-                        <>
-                          <br />
-                          {asset.engraving !== undefined && (
-                            <TextField
-                              // id="outlined-multiline"
-                              label="Engraving"
-                              // multiline
-                              rows={2}
-                              defaultValue={asset.engraving}
-                              variant="outlined"
-                              fullWidth
-                              disabled
-                              className={engravingClasses.engraving}
-                            />
-                          )}
-                          {asset.engraving === undefined && (
-                            <TextField
-                              // id="outlined-multiline"
-                              label="Engraving"
-                              // multiline
-                              rows={2}
-                              defaultValue="None"
-                              variant="outlined"
-                              fullWidth
-                              disabled
-                              className={engravingClasses.engraving}
-                            />
-                          )}
-                        </>
+                      <br />
+                      {asset.nonMutableStorage.engraving !== undefined && (
+                        <TextField
+                          // id="outlined-multiline"
+                          label="Engraving"
+                          // multiline
+                          rows={2}
+                          defaultValue={asset.nonMutableStorage.engraving}
+                          variant="outlined"
+                          fullWidth
+                          disabled
+                          className={engravingClasses.engraving}
+                        />
                       )}
+                      {asset.nonMutableStorage.engraving === undefined && (
+                        <TextField
+                          // id="outlined-multiline"
+                          label="Engraving"
+                          // multiline
+                          rows={2}
+                          defaultValue="None"
+                          variant="outlined"
+                          fullWidth
+                          disabled
+                          className={engravingClasses.engraving}
+                        />
+                      )}
+                      {displayMutableStorage(asset)}
                       {asset.storageProvider === "2" && (
                         <h6 className="storageProviderText">
                           See it on
@@ -2979,7 +3048,9 @@ export default function Search(props) {
                                               );
                                             });
                                         } else
-                                          swalReact("No ethereum provider detected");
+                                          swalReact(
+                                            "No ethereum provider detected"
+                                          );
                                       }}
                                     >
                                       connect
