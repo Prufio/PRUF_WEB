@@ -18,6 +18,7 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardHeader from "components/Card/CardHeader.js";
+import CustomInput from "components/CustomInput/CustomInput.js";
 import ReactTable from "components/ReactTable/ReactTable.js";
 import ReactTableSimple from "components/ReactTable/ReactTableSimple.js";
 import CardFooter from "components/Card/CardFooter.js";
@@ -66,6 +67,14 @@ export default function NodeManager(props) {
   // const [actionState, setActionState] = React.useState({})
   const [forceReload] = React.useState(true);
   const [resetToDefault, setResetToDefault] = React.useState("");
+
+  const [formChanged, setFormChanged] = React.useState(false);
+  const [transactionActive, setTransactionActive] = React.useState(false);
+  const [costPacket, setCostPacket] = React.useState({});
+  const [operationIndex, setOperationIndex] = React.useState("");
+  const [beneficiaryAddress, setBeneficiaryAddress] =
+    React.useState(0x0000000000000000000000000000000000000000);
+  const [loginOperationState, setloginOperationState] = React.useState({});
 
   const classes = useStyles();
   const chartClasses = useChartStyles();
@@ -199,107 +208,405 @@ export default function NodeManager(props) {
     setTotalRewards(true);
   };
 
-  // const clearInput = () => {
-  // }
+  const handleChangeCost = (op, val) => {
+    if (!formChanged) setFormChanged(true);
+    let obj = costPacket;
+    obj[op] = val;
+    setCostPacket(obj);
+    console.log("op", op, "val", val);
+  };
 
-  const handleSimple = (e) => {
+  const generateCostForm = (obj) => {
+    if (!obj.costs) return;
+    return Object.values(obj.costs).map((prop, key) => {
+      // console.log(key, prop)
+      return (
+        <>
+          {!transactionActive ? (
+            <CustomInput
+              // success={loginOperationState[key + 1] === 'success'}
+              // error={loginOperationState[key + 1] === 'error'}
+              labelText={`Operation ${key + 1}`}
+              id={`cost${key + 1}`}
+              formControlProps={{
+                fullWidth: true,
+              }}
+              inputProps={{
+                type: "number",
+                defaultValue: prop.node,
+                onChange: (e) => {
+                  handleChangeCost(
+                    e.target.id.substring(
+                      e.target.id.length - 1,
+                      e.target.id.length
+                    ),
+                    e.target.value
+                  );
+                },
+              }}
+            />
+          ) : (
+            <CustomInput
+              labelText={`Operation ${key + 1}`}
+              id=""
+              formControlProps={{
+                fullWidth: true,
+              }}
+              inputProps={{
+                defaultValue: prop.node,
+                disabled: true,
+              }}
+            />
+          )}
+        </>
+      );
+    });
+  };
+
+  const changeCosts = (obj, tempObj, _beneficiaryAddress, index, iteration) => {
+    if (!index) {
+      index = 1;
+    }
+    console.log(costPacket);
+    console.log(Object.values(costPacket).length);
+    if (obj.costs[index - 1]) {
+      console.log(obj.costs[index - 1]);
+    }
+    console.log(obj);
+    console.log(_beneficiaryAddress);
+    if (obj.formChanged === false) {
+      return swal("Costs not changed");
+    }
+
+    if (!tempObj) {
+      tempObj = JSON.parse(JSON.stringify(obj));
+    }
+
+    if (!iteration) {
+      iteration = 1;
+    }
+
+    if (!_beneficiaryAddress) {
+      _beneficiaryAddress = obj.beneficiaryAddress;
+    }
+
+    if (index > obj.costs.length) {
+      return console.log("OOOOPPPPSSSSIIIIEEEE")
+    }
+
+    console.log(obj.costs[index - 1].beneficiary);
+    console.log(_beneficiaryAddress);
+    console.log(Object.values(tempObj).length, iteration, index);
+    console.log(obj.costs[index - 1].beneficiary === _beneficiaryAddress);
+    console.log(tempObj);
+
+    console.log(
+      !tempObj[String(index)] &&
+      obj.costs[index - 1].beneficiary === _beneficiaryAddress
+    );
+
+    if (
+      !tempObj[String(index)] &&
+      obj.costs[index - 1].beneficiary === _beneficiaryAddress
+    ) {
+      return changeCosts(obj, tempObj, _beneficiaryAddress, index + 1, iteration);
+    }
+
+    let tempTxHash;
+    // setShowHelp(false);
+    // setTxStatus(false);
+    // setTxHash("");
+    // setError(undefined);
+    if (!transactionActive) {
+      setTransactionActive(true);
+    }
+
+    if (!window.web3.utils.isAddress(_beneficiaryAddress)) {
+      return swal({
+        title: "Submitted address is not a valid ethereum address!",
+        // text: _beneficiaryAddress,
+        text: "Please check form and input a valid ethereum address.",
+        icon: "warning",
+        button: "Close",
+      });
+    }
+
+    setOperationIndex(index);
+
+    let newCost = tempObj[String(index)] || obj.costs[index - 1].node;
+
+    console.log(
+      obj.id,
+      String(index),
+      window.web3.utils.toWei(String(newCost)),
+      _beneficiaryAddress
+    );
+    props.prufClient.do.node
+      .setOperationCost(
+        obj.id,
+        String(index),
+        window.web3.utils.toWei(String(newCost)),
+        _beneficiaryAddress
+      )
+      // eslint-disable-next-line react/prop-types
+      .send({ from: props.addr })
+      .on("error", function (_error) {
+        setFormChanged(false);
+        setBeneficiaryAddress("");
+        setloginOperation(obj.costs[iteration].acthCost);
+        // setOperation(nodeInfo.costs[`cost${iteration}`].acthCost)
+        setTransactionActive(false);
+        // setTxStatus(false);
+        // setTxHash(Object.values(_error)[0].transactionHash);
+        tempTxHash = Object.values(_error)[0].transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
+        // setError(Object.values(_error)[0]);
+        if (tempTxHash !== undefined) {
+          swal({
+            title: "Something went wrong!",
+            content: link,
+            icon: "warning",
+            button: "Close",
+          });
+        }
+        if (tempTxHash === undefined) {
+          swal({
+            title: "Something went wrong!",
+            icon: "warning",
+            button: "Close",
+          });
+        }
+        return changeCosts(obj, tempObj, _beneficiaryAddress, index + 1, iteration + 1);
+      })
+      .on("receipt", (receipt) => {
+        setTransactionActive(false);
+        // setTxStatus(receipt.status);
+        tempTxHash = receipt.transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
+        window.replaceAssetData.refreshBals = true;
+        window.dispatchEvent(props.refresh);
+        // setTxHash(receipt.transactionHash);
+        if (
+          !obj.costs[index] &&
+          iteration + 1 > Object.values(tempObj).length
+        ) {
+          console.log("exit");
+          return swal("Cost updates complete!")
+        } else if (
+          obj.costs[index].beneficiary === _beneficiaryAddress &&
+          iteration + 1 > Object.values(tempObj).length
+        ) {
+          console.log("exit");
+          return swal("Cost updates complete!")
+        } else {
+          return changeCosts(
+            obj,
+            tempObj,
+            _beneficiaryAddress,
+            index + 1,
+            iteration + 1
+          );
+        }
+      });
+  };
+
+  const viewNode = (e) => {
     console.log(e);
     if (!e) return;
     let index = e.index;
-    if (e.href === "view") {
-      if (e.name === "" || e.name === "Loading Nodes...") return;
-      document.body.style.cursor = "wait";
-      let tempObj = {};
-      console.log("props.nodeExtData", props.nodeExtData);
+    document.body.style.cursor = "wait";
+    let tempObj = {};
+    console.log("props.nodeExtData", props.nodeExtData);
 
-      // eslint-disable-next-line react/prop-types
-      props.prufClient.get.node
-        .name(props.nodeExtData[index].root)
-        .then((e) => {
-          tempObj.name = props.nodeExtData[index].name;
-          tempObj.id = props.nodeExtData[index].id;
-          tempObj.rootName = e
-            .toLowerCase()
-            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
-          tempObj.root = props.nodeExtData[index].root;
-          tempObj.usesAuth = props.nodeExtData[index].usesAuth;
-          tempObj.storageProvider = props.nodeExtData[index].storageProvider;
-          tempObj.managementType = props.nodeExtData[index].managementType;
-          console.log("tempObj", tempObj);
-          document.body.style.cursor = "auto";
-          swalReact({
-            content: (
-              <Card className="delegationCard">
-                <h4 className="delegationTitle">Node Information</h4>
-                <div className="delegationTips">
-                  <FiberManualRecordTwoTone className="delegationPin" />
-                  <h5 className="delegationTipsContent">
-                    Name:&nbsp;{tempObj.name} ID:(
-                    {tempObj.id})
-                  </h5>
-                </div>
-                <div className="delegationTips">
-                  <FiberManualRecordTwoTone className="delegationPin" />
-                  <h5 className="delegationTipsContent">
-                    Root Node:&nbsp;
-                    {tempObj.rootName} ID:(
-                    {tempObj.root})
-                  </h5>
-                </div>
-                <div className="delegationTips">
-                  <FiberManualRecordTwoTone className="delegationPin" />
-                  <h5 className="delegationTipsContent">
-                    Management Type:&nbsp;
-                    {tempObj.managementType}
-                  </h5>
-                </div>
-                <div className="delegationTips">
-                  <FiberManualRecordTwoTone className="delegationPin" />
-                  <h5 className="delegationTipsContent">
-                    Storage Provider:&nbsp;
-                    {tempObj.storageProvider}
-                  </h5>
-                </div>
-              </Card>
-            ),
-            buttons: {
-              close: {
-                text: "Close",
-                className: "delegationButtonBack",
-              },
-            },
-          }).then((value) => {
-            switch (value) {
-              case "close":
-                setResetToDefault("");
-                break;
-
-              default:
-                break;
-            }
-          });
-        });
-    } else {
-      document.body.style.cursor = "wait";
-      // eslint-disable-next-line react/prop-types
-      if (props.ps) {
-        // eslint-disable-next-line react/prop-types
-        props.ps.element.scrollTop = 0;
-        //console.log(props.ps.element.scrollTop)
-      }
-      let tempObj = JSON.parse(JSON.stringify(e));
-      let costs = [];
-      tempObj.lastRef = "/#/user/node-manager";
-      tempObj.root = props.nodeExtData[index].root;
-      tempObj.id = props.nodeExtData[index].id;
+    // eslint-disable-next-line react/prop-types
+    props.prufClient.get.node.name(props.nodeExtData[index].root).then((e) => {
       tempObj.name = props.nodeExtData[index].name;
-      tempObj.custodyType = props.nodeExtData[index].custodyType;
+      tempObj.id = props.nodeExtData[index].id;
+      tempObj.rootName = e
+        .toLowerCase()
+        .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+      tempObj.root = props.nodeExtData[index].root;
       tempObj.usesAuth = props.nodeExtData[index].usesAuth;
-      tempObj.discount = props.nodeExtData[index].discount;
-      tempObj.referenceAddress = props.nodeExtData[index].referenceAddress;
-      tempObj.index = index;
-      getAllCosts(tempObj);
+      tempObj.storageProvider = props.nodeExtData[index].storageProvider;
+      tempObj.managementType = props.nodeExtData[index].managementType;
+      console.log("tempObj", tempObj);
+      document.body.style.cursor = "auto";
+      swalReact({
+        content: (
+          <Card className="delegationCard">
+            <h4 className="delegationTitle">Node Information</h4>
+            <div className="delegationTips">
+              <FiberManualRecordTwoTone className="delegationPin" />
+              <h5 className="delegationTipsContent">
+                Name:&nbsp;{tempObj.name} ID:(
+                {tempObj.id})
+              </h5>
+            </div>
+            <div className="delegationTips">
+              <FiberManualRecordTwoTone className="delegationPin" />
+              <h5 className="delegationTipsContent">
+                Root Node:&nbsp;
+                {tempObj.rootName} ID:(
+                {tempObj.root})
+              </h5>
+            </div>
+            <div className="delegationTips">
+              <FiberManualRecordTwoTone className="delegationPin" />
+              <h5 className="delegationTipsContent">
+                Management Type:&nbsp;
+                {tempObj.managementType}
+              </h5>
+            </div>
+            <div className="delegationTips">
+              <FiberManualRecordTwoTone className="delegationPin" />
+              <h5 className="delegationTipsContent">
+                Storage Provider:&nbsp;
+                {tempObj.storageProvider}
+              </h5>
+            </div>
+          </Card>
+        ),
+        buttons: {
+          close: {
+            text: "Close",
+            className: "delegationButtonBack",
+          },
+        },
+      }).then((value) => {
+        switch (value) {
+          case "close":
+            setResetToDefault("");
+            break;
+
+          default:
+            break;
+        }
+      });
+    });
+  };
+
+  const changeCostsSwal = (e) => {
+    let index = e.index;
+    e.beneficiaryAddress = e.costs[1].beneficiary;
+    swalReact({
+      content: (
+        <Card>
+          <CardHeader icon>
+            <h4 className={classes.cardIconTitle}>
+              Change Node Operation Costs
+            </h4>
+          </CardHeader>
+          <CardBody>
+            <form>
+              <h4>
+                Node Selected: {props.nodeExtData[index].name}, (
+                {props.nodeExtData[index].id})
+              </h4>
+              <>
+                {generateCostForm(e)}
+                {!transactionActive ? (
+                  <CustomInput
+                    labelText="Beneficiary Address *"
+                    id="beneficiaryAddress"
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
+                    inputProps={{
+                      defaultValue: e.costs[1].beneficiary,
+                      onChange: (event) => {
+                        // setFormChanged(true);
+                        // setBeneficiaryAddress(event.target.value.trim());
+                        e.formChanged = true
+                        e.beneficiaryAddress = event.target.value.trim()
+                        // BeneficiaryAddress(event.target.value);
+                      },
+                    }}
+                  />
+                ) : (
+                  <CustomInput
+                    labelText="beneficiary Address *"
+                    id=""
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
+                    inputProps={{
+                      defaultValue: beneficiaryAddress,
+                      disabled: true,
+                    }}
+                  />
+                )}
+                <div className={classes.formCategory}>
+                  <small>*</small> Required fields
+                </div>
+              </>
+            </form>
+          </CardBody>
+        </Card>
+      ),
+      buttons: {
+        close: {
+          text: "Close",
+          // className: "delegationButtonBack",
+        },
+        updateCosts: {
+          text: "Update Costs",
+          className: "MLBGradient",
+        },
+      },
+    }).then((value) => {
+      switch (value) {
+        case "close":
+          setResetToDefault("");
+          break;
+
+        case "updateCosts":
+          changeCosts(e);
+          break;
+
+        default:
+          break;
+      }
+    });
+  }
+
+  const handleSimple = (e) => {
+    switch (e.value) {
+      case "change-costs":
+        changeCostsSwal(e);
+        break;
+      case "authorize-user":
+        authorizeUserSwal(e);
+        break;
+      case "transfer-node":
+        transferNodeSwal(e)
+        break;
     }
+
+    // else {
+    //   document.body.style.cursor = "wait";
+    //   // eslint-disable-next-line react/prop-types
+    //   if (props.ps) {
+    //     // eslint-disable-next-line react/prop-types
+    //     props.ps.element.scrollTop = 0;
+    //     //console.log(props.ps.element.scrollTop)
+    //   }
+    //   let tempObj = JSON.parse(JSON.stringify(e));
+    //   let costs = [];
+    //   tempObj.lastRef = "/#/user/node-manager";
+    //   tempObj.root = props.nodeExtData[index].root;
+    //   tempObj.id = props.nodeExtData[index].id;
+    //   tempObj.name = props.nodeExtData[index].name;
+    //   tempObj.custodyType = props.nodeExtData[index].custodyType;
+    //   tempObj.usesAuth = props.nodeExtData[index].usesAuth;
+    //   tempObj.discount = props.nodeExtData[index].discount;
+    //   tempObj.referenceAddress = props.nodeExtData[index].referenceAddress;
+    //   tempObj.index = index;
+    //   getAllCosts(tempObj);
+    // }
   };
 
   const getAllCosts = (obj, costs, iteration) => {
@@ -307,13 +614,13 @@ export default function NodeManager(props) {
     if (!costs) costs = [];
     if (!iteration) iteration = 1;
 
-    if (iteration >= 9) {
+    if (iteration > 8) {
       obj.costs = costs;
-      window.sentPacket = JSON.parse(JSON.stringify(obj));
-      console.log(obj);
-      console.log(window.sentPacket);
+      console.log("In GETALLCOSTS", obj);
+      // console.log(window.sentPacket);
       setSimpleSelect(obj);
-      return (window.location.href = obj.href);
+      return handleSimple(obj);
+      // return obj
     }
 
     props.prufClient.get.node
@@ -517,7 +824,7 @@ export default function NodeManager(props) {
                         <button
                           className="nodeButton2"
                           onClick={() =>
-                            handleSimple({
+                            viewNode({
                               name: prop[0],
                               index: key,
                               href: "view",
@@ -590,11 +897,11 @@ export default function NodeManager(props) {
                                     select: classes.select,
                                   }}
                                   onChange={(e) =>
-                                    handleSimple({
+                                    getAllCosts({
                                       name: prop[0],
                                       id: prop[1],
                                       index: key,
-                                      href: e.target.value,
+                                      value: e.target.value,
                                     })
                                   }
                                   inputProps={{
@@ -636,7 +943,7 @@ export default function NodeManager(props) {
                                       root: classes.selectMenuItem,
                                       selected: classes.selectMenuItemSelected,
                                     }}
-                                    value={"/#/user/change-costs"}
+                                    value={"change-costs"}
                                   >
                                     Update Operation Costs
                                   </MenuItem>
@@ -650,7 +957,7 @@ export default function NodeManager(props) {
                                           selected:
                                             classes.selectMenuItemSelected,
                                         }}
-                                        value={"/#/user/authorize-user"}
+                                        value={"authorize-user"}
                                       >
                                         Authorize User
                                       </MenuItem>
@@ -661,7 +968,7 @@ export default function NodeManager(props) {
                                       root: classes.selectMenuItem,
                                       selected: classes.selectMenuItemSelected,
                                     }}
-                                    value={"/#/user/transfer-node"}
+                                    value={"transfer-node"}
                                   >
                                     Transfer
                                   </MenuItem>
@@ -714,7 +1021,7 @@ export default function NodeManager(props) {
                         <button
                           className="nodeButton2"
                           onClick={() =>
-                            handleSimple({
+                            viewNode({
                               name: prop[0],
                               index: key,
                               href: "view",
@@ -782,7 +1089,7 @@ export default function NodeManager(props) {
                                   classes={{
                                     select: classes.select,
                                   }}
-                                  onChange={(e) => handleSimple(e.target.value)}
+                                  onChange={(e) => getAllCosts(e.target.value)}
                                   inputProps={{
                                     name: "simpleSelect",
                                     id: "",
