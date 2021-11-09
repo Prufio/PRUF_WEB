@@ -1241,15 +1241,9 @@ export default function Dashboard(props) {
               } else {
                 for await (const chunk of window.ipfs.cat(query)) {
                   let str = new TextDecoder("utf-8").decode(chunk);
-                  try {
                     rec.nonMutableStorage = JSON.parse(str);
-                    setCookieTo(
-                      window.web3.utils.soliditySha3(query),
-                      rec.nonMutableStorage
-                    );
-                  } catch {
-                    rec.nonMutableStorage = str;
-                  }
+                    console.log({parsedIpfsChunk: str})
+                    setCookieTo(window.web3.utils.soliditySha3(query), rec.nonMutableStorage);
                   getMutableOf(rec, _prufClient, _arweaveClient);
                 }
               }
@@ -1339,7 +1333,8 @@ export default function Dashboard(props) {
           for await (const chunk of window.ipfs.cat(query)) {
             let str = new TextDecoder("utf-8").decode(chunk);
             rec.mutableStorage = JSON.parse(str);
-            setCookieTo(window.web3.utils.soliditySha3(query), JSON.parse(str));
+            console.log({parsedIpfsChunk: str})
+            setCookieTo(window.web3.utils.soliditySha3(query), rec.mutableStorage);
             finalize(rec, _prufClient);
           }
         }
