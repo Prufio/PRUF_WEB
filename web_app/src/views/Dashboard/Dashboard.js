@@ -1111,109 +1111,65 @@ export default function Dashboard(props) {
       return []
     }
       let component = [];
-      // if (asset.mutableStorage === "")
-      //   return [
-      //     <Button className="MLBGradientInlineLeft" onClick={() => addElement()}>
-      //       <NoteAddOutlined />
-      //     </Button>,
-      //   ];
+      let accordionContent = []
   
       let keys = Object.keys(asset.mutableStorage);
-      keys.forEach((key) => {
+      keys.forEach((key, i) => {
         if (key !== "Signing-Client" && key !== "Signing-Client-Version")
-        component.push(
-          <>
-            <br />
-            <br />
-  
-            <TextField
-              key={`AccordionStack${key}`}
-              // id="outlined-multiline"
-              label={key}
-              disabled
-              // InputProps={{
-              //   startAdornment: (
-              //     <InputAdornment position="start">
-              //       {/* {!transactionActive && ( */}
-              //         {/* <>
-              //         <DeleteForever
-              //           className="deleteIcon"
-              //           onClick={() => handleChanges(key, "delete")}
-              //         /> */}
-              //       {/* <Edit
-              //         className="deleteIcon"
-              //         onClick={() => handleChanges(key, "delete")}
-              //       /> */}
-              //       {/* </> */}
-              //       {/* )} */}
-              //       {/* {transactionActive && (
-              //       <DeleteForever
-              //         // className="deleteIcon"
-              //         // onClick={() => handleChanges(key, "delete")}
-              //       />
-              //       )} */}
-              //     </InputAdornment>
-              //   ),
-              // }}
-              rows={2}
-              defaultValue={asset.mutableStorage[key]}
-              variant="outlined"
-              fullWidth
-              // className={engravingClasses.engraving}
-              onChange={e => handleChanges(key, e.target.value)}
-            />
-          </>
-          // <Accordion key={`AccordionStack${key}`}>
-          // {/* <h4>{key}</h4> */}
-          // {/* <AccordionSummary
-          //   expandIcon={<ExpandMoreOutlined />}
-          //   aria-label="Expand"
-          //   aria-controls="additional-actions1-content"
-          //   id={`additional-actions1-header-${key}`}
-          // > */}
-          // <div className="flexRowWithGap">
-          //     <DeleteForever onClick={() => handleChanges(key, "delete")}/>
-          //   <h4>{key}</h4>
-          //   <h4 className="">{asset.mutableStorage[key]}</h4>
-          // </div>
-          // {/* </AccordionSummary> */}
-          // {/* <AccordionDetails>
-          //   <div>
-          //     <div className="delegationTips">
-          //       <FiberManualRecordTwoTone className="delegationPin" />
-          //       <h5 className="delegationTipsContent">
-          //         {asset.mutableStorage[key]}
-          //       </h5>
-          //     </div>
-          //   </div>
-          // </AccordionDetails> */}
-          // </Accordion>
-        );
+        if (i === 0){
+          component.push(
+            <>
+              <br />
+              <br />
+    
+              <TextField
+                key={`AccordionStack${key}`}
+                // id="outlined-multiline"
+                label={key}
+                disabled
+                rows={2}
+                defaultValue={asset.mutableStorage[key]}
+                variant="outlined"
+                fullWidth
+                // className={engravingClasses.engraving}
+              />
+            </>
+          );
+        } else {
+          accordionContent.push(
+              <TextField
+                key={`AccordionStack${key}`}
+                // id="outlined-multiline"
+                label={key}
+                disabled
+                rows={2}
+                defaultValue={asset.mutableStorage[key]}
+                variant="outlined"
+                fullWidth
+                // className={engravingClasses.engraving}
+              />
+          )
+        }
       });
-      // component.push(
-      // <div className="flexRow">
-      //   <Button
-      //     className="MLBGradientInlineLeft"
-      //     onClick={() => addElement()}
-      //   >
-      //     <NoteAddOutlined />
-      //   </Button>
-      //   {asset.mutableStorage !== "" && (
-      //     <Button
-      //       className="MLBGradientInlineRight"
-      //       onClick={() => submitChanges()}
-      //     >
-      //       Save Changes
-      //     </Button>
-      //   )}
-      {
-        /* 
-        <Button className="MLBGradientInlineRight" onClick={() => updateAssetMS(["0x0", "0x0"])}>
-          Save Changes
-        </Button> */
-      }
-      // </div>
-      // );
+      if (accordionContent.length > 0)
+      component.push(
+        <Accordion key={`DetailsAccordionStack`}>
+            {/* <h4>Details</h4> */}
+            <AccordionSummary
+              expandIcon={<ExpandMoreOutlined />}
+              aria-label="Expand"
+              aria-controls="additional-actions1-content"
+              id={`additional-actions1-header-details`}
+            >
+              <h4>Details</h4>
+            </AccordionSummary>
+            <AccordionDetails>
+              <div>
+              {accordionContent}
+              </div>
+            </AccordionDetails>
+            </Accordion>
+      )
   
       return component;
     };
