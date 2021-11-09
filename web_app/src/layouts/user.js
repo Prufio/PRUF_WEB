@@ -308,15 +308,15 @@ export default function Dashboard(props) {
 
     console.log(arweave);
 
-    if (window.arweaveWallet) {
-      window.arweaveWallet.connect([
-        `ACCESS_ADDRESS`,
-        `SIGN_TRANSACTION`,
-        `ENCRYPT`,
-        `DECRYPT`,
-      ]);
-      window.arweaveWallet.getActiveAddress().then((e) => console.log(e));
-    }
+    // if (window.arweaveWallet) {
+    //   window.arweaveWallet.connect([
+    //     `ACCESS_ADDRESS`,
+    //     `SIGN_TRANSACTION`,
+    //     `ENCRYPT`,
+    //     `DECRYPT`,
+    //   ]);
+    //   window.arweaveWallet.getActiveAddress().then((e) => console.log(e));
+    // }
 
     window.arweaveClient = arweave;
 

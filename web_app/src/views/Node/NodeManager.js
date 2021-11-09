@@ -601,28 +601,6 @@ export default function NodeManager(props) {
         transferNodeSwal(e);
         break;
     }
-
-    // else {
-    //   document.body.style.cursor = "wait";
-    //   // eslint-disable-next-line react/prop-types
-    //   if (props.ps) {
-    //     // eslint-disable-next-line react/prop-types
-    //     props.ps.element.scrollTop = 0;
-    //     //console.log(props.ps.element.scrollTop)
-    //   }
-    //   let tempObj = JSON.parse(JSON.stringify(e));
-    //   let costs = [];
-    //   tempObj.lastRef = "/#/user/node-manager";
-    //   tempObj.root = props.nodeExtData[index].root;
-    //   tempObj.id = props.nodeExtData[index].id;
-    //   tempObj.name = props.nodeExtData[index].name;
-    //   tempObj.custodyType = props.nodeExtData[index].custodyType;
-    //   tempObj.usesAuth = props.nodeExtData[index].usesAuth;
-    //   tempObj.discount = props.nodeExtData[index].discount;
-    //   tempObj.referenceAddress = props.nodeExtData[index].referenceAddress;
-    //   tempObj.index = index;
-    //   getAllCosts(tempObj);
-    // }
   };
 
   const getAllCosts = (obj, costs, iteration) => {
