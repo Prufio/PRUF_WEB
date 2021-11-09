@@ -1243,7 +1243,7 @@ export default function Dashboard(props) {
                   let str = new TextDecoder("utf-8").decode(chunk);
                     rec.nonMutableStorage = JSON.parse(str);
                     console.log({parsedIpfsChunk: str})
-                    setCookieTo(window.web3.utils.soliditySha3(query), rec.nonMutableStorage);
+                    if (rec.nonMutableStorage) setCookieTo(window.web3.utils.soliditySha3(query), rec.nonMutableStorage);
                   getMutableOf(rec, _prufClient, _arweaveClient);
                 }
               }
@@ -1334,7 +1334,7 @@ export default function Dashboard(props) {
             let str = new TextDecoder("utf-8").decode(chunk);
             rec.mutableStorage = JSON.parse(str);
             console.log({parsedIpfsChunk: str})
-            setCookieTo(window.web3.utils.soliditySha3(query), rec.mutableStorage);
+            if (rec.mutableStorage) setCookieTo(window.web3.utils.soliditySha3(query), rec.mutableStorage);
             finalize(rec, _prufClient);
           }
         }
