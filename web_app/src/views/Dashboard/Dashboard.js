@@ -1109,63 +1109,113 @@ export default function Dashboard(props) {
       console.log("Bad inputs")
       return []
     }
-    let component = []
-    let keys = Object.keys(asset.mutableStorage);
-
-    keys.forEach((key) => {
-      if (key !== "Signing-Client" && key !== "Signing-Client-Version")
-      component.push(
-        <Accordion key={`AccordionStack${key}`}>
-          {/* <h4>{key}</h4> */}
-          <AccordionSummary
-            expandIcon={<ExpandMoreOutlined />}
-            aria-label="Expand"
-            aria-controls="additional-actions1-content"
-            id={`additional-actions1-header-${key}`}
-          >
-            <div className="flexRowWithGap">
-              <h4>{key}</h4> <br/> <h4 className="">{asset.mutableStorage[key]}</h4>
-            </div>
-            {/* <FormControlLabel
-              aria-label="Acknowledge"
-              onClick={(event) => {
-                event.stopPropagation();
+      let component = [];
+      // if (asset.mutableStorage === "")
+      //   return [
+      //     <Button className="MLBGradientInlineLeft" onClick={() => addElement()}>
+      //       <NoteAddOutlined />
+      //     </Button>,
+      //   ];
+  
+      let keys = Object.keys(asset.mutableStorage);
+  
+      keys.forEach((key) => {
+        component.push(
+          <>
+            <br />
+            <br />
+  
+            <TextField
+              key={`AccordionStack${key}`}
+              // id="outlined-multiline"
+              label={key}
+              disabled
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    {!transactionActive && (
+                      <>
+                      <DeleteForever
+                        className="deleteIcon"
+                        onClick={() => handleChanges(key, "delete")}
+                      />
+                    {/* <Edit
+                      className="deleteIcon"
+                      onClick={() => handleChanges(key, "delete")}
+                    /> */}
+                    </>
+                    )}
+                    {transactionActive && (
+                    <DeleteForever
+                      // className="deleteIcon"
+                      // onClick={() => handleChanges(key, "delete")}
+                    />
+                    )}
+                  </InputAdornment>
+                ),
               }}
-              onFocus={(event) => {
-                event.stopPropagation();
-              }}
-              // control={
-              //   <Checkbox
-              //     disabled={!(prufBalance > props.min)}
-              //     onClick={() =>
-              //       (isTierChecked[`chk${props.pos}`] =
-              //         !isTierChecked[`chk${props.pos}`])
-              //     }
-              //     classes={{
-              //       checked: classes.checked,
-              //       root: classes.checkRoot,
-              //     }}
-              //   />
-              // }
-              label={`${key} ${asset.mutableStorage[key].substring(0, 28)}...`}
-            /> */}
-          </AccordionSummary>
-          <AccordionDetails>
-            <div>
-              <div className="delegationTips">
-                <FiberManualRecordTwoTone className="delegationPin" />
-                <h5 className="delegationTipsContent">
-                  {asset.mutableStorage[key]}
-                </h5>
-              </div>
-            </div>
-          </AccordionDetails>
-        </Accordion>
-      );
-    });
-
-    return component
-  }
+              rows={2}
+              defaultValue={asset.mutableStorage[key]}
+              variant="outlined"
+              fullWidth
+              // className={engravingClasses.engraving}
+              onChange={e => handleChanges(key, e.target.value)}
+            />
+          </>
+          // <Accordion key={`AccordionStack${key}`}>
+          // {/* <h4>{key}</h4> */}
+          // {/* <AccordionSummary
+          //   expandIcon={<ExpandMoreOutlined />}
+          //   aria-label="Expand"
+          //   aria-controls="additional-actions1-content"
+          //   id={`additional-actions1-header-${key}`}
+          // > */}
+          // <div className="flexRowWithGap">
+          //     <DeleteForever onClick={() => handleChanges(key, "delete")}/>
+          //   <h4>{key}</h4>
+          //   <h4 className="">{asset.mutableStorage[key]}</h4>
+          // </div>
+          // {/* </AccordionSummary> */}
+          // {/* <AccordionDetails>
+          //   <div>
+          //     <div className="delegationTips">
+          //       <FiberManualRecordTwoTone className="delegationPin" />
+          //       <h5 className="delegationTipsContent">
+          //         {asset.mutableStorage[key]}
+          //       </h5>
+          //     </div>
+          //   </div>
+          // </AccordionDetails> */}
+          // </Accordion>
+        );
+      });
+      // component.push(
+      // <div className="flexRow">
+      //   <Button
+      //     className="MLBGradientInlineLeft"
+      //     onClick={() => addElement()}
+      //   >
+      //     <NoteAddOutlined />
+      //   </Button>
+      //   {asset.mutableStorage !== "" && (
+      //     <Button
+      //       className="MLBGradientInlineRight"
+      //       onClick={() => submitChanges()}
+      //     >
+      //       Save Changes
+      //     </Button>
+      //   )}
+      {
+        /* 
+        <Button className="MLBGradientInlineRight" onClick={() => updateAssetMS(["0x0", "0x0"])}>
+          Save Changes
+        </Button> */
+      }
+      // </div>
+      // );
+  
+      return component;
+    };
 
   const handleSimple = (event) => {
     // eslint-disable-next-line react/prop-types
