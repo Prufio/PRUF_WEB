@@ -318,16 +318,14 @@ export default function ModifyDescription(props) {
               disabled: false,
             }}
           />
-          <CustomInput
-            labelText={`Content`}
-            id="model"
-            formControlProps={{
-              fullWidth: true,
-              onChange: (e) => (value = e.target.value),
-            }}
-            inputProps={{
-              disabled: false,
-            }}
+          <TextField
+            // id="outlined-multiline"
+            label="Content"
+            multiline
+            rows={4}
+            formControlProps={{onChange: (e) => (value = e.target.value)}}
+            variant="outlined"
+            fullWidth
           />
         </Card>
       ),
@@ -512,6 +510,7 @@ export default function ModifyDescription(props) {
               ),
             }}
             rows={2}
+            multiline
             defaultValue={asset.mutableStorage[key]}
             variant="outlined"
             fullWidth
