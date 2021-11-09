@@ -202,7 +202,7 @@ export default function ModifyDescription(props) {
       }
 
       setIpfsActive(true);
-      postToIpfs(JSON.stringify(payload));
+      postToIpfs(payload);
     } else if (asset.nodeData.storageProvider === "2") {
       postToArweave(tempObj);
     }
@@ -562,12 +562,6 @@ export default function ModifyDescription(props) {
     //       Save Changes
     //     </Button>
     //   )}
-    {
-      /* 
-      <Button className="MLBGradientInlineRight" onClick={() => updateAssetMS(["0x0", "0x0"])}>
-        Save Changes
-      </Button> */
-    }
     // </div>
     // );
 
@@ -1253,6 +1247,9 @@ export default function ModifyDescription(props) {
                 Save Changes
               </Button>
             )}
+            {/* <Button className="MLBGradientInlineRight" onClick={() => updateAssetMS(["0x0", "0x0"])}>
+              Kill
+            </Button> */}
           </div>
           )}
           {transactionActive && (

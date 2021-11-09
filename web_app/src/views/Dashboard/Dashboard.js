@@ -15,6 +15,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Icon from "@material-ui/core/Icon";
+import InputAdornment from "@material-ui/core/InputAdornment";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Accordion from "@material-ui/core/Accordion";
@@ -1118,7 +1119,6 @@ export default function Dashboard(props) {
       //   ];
   
       let keys = Object.keys(asset.mutableStorage);
-  
       keys.forEach((key) => {
         component.push(
           <>
@@ -1130,30 +1130,30 @@ export default function Dashboard(props) {
               // id="outlined-multiline"
               label={key}
               disabled
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    {!transactionActive && (
-                      <>
-                      <DeleteForever
-                        className="deleteIcon"
-                        onClick={() => handleChanges(key, "delete")}
-                      />
-                    {/* <Edit
-                      className="deleteIcon"
-                      onClick={() => handleChanges(key, "delete")}
-                    /> */}
-                    </>
-                    )}
-                    {transactionActive && (
-                    <DeleteForever
-                      // className="deleteIcon"
-                      // onClick={() => handleChanges(key, "delete")}
-                    />
-                    )}
-                  </InputAdornment>
-                ),
-              }}
+              // InputProps={{
+              //   startAdornment: (
+              //     <InputAdornment position="start">
+              //       {/* {!transactionActive && ( */}
+              //         {/* <>
+              //         <DeleteForever
+              //           className="deleteIcon"
+              //           onClick={() => handleChanges(key, "delete")}
+              //         /> */}
+              //       {/* <Edit
+              //         className="deleteIcon"
+              //         onClick={() => handleChanges(key, "delete")}
+              //       /> */}
+              //       {/* </> */}
+              //       {/* )} */}
+              //       {/* {transactionActive && (
+              //       <DeleteForever
+              //         // className="deleteIcon"
+              //         // onClick={() => handleChanges(key, "delete")}
+              //       />
+              //       )} */}
+              //     </InputAdornment>
+              //   ),
+              // }}
               rows={2}
               defaultValue={asset.mutableStorage[key]}
               variant="outlined"
