@@ -202,67 +202,80 @@ export default function Search(props) {
   };
 
   const displayMutableStorage = (asset) => {
-    if (!asset.mutableStorage || asset.mutableStorage === "") {
-      console.log("Bad inputs");
-      return [];
+    if(!asset.mutableStorage || asset.mutableStorage === "") {
+      console.log("Bad inputs")
+      return []
     }
-    let component = [];
-    let keys = Object.keys(asset.mutableStorage);
-
-    keys.forEach((key) => {
-      if (key !== "Signing-Client" && key !== "Signing-Client-Version")
-        component.push(
-          <Accordion key={`AccordionStack${key}`}>
-            {/* <h4>{key}</h4> */}
+      let component = [];
+      let accordionContent = []
+  
+      let keys = Object.keys(asset.mutableStorage);
+      keys.forEach((key, i) => {
+        if (key !== "Signing-Client" && key !== "Signing-Client-Version")
+        if (i === 0){
+          component.push(
+            <>
+              <br />
+              <br />
+    
+              <TextField
+                key={`AccordionStack${key}`}
+                // id="outlined-multiline"
+                label={key}
+                disabled
+                rows={2}
+                defaultValue={asset.mutableStorage[key]}
+                variant="outlined"
+                fullWidth
+                // className={engravingClasses.engraving}
+              />
+            </>
+          );
+        } else {
+          accordionContent.push(
+            <>
+              <TextField
+                key={`AccordionStack${key}`}
+                // id="outlined-multiline"
+                label={key}
+                disabled
+                rows={2}
+                defaultValue={asset.mutableStorage[key]}
+                variant="outlined"
+                fullWidth
+                // className={engravingClasses.engraving}
+              />
+        <br/>
+        <br/>
+        </>
+        )
+        }
+      });
+      if (accordionContent.length > 0)
+      component.push(
+        <>
+        {/* <br/> */}
+        {/* <br/> */}
+        <Accordion key={`DetailsAccordionStack`}
+        className="smallAccordian">
             <AccordionSummary
               expandIcon={<ExpandMoreOutlined />}
               aria-label="Expand"
               aria-controls="additional-actions1-content"
-              id={`additional-actions1-header-${key}`}
+              id={`additional-actions1-header-details`}
             >
-              <div className="flexRowWithGap">
-                <h4>{key}</h4> <br />{" "}
-                <h4 className="">{asset.mutableStorage[key]}</h4>
-              </div>
-              {/* <FormControlLabel
-              aria-label="Acknowledge"
-              onClick={(event) => {
-                event.stopPropagation();
-              }}
-              onFocus={(event) => {
-                event.stopPropagation();
-              }}
-              // control={
-              //   <Checkbox
-              //     disabled={!(prufBalance > props.min)}
-              //     onClick={() =>
-              //       (isTierChecked[`chk${props.pos}`] =
-              //         !isTierChecked[`chk${props.pos}`])
-              //     }
-              //     classes={{
-              //       checked: classes.checked,
-              //       root: classes.checkRoot,
-              //     }}
-              //   />
-              // }
-              label={`${key} ${asset.mutableStorage[key].substring(0, 28)}...`}
-            /> */}
+              <h4 className="mutDataAccordian">More...</h4>
             </AccordionSummary>
             <AccordionDetails>
               <div>
-                <div className="delegationTips">
-                  <FiberManualRecordTwoTone className="delegationPin" />
-                  <h5 className="delegationTipsContent">
-                    {asset.mutableStorage[key]}
-                  </h5>
-                </div>
+              {accordionContent}
               </div>
             </AccordionDetails>
-          </Accordion>
-        );
-    });
-
-    return component;
+            </Accordion>
+            </>
+      )
+  
+      return component;
   };
 
   const renderOptions = (status) => {
