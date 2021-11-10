@@ -21,16 +21,7 @@ import AdminLayout from "layouts/user.js";
 import { CookiesProvider } from "react-cookie";
 
 import "assets/scss/material-dashboard-pro-react.scss?v=1.9.0";
-
-/* let query;
-if(window.location.href.includes('0x')){
-  query = "/"+(window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.indexOf('0x')+66) || "");
-} else {
-  query = "";
-}
-console.log(query);
-const fullUrl = "/user/home" + query */
-
+  
 ReactDOM.render(
   <CookiesProvider>
     <HashRouter>

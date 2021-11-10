@@ -67,7 +67,7 @@ export default function AdminNavbar(props) {
           </Button>
         </div>
         <Hidden smDown implementation="css">
-          <AdminNavbarLinks rtlActive={rtlActive} />
+          <AdminNavbarLinks search={props.search} rtlActive={rtlActive} />
         </Hidden>
         <Hidden mdUp implementation="css">
           <Button
