@@ -60,6 +60,7 @@ export default function Dashboard(props) {
   const [isAssetHolder, setIsAssetHolder] = React.useState(false);
   const [isAssetClassHolder, setIsAssetClassHolder] = React.useState(false);
   const [simpleAssetView, setSimpleAssetView] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState();
   const [hasBeenNotified, setHasBeenNotified] = React.useState(false);
   // const [isIDHolder, setIsIDHolder] = React.useState();
   const [sidebarRoutes, setSidebarRoutes] = React.useState([
@@ -112,6 +113,8 @@ export default function Dashboard(props) {
   const classes = useStyles();
   const refreshEvent = new Event("refresh");
   const connectArweaveEvent = new Event("connectArweave");
+  const searchEvent = new Event("search");
+  const clearSearchEvent = new Event("clearSearch")
 
   //classes for main panel
   const mainPanelClasses =
@@ -151,6 +154,22 @@ export default function Dashboard(props) {
       let newNum = replaceAssetData + 1;
       setReplaceAssetData(newNum);
     });
+
+    window.addEventListener("search", () => {
+      console.log("Trying to search for asset");
+      setSearchQuery(window.idxQuery);
+    });
+
+    window.addEventListener("clearSearch", () => {
+      console.log("Trying to search for asset");
+      setSearchQuery();
+    });
+
+    window.addEventListener("clearSearch", () => {
+      console.log("Trying to search for asset");
+      setSearchQuery(window.idxQuery);
+    });
+
     window.addEventListener("connectArweave", () => {
       if (!window.arweaveWallet) {
         return swalReact(
@@ -296,6 +315,20 @@ export default function Dashboard(props) {
     }
   }, [replaceAssetData]);
 
+  React.useEffect(() => {
+    if (
+      arweaveClient &&
+      arweaveClient.transactions &&
+      prufClient &&
+      prufClient.get &&
+      window.idxQuery &&
+      window.idxQuery.includes("0x")
+    ) {
+      console.log("query detected for idx: ", window.idxQuery);
+      window.dispatchEvent(searchEvent);
+    }
+  }, [prufClient, arweaveClient]);
+
   //console.log("pre-load href", window.location.href)
   const initArweave = async () => {
     const _arweaveClient = Arweave;
@@ -340,7 +373,7 @@ export default function Dashboard(props) {
       console.log(_prufClient);
       setPrufClient(_prufClient);
       setUpEnvironment(_prufClient);
-      awaitPrufInitNoAddress(_prufClient);
+      //awaitPrufInitNoAddress(_prufClient);
       // setIsIDHolder(false);
 
       window.prufClient = _prufClient;
@@ -481,10 +514,6 @@ export default function Dashboard(props) {
                 if (cookies[`${_addr}sideBarImage`]) {
                   setImage(cookies[`${_addr}sideBarImage`]);
                 }
-                if (window.idxQuery) {
-                  window.location.href = "/#/user/search";
-                  return forceUpdate();
-                }
                 setUpEnvironment(_prufClient, _addr);
                 setIsMounted(true);
               } else {
@@ -538,6 +567,17 @@ export default function Dashboard(props) {
   };
 
   window.onload = () => {
+    window.idxQuery = "";
+
+    if (window.location.href.includes("0x")) {
+      window.idxQuery = window.location.href.substring(
+        window.location.href.indexOf("0x"),
+        window.location.href.indexOf("0x") + 66
+      );
+      window.isSearching = true
+      window.location.href = `/#/user/search/${window.idxQuery}`;
+    }
+
     window.balances = {};
     window.replaceAssetData = {};
     window.recount = false;
@@ -549,43 +589,27 @@ export default function Dashboard(props) {
 
     _ipfs = new IPFS(new URL("https://ipfs.infura.io:5001"));
 
+    window.ipfs = _ipfs;
+
     let hrefStr = String(
       window.location.href.substring(
         window.location.href.indexOf("/#/"),
         window.location.href.length
       )
     );
-    //console.log(hrefStr.includes("0x") && hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length).length === 66)
-    if (
-      hrefStr.includes("0x") &&
-      hrefStr.substring(hrefStr.indexOf("0x"), hrefStr.length).length === 66
-    ) {
-      if (!window.location.href.includes("/#/user/search")) {
-        window.idxQuery = hrefStr.substring(
-          hrefStr.indexOf("0x"),
-          hrefStr.indexOf("0x") + 66
-        );
-        console.log(
-          "query detected for idx: ",
-          hrefStr.substring(hrefStr.indexOf("0x"), hrefStr.indexOf("0x") + 66)
-        );
-        window.location.href = String(
-          "/#/user/search/" +
-            hrefStr.substring(hrefStr.indexOf("0x"), hrefStr.length)
-        );
-      }
+
+    if (window.idxQuery && window.idxQuery.includes("0x")) {
+      console.log("URL contains 0x");
     } else if (
       hrefStr !== "/#/user/dashboard" &&
       hrefStr !== "/#/user/home" &&
-      hrefStr !== "/#/user/search" &&
+      !hrefStr.includes("/#/user/search") &&
       hrefStr !== "/#/user/node-manager" &&
       hrefStr !== "/#/user/new-asset"
     ) {
       console.log("Rerouting...");
       window.location.href = "/#/user/home";
     }
-
-    window.ipfs = _ipfs;
 
     buildWindowUtils(); // get the utils object and make it globally accessible
 
@@ -699,33 +723,36 @@ export default function Dashboard(props) {
           <Route
             path={prop.layout + prop.path}
             render={() => (
-                <prop.component
-                  assetsPerPage={assetsPerPage}
-                  roots={roots}
-                  ARWallet={ARWallet}
-                  refresh={refreshEvent}
-                  connectArweave={connectArweaveEvent}
-                  rootNames={rootNames}
-                  nodeSets={nodeSets}
-                  chainId={chainId}
-                  heldNodeData={heldNodeData}
-                  nodeExtData={nodeExtData}
-                  ps={sps}
-                  isMounted={isMounted}
-                  addr={addr}
-                  assetObj={assets}
-                  assetArr={assetArr}
-                  pruf={prufBalance}
-                  ether={ETHBalance}
-                  assets={assetBalance}
-                  nodes={nodeBalance}
-                  currentACPrice={currentACPrice}
-                  simpleAssetView={simpleAssetView}
-                  winKey={winKey}
-                  prufClient={prufClient}
-                  arweaveClient={arweaveClient}
-                  showPlaceHolder={showPlaceHolder}
-                />
+              <prop.component
+                assetsPerPage={assetsPerPage}
+                searchQuery={searchQuery}
+                roots={roots}
+                ARWallet={ARWallet}
+                refresh={refreshEvent}
+                search={searchEvent}
+                connectArweave={connectArweaveEvent}
+                rootNames={rootNames}
+                nodeSets={nodeSets}
+                chainId={chainId}
+                heldNodeData={heldNodeData}
+                nodeExtData={nodeExtData}
+                ps={sps}
+                isMounted={isMounted}
+                addr={addr}
+                assetObj={assets}
+                assetArr={assetArr}
+                pruf={prufBalance}
+                ether={ETHBalance}
+                assets={assetBalance}
+                clearSearch={clearSearchEvent}
+                nodes={nodeBalance}
+                currentACPrice={currentACPrice}
+                simpleAssetView={simpleAssetView}
+                winKey={winKey}
+                prufClient={prufClient}
+                arweaveClient={arweaveClient}
+                showPlaceHolder={showPlaceHolder}
+              />
             )}
             key={key}
           />
@@ -751,22 +778,16 @@ export default function Dashboard(props) {
 
     console.log("Getting things set up...");
 
-    if (window.isKovan === false) {
-      return;
-    }
-
     initArweave().then((e) => {
       if (window.ethereum) {
         if (_addr) {
           setupTokenVals(e, _addr, _prufClient);
           buildRoots(_addr, _prufClient);
         }
+      } else {
+        setArweaveClient(e)
       }
     });
-
-    if (window.idxQuery) {
-      window.location.href = "/#/user/search/" + window.idxQuery;
-    }
   };
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
@@ -1511,6 +1532,7 @@ export default function Dashboard(props) {
       />
       <div className={mainPanelClasses} ref={mainPanel}>
         <AdminNavbar
+          search={searchEvent}
           sidebarMinimize={sidebarMinimize.bind(this)}
           miniActive={miniActive}
           brandText={getActiveRoute(routes)}

@@ -76,7 +76,7 @@ export default function Search(props) {
   const [currency, setCurrency] = React.useState("");
   const [recycled, setRecycled] = React.useState(false);
   const [transaction, setTransaction] = React.useState(false);
-  const [retrieving, setRetrieving] = React.useState(false);
+  const [retrieving, setRetrieving] = React.useState(window.isSearching);
   const [ownerOf, setOwnerOf] = React.useState(false);
   const [assetURL, setURL] = React.useState("");
   const [baseURL, setBaseURL] = React.useState(
@@ -138,52 +138,7 @@ export default function Search(props) {
 
   const link = document.createElement("div");
 
-  const awaitPrufInit = (id) => {
-    setTimeout(() => {
-      //console.log("Checking...", props.prufClient)
-      if (
-        props.prufClient !== undefined &&
-        props.prufClient.get !== undefined
-      ) {
-        console.log("Searching...", id);
-        checkInputs(id);
-      } else {
-        awaitPrufInit(id);
-      }
-    }, 100);
-  };
-
   React.useEffect(() => {
-    if (
-      !window.idxQuery &&
-      window.location.href.includes("0x") &&
-      window.location.href.substring(
-        window.location.href.indexOf("0x"),
-        window.location.href.length
-      ).length === 66
-    ) {
-      console.log(
-        `Got query: ${window.location.href.substring(
-          window.location.href.indexOf("0x"),
-          window.location.href.length
-        )}`
-      );
-      window.idxQuery = window.location.href.substring(
-        window.location.href.indexOf("0x"),
-        window.location.href.length
-      );
-      setQuery(
-        window.location.href.substring(
-          window.location.href.indexOf("0x"),
-          window.location.href.length
-        )
-      );
-    } else if (window.idxQuery) {
-      console.log(`Got query: ${window.idxQuery}`);
-      //awaitPrufInit(props.prufClient, window.idxQuery)
-      setQuery(window.idxQuery);
-      //window.idxQuery = null;
-    }
     if (props.ps) {
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
@@ -192,18 +147,20 @@ export default function Search(props) {
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
+
     if (window.backIndex) {
       window.backIndex = undefined;
     }
+    window.isSearching = false
   }, []);
 
-  React.useEffect(() => {
-    if (props.prufClient && props.prufClient.get && query) {
-      window.location.href = `/#/user/search/${query}`;
-      checkInputs(query);
-      setQuery(null);
+  React.useEffect(()=>{
+    if(!window.hasSearched && props.searchQuery && props.searchQuery.includes("0x")) {
+      console.log("Search query has changed")
+      checkInputs(props.searchQuery)
     }
-  }, [props.prufClient, query, window.location.href]);
+    window.idxQuery = ""
+  }, [props.searchQuery])
 
   const ACLogin = (event) => {
     // if (!props.IDHolder) {
@@ -1048,7 +1005,7 @@ export default function Search(props) {
     setSelectedEnabled(event.target.value);
   };
 
-  const handleScanQR = (event) => {
+  const handleScanQR = () => {
     setScanQR(!scanQR);
     setData();
     console.log("new value", !scanQR);
@@ -1056,18 +1013,6 @@ export default function Search(props) {
 
   const verify = () => {
     setIsVerifying(true);
-    if (props.ps) {
-      console.log(props.ps);
-      props.ps.element.scrollTop = 0;
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      document.documentElement.scrollTop = 0;
-      document.scrollingElement.scrollTop = 0;
-    }
-  };
-
-  const recycle = async () => {
-    setIsRecycling(true);
     if (props.ps) {
       console.log(props.ps);
       props.ps.element.scrollTop = 0;
@@ -1101,182 +1046,6 @@ export default function Search(props) {
     setloginLastState("");
     setloginIDState("");
     setloginPasswordState("");
-  };
-
-  const purchaseAsset = () => {
-    // if (!props.addr) return swalReact("No address detected")
-    // let newAsset = JSON.parse(JSON.stringify(asset));
-    // const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
-    // let tempTxHash;
-    // console.log("Purchasing Asset");
-    // if (Number(props.pruf) < Number(price)) {
-    //   swalReact({
-    //     title: "Insufficient balance!",
-    //     icon: "warning",
-    //     button: "Close",
-    //   });
-    //   return console.log(price), console.log(props.pruf);
-    // }
-    // setTransaction(true);
-    // props.prufClient.do
-    //   .buyAsset(asset.id)
-    //   .send({ from: props.addr })
-    //   .on("error", function (_error) {
-    //     setTransaction(false);
-    //     tempTxHash = Object.values(_error)[0].transactionHash;
-    //     let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-    //     let str2 = "' target='_blank'>here</a>";
-    //     link.innerHTML = String(str1 + tempTxHash + str2);
-    //     if (tempTxHash !== undefined) {
-    //       swalReact({
-    //         title: "Something went wrong!",
-    //         content: link,
-    //         icon: "warning",
-    //         button: "Close",
-    //       });
-    //     }
-    //     if (tempTxHash === undefined) {
-    //       swalReact({
-    //         title: "Something went wrong!",
-    //         icon: "warning",
-    //         button: "Close",
-    //       });
-    //     }
-    //     console.log("Verification conf");
-    //     setTxHash(Object.values(_error)[0].transactionHash);
-    //     console.log(Object.values(_error)[0].transactionHash);
-    //     console.log(_error);
-    //     setError(_error);
-    //   })
-    //   .on("receipt", (receipt) => {
-    //     setTransactionActive(false);
-    //     setTxStatus(receipt.status);
-    //     newAsset.currency = "0"
-    //     newAsset.price = "0"
-    //     tempTxHash = receipt.transactionHash;
-    //     let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-    //     let str2 = "' target='_blank'>here</a>";
-    //     link.innerHTML = String(str1 + tempTxHash + str2);
-    //     swalReact({
-    //       title: "Purchase Success!",
-    //       content: link,
-    //       icon: "success",
-    //       button: "Close",
-    //     }).then(() => {
-    //       window.location.href = "/#/user/dashboard";
-    //       window.replaceAssetData = { key: pageKey, newAsset: newAsset };
-    //       window.replaceAssetData.refreshBals = true
-    //     window.dispatchEvent(props.refresh)
-    //     });
-    //   });
-  };
-
-  const recycleAsset = () => {
-    // if (
-    //   loginFirst === "" ||
-    //   loginLast === "" ||
-    //   loginID === "" ||
-    //   loginPassword === ""
-    // ) {
-    //   if (loginFirst === "") {
-    //     setloginFirstState("error");
-    //   }
-    //   if (loginLast === "") {
-    //     setloginLastState("error");
-    //   }
-    //   if (loginID === "") {
-    //     setloginIDState("error");
-    //   }
-    //   if (loginPassword === "") {
-    //     setloginPasswordState("error");
-    //   }
-    //   return;
-    // }
-    // const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
-    // console.log("in RA");
-    // let idxHash = asset.id;
-    // let rgtHash;
-    // let rgtHashRaw;
-    // let tempTxHash;
-    // let newAsset = JSON.parse(JSON.stringify(asset));
-    // newAsset.status = "Out of Escrow";
-    // newAsset.statusNum = "58";
-    // props.prufClient.utils.generateSecureRgt(
-    //   asset.id,
-    //   {
-    //     first: first,
-    //     middle: middle,
-    //     last: last,
-    //     id: ID,
-    //     password: password
-    //   }
-    // ).then(rgtHash => {
-    //   console.log("idxHash", idxHash);
-    //   console.log("rgtHash", rgtHash);
-    //   console.log("addr: ", props.addr);
-    //   setTransaction(true);
-    //   props.prufClient.do
-    //     .recycleAsset(idxHash, rgtHash, nodeId)
-    //     .send({ from: props.addr })
-    //     .on("error", function (_error) {
-    //       setTransaction(false);
-    //       tempTxHash = Object.values(_error)[0].transactionHash;
-    //       let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-    //       let str2 = "' target='_blank'>here</a>";
-    //       link.innerHTML = String(str1 + tempTxHash + str2);
-    //       if (tempTxHash !== undefined) {
-    //         swalReact({
-    //           title: "Something went wrong!",
-    //           content: link,
-    //           icon: "warning",
-    //           button: "Close",
-    //         });
-    //       }
-    //       if (tempTxHash === undefined) {
-    //         swalReact({
-    //           title: "Something went wrong!",
-    //           icon: "warning",
-    //           button: "Close",
-    //         });
-    //       }
-    //       console.log("Verification conf");
-    //       setTxHash(Object.values(_error)[0].transactionHash);
-    //       console.log(Object.values(_error)[0].transactionHash);
-    //       console.log(_error);
-    //       setError(_error);
-    //     })
-    //     .on("receipt", (receipt) => {
-    //       setTransactionActive(false);
-    //       setTxStatus(receipt.status);
-    //       tempTxHash = receipt.transactionHash;
-    //       let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-    //       let str2 = "' target='_blank'>here</a>";
-    //       link.innerHTML = String(str1 + tempTxHash + str2);
-    //       swalReact({
-    //         title: "Recycle Success!",
-    //         content: link,
-    //         icon: "success",
-    //         button: "Close",
-    //       }).then(() => {
-    //         window.newStat = { num: "58", str: "Out of Escrow" };
-    //         window.location.href = "/#/user/dashboard";
-    //         window.replaceAssetData = { key: pageKey, newAsset: newAsset };
-    //         window.replaceAssetData.refreshBals = true
-    //     window.dispatchEvent(props.refresh)
-    //       });
-    //     });
-    // })
-    //return;
-  };
-
-  const thousandHashesOf = (varToHash) => {
-    if (!window.web3) return (window.location.href = "/#/user/home");
-    let tempHash = varToHash;
-    for (let i = 0; i < 1000; i++) {
-      tempHash = window.web3.utils.soliditySha3(tempHash);
-      //console.log(tempHash);
-    }
-    return tempHash;
   };
 
   const copyTextSnippet = (temp) => {
@@ -1486,7 +1255,10 @@ export default function Search(props) {
   };
 
   const checkInputs = (fromQR) => {
-    window.idxQuery = null;
+    window.hasSearched = true
+    window.dispatchEvent(props.clearSearch)
+    window.idxQuery = "";
+
     let id;
 
     if (fromQR) {
@@ -1567,28 +1339,31 @@ export default function Search(props) {
     _addr = props.addr,
     _prufClient = props.prufClient
   ) => {
-    _prufClient.get.asset.record(id).then((rec) => {
+    window.isSearching = true
+    checkIsHolder(id);
+    _prufClient.get.asset.record(id).then(async (rec) => {
       console.log({ rec });
-      setScanQR(false);
-      setResult(rec);
-      setError("");
-      checkIsHolder(id);
       rec.id = id;
-      getNonMutableOf(rec, _prufClient, _arweaveClient);
+      rec.identicon = <Jdenticon value={rec.id} />;
+      rec.statusNum = rec.status;
+      rec.status = await _prufClient.utils.stringifyStatus(rec.status);
+      _prufClient.get.node.record(rec.nodeId).then((nodeData) => {
+        rec.nodeData = nodeData;
+        rec.nodeName = nodeData.name
+          .toLowerCase()
+          .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+        _prufClient.get.node.ownerOf(rec.nodeId).then((admin) => {
+          rec.nodeAdmin = admin;
+          setScanQR(false);
+          setResult(rec);
+          setError("");
+          getNonMutableOf(rec, _prufClient, _arweaveClient);
+        })
+      })
     });
   };
 
   const getNonMutableOf = async (rec, _prufClient, _arweaveClient) => {
-    rec.identicon = <Jdenticon value={rec.id} />;
-    rec.statusNum = rec.status;
-    rec.status = await _prufClient.utils.stringifyStatus(rec.status);
-    _prufClient.get.node.record(rec.nodeId).then((nodeData) => {
-      rec.nodeData = nodeData;
-      rec.nodeName = nodeData.name
-        .toLowerCase()
-        .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
-      _prufClient.get.node.ownerOf(rec.nodeId).then((admin) => {
-        rec.nodeAdmin = admin;
         if (
           rec.nonMutableStorage1 ===
           "0x0000000000000000000000000000000000000000000000000000000000000000"
@@ -1665,8 +1440,6 @@ export default function Search(props) {
               xhr.send(null);
             });
         }
-      });
-    });
   };
 
   const getMutableOf = async (rec, _prufClient, _arweaveClient) => {
@@ -1753,6 +1526,7 @@ export default function Search(props) {
         setSelectedImage(rec.displayImage);
         setRetrieving(false);
         setMoreInfo(true);
+        window.isSearching = false;
       };
 
       req.onerror = function (e) {
@@ -1764,6 +1538,7 @@ export default function Search(props) {
         setSelectedImage(rec.displayImage);
         setRetrieving(false);
         setMoreInfo(true);
+        window.isSearching = false;
       };
       req.open("GET", rec.nonMutableStorage.displayImage, true);
       req.send();
@@ -1775,6 +1550,7 @@ export default function Search(props) {
         setSelectedImage(rec.displayImage);
         setRetrieving(false);
         setMoreInfo(true);
+        window.isSearching = false;
       });
     } else {
       _prufClient.get.asset.URI(rec.id).then((uri) => {
@@ -1784,550 +1560,9 @@ export default function Search(props) {
         setSelectedImage(rec.displayImage);
         setRetrieving(false);
         setMoreInfo(true);
+        window.isSearching = false;
       });
     }
-  };
-
-  // const buildAsset = (id) => {
-  //   if (!id) return;
-
-  //   setURL(`${baseURL}${id}`);
-
-  //   if (props.ps) {
-  //     //console.log(props.ps)
-  //     props.ps.element.scrollTop = 0;
-  //   } else {
-  //     window.scrollTo({ top: 0, behavior: "smooth" });
-  //     document.documentElement.scrollTop = 0;
-  //     document.scrollingElement.scrollTop = 0;
-  //   }
-
-  //   setRetrieving(true);
-
-  //   //Call to the API for an asset with assetId 'id'
-  //   props.prufClient.get.asset.record(id).then(e => {
-  //     setScanQR(false);
-  //     setResult(Object.values(e));
-  //     setError("");
-
-  //     //If asset is in status 60, allow for recycling
-  //     e.statusNum === "60" ? setRecycled(true) : checkIsHolder(id);
-
-  //     let obj = Object.assign({}, e);
-
-  //     //Some jdenticons for default placeholders
-  //     obj.identicon = <Jdenticon value={id} />;
-  //     obj.identiconLG = <Jdenticon value={id} />;
-
-  //     //util call for status string
-  //     props.prufClient.utils.stringifyStatus(e.statusNum).then((e) => {
-  //       obj.status = e;
-  //     });
-
-  //     //retreive price data set by holder
-  //     props.prufClient.get.assetPriceData(id).then(e => {
-  //       obj = Object.assign(obj, e)
-
-  //       e.price !== "0"
-  //         ? setPrice(e.price)
-  //         : setPrice("");
-  //       e.currency === "2"
-  //         ? setCurrency("ü")
-  //         : setCurrency("");
-
-  //       //get data on the node in which the asset resides
-  //       props.prufClient.get
-  //         node.record(obj.nodeId)
-  //         .then(e => {
-  //           obj.nodeName = e.name.toLowerCase()
-  //             .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-  //               letter.toUpperCase()
-  //             );
-  //           setSelectedRootID(e.root)
-  //           obj.nodeData = Object.assign({}, e)
-  //           props.prufClient.get.node.ownerOf(obj.nodeId).then(e => {
-  //             obj.nodeAdmin = e
-  //             props.prufClient.get.node.userType(window.web3.utils.soliditySha3(props.addr), obj.nodeId).then(e => {
-  //               obj.userAuthLevel = e
-  //               console.log("HERE", e.root);
-  //               return getMutableStorage(obj);
-  //             })
-  //           })
-  //         });
-  //     });
-  //   });
-  // };
-
-  // const getMutableStorage = (asset) => {
-  //   if (!asset) return console.log("Failed upon reception of:", asset);
-
-  //   let obj = JSON.parse(JSON.stringify(asset));
-  //   let storageProvider = obj.nodeData.storageProvider;
-  //   let mutableStorageQuery;
-
-  //   if (
-  //     obj.mutableStorageA ===
-  //     "0x0000000000000000000000000000000000000000000000000000000000000000"
-  //     || obj.nodeData.root === obj.nodeId
-  //   ) {
-  //     obj.mutableStorage = "";
-  //     return getnonMutableStorage(obj);
-  //   } else if (storageProvider === "1") {
-  //     //util call to convert b32 stored on chain to a bs58 hash compatible with IPFS
-  //     props.prufClient.utils.ipfsFromB32(obj.mutableStorageA).then(async (e) => {
-  //       let mutableStorageQuery = e;
-  //       console.log("MDQ", e);
-  //       //fetch mutableStorage from IPFS if storageProvider === '1'
-  //       for await (const chunk of window.ipfs.cat(mutableStorageQuery)) {
-  //         let str = new TextDecoder("utf-8").decode(chunk);
-  //         console.log(str);
-  //         try {
-  //           obj.mutableStorage = JSON.parse(str);
-  //         } catch {
-  //           obj.mutableStorage = str;
-  //         }
-  //         return getnonMutableStorage(obj);
-  //       }
-  //     });
-  //   } else if (storageProvider === "2") {
-  //     console.log(obj.mutableStorageA, obj.mutableStorageB);
-
-  //     //Convert b32 stored on chain to a valid Arweave txId
-  //     mutableStorageQuery = window.web3.utils.hexToUtf8(
-  //       obj.mutableStorageA +
-  //       obj.mutableStorageB.substring(2, 24)
-  //     );
-
-  //     //We will check an arweave gateway to make sure the asset has data stored at the fetched txId
-  //     let xhr = new XMLHttpRequest();
-
-  //     xhr.onload = () => {
-  //       if (xhr.status !== 404) {
-  //         try {
-  //           //fetch mutableStorage from Arweave if storageProvider === '2'
-  //           props.arweaveClient.transactions.get(mutableStorageQuery).then((e) => {
-  //             let tempObj = {};
-  //             e.get("tags").forEach((tag) => {
-  //               let key = tag.get("name", { decode: true, string: true });
-  //               let value = tag.get("value", { decode: true, string: true });
-  //               tempObj[key] = value;
-  //               //console.log(`${key} : ${value}`);
-  //             });
-  //             //tempObj.contentUrl = `https://arweave.net/${mutableStorageQuery}`
-  //             tempObj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
-  //             obj.mutableStorage = tempObj;
-  //             obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
-  //             return getnonMutableStorage(obj);
-  //           });
-  //         } catch {
-  //           console.log("Id returned 404");
-  //           obj.mutableStorage = "";
-  //           obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
-  //           return getnonMutableStorage(obj);
-  //         }
-  //       } else {
-  //         console.log("Gateway returned 404");
-  //         obj.mutableStorage = "";
-  //         obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
-  //         return getnonMutableStorage(obj);
-  //       }
-  //     };
-
-  //     xhr.onerror = () => {
-  //       console.log("Gateway returned 404");
-  //       obj.mutableStorage = "";
-  //       obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
-  //       return getnonMutableStorage(obj);
-  //     };
-
-  //     xhr.open("GET", `https://arweave.net/tx/${mutableStorageQuery}`, true);
-  //     try {
-  //       xhr.send(null);
-  //     } catch {
-  //       console.log("Gateway returned 404");
-  //       obj.mutableStorage = "";
-  //       obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
-  //       return getnonMutableStorage(obj);
-  //     }
-  //   }
-  // };
-
-  // const getnonMutableStorage = (asset) => {
-  //   if (!asset) return console.log("Failed upon reception of:", asset);
-
-  //   let obj = JSON.parse(JSON.stringify(asset));
-  //   let storageProvider = obj.nodeData.storageProvider;
-  //   let nonMutableStorageQuery;
-
-  //   if (
-  //     obj.nonMutableStorageA ===
-  //     "0x0000000000000000000000000000000000000000000000000000000000000000"
-  //     || obj.nodeData.root === obj.nodeId
-  //   ) {
-  //     obj.nonMutableStorage = "";
-  //     return finalizeAsset(obj);
-  //   } else if (storageProvider === "1") {
-  //     //util call to convert b32 stored on chain to a bs58 hash compatible with IPFS
-  //     props.prufClient.utils.ipfsFromB32(obj.nonMutableStorageA).then(async (e) => {
-  //       nonMutableStorageQuery = e;
-  //       //fetch nonMutableStorage from IPFS if storageProvider === '1'
-  //       for await (const chunk of window.ipfs.cat(nonMutableStorageQuery)) {
-  //         let str = new TextDecoder("utf-8").decode(chunk);
-  //         console.log(str);
-  //         try {
-  //           obj.nonMutableStorage = JSON.parse(str);
-  //         } catch {
-  //           obj.nonMutableStorage = str;
-  //         }
-  //         //console.log("EXIT")
-  //         return finalizeAsset(obj);
-  //       }
-  //     });
-  //   } else if (storageProvider === "2") {
-  //     console.log(obj.nonMutableStorageB.indexOf("0000000000000000000000"));
-
-  //     //Convert b32 stored on chain to a valid Arweave txId
-  //     nonMutableStorageQuery = window.web3.utils.hexToUtf8(
-  //       obj.nonMutableStorageA +
-  //       obj.nonMutableStorageB.substring(
-  //         2,
-  //         24
-  //       )
-  //     );
-
-  //     //We will check an arweave gateway to make sure the asset has data stored at the fetched txId
-  //     let xhr = new XMLHttpRequest();
-
-  //     xhr.onload = () => {
-  //       if (xhr.status !== 404) {
-  //         try {
-  //           //fetch nonMutableStorage from Arweave if storageProvider === '2'
-  //           props.arweaveClient.transactions.get(nonMutableStorageQuery).then((e) => {
-  //             if (!e) throw "Thrown";
-  //             let tempObj = {};
-  //             e.get("tags").forEach((tag) => {
-  //               let key = tag.get("name", { decode: true, string: true });
-  //               let value = tag.get("value", { decode: true, string: true });
-  //               tempObj[key] = value;
-  //               //console.log(`${key} : ${value}`);
-  //             });
-  //             //tempObj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`
-  //             tempObj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
-  //             obj.nonMutableStorage = tempObj;
-  //             return finalizeAsset(obj);
-  //           });
-  //         } catch {
-  //           console.log("In arweave catch clause");
-  //           obj.nonMutableStorage = "";
-  //           return finalizeAsset(obj);
-  //         }
-  //       } else {
-  //         console.log("Id returned 404");
-  //         obj.nonMutableStorage = "";
-  //         obj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
-  //         return finalizeAsset(obj);
-  //       }
-  //     };
-
-  //     xhr.onerror = () => {
-  //       console.log("Gateway returned 404");
-  //       obj.nonMutableStorage = "";
-  //       obj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
-  //       return finalizeAsset(obj);
-  //     };
-
-  //     xhr.open("GET", `https://arweave.net/${nonMutableStorageQuery}`, true);
-  //     try {
-  //       xhr.send(null);
-  //     } catch {
-  //       console.log("Gateway returned 404");
-  //       obj.nonMutableStorage = "";
-  //       obj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
-  //       return finalizeAsset(obj);
-  //     }
-  //   }
-  // };
-
-  // const finalizeAsset = (asset) => {
-  //   if (!asset) return console.log("Failed upon reception of:", asset);
-
-  //   //In here we get all the data together and bundle it into an object, with a bias towards putting permanent data on display.
-
-  //   let obj = JSON.parse(JSON.stringify(asset));
-
-  //   obj.photo = obj.nonMutableStorage.photo || obj.mutableStorage.photo || {};
-  //   obj.text = obj.nonMutableStorage.text || obj.mutableStorage.text || {};
-  //   obj.urls = obj.nonMutableStorage.urls || obj.mutableStorage.urls || {};
-  //   obj.name = obj.nonMutableStorage.name || obj.mutableStorage.name || "Name Unavailable";
-  //   obj.photoUrls = obj.nonMutableStorage.photo || obj.mutableStorage.photo || {};
-  //   obj.engraving = obj.nonMutableStorage.engraving || obj.mutableStorage.engraving || "";
-  //   obj.ContentUrl = obj.nonMutableStorage.contentUrl || obj.mutableStorage.contentUrl || "";
-  //   obj.storageProvider = obj.nodeData.storageProvider;
-  //   obj.PrimaryContent = obj.nonMutableStorage.PrimaryContent || obj.mutableStorage.PrimaryContent || "";
-  //   obj.ContentType = obj.nonMutableStorage.ContentType || obj.mutableStorage.ContentType || obj.nonMutableStorage["Content-Type"] || obj.mutableStorage["Content-Type"] || "";
-  //   obj.engraving = obj.nonMutableStorage.engraving || obj.mutableStorage.engraving || "";
-  //   let vals = Object.values(obj.photo), keys = Object.keys(obj.photo);
-
-  //   console.log("Finalizing", obj);
-  //   if (obj.nodeData.storageProvider === "2") {
-  //     console.log("detected storageProvider 2");
-  //     if (
-  //       obj.nonMutableStorage.contentUrl &&
-  //       obj.nonMutableStorage["Content-Type"].includes("image")
-  //     ) {
-  //       obj.displayImage = obj.nonMutableStorage.contentUrl;
-  //       setAsset(obj);
-  //       setSelectedImage(obj.displayImage);
-  //       setRetrieving(false);
-  //       setMoreInfo(true);
-  //       return;
-  //     } else if (
-  //       obj.mutableStorage.contentUrl &&
-  //       obj.mutableStorage["Content-Type"].includes("image")
-  //     ) {
-  //       obj.displayImage = obj.mutableStorage.contentUrl;
-  //       setAsset(obj);
-  //       setSelectedImage(obj.displayImage);
-  //       setRetrieving(false);
-  //       setMoreInfo(true);
-  //       return;
-  //     } else if (obj.nonMutableStorage["Content-Type"].includes("pdf")) {
-  //       obj.displayImage = placeholder
-  //       setAsset(obj);
-  //       setSelectedImage(obj.displayImage);
-  //       setRetrieving(false);
-  //       setMoreInfo(true);
-  //     } else if (obj.nonMutableStorage["Content-Type"].includes("zip")) {
-  //       obj.displayImage = placeholder
-  //       setAsset(obj);
-  //       setSelectedImage(obj.displayImage);
-  //       setRetrieving(false);
-  //       setMoreInfo(true);
-  //     } else if (obj.mutableStorage["Content-Type"].includes("pdf")) {
-  //       obj.displayImage = placeholder
-  //       setAsset(obj);
-  //       setSelectedImage(obj.displayImage);
-  //       setRetrieving(false);
-  //       setMoreInfo(true);
-  //     } else if (obj.mutableStorage["Content-Type"].includes("zip")) {
-  //       obj.displayImage = placeholder
-  //       setAsset(obj);
-  //       setSelectedImage(obj.displayImage);
-  //       setRetrieving(false);
-  //       setMoreInfo(true);
-  //     } else if (keys.length === 0) {
-  //       obj.displayImage = "";
-  //       setAsset(obj);
-  //       setSelectedImage(obj.displayImage);
-  //       setRetrieving(false);
-  //       setMoreInfo(true);
-  //       return;
-  //     }
-  //   } else if (obj.nodeData.storageProvider === "1") {
-  //     const getAndSet = (url) => {
-  //       const req = new XMLHttpRequest();
-  //       req.responseType = "text";
-
-  //       req.onload = function () {
-  //         //console.log("response", this.response);
-  //         if (this.response.includes("image")) {
-  //           obj.displayImage = this.response;
-  //           setAsset(obj);
-  //           setSelectedImage(obj.displayImage);
-  //           setRetrieving(false);
-  //           setMoreInfo(true);
-  //           return;
-  //         } else if (this.response.includes("application")) {
-  //           console.log("app")
-  //           obj.displayImage = placeholder
-  //           setAsset(obj);
-  //           setSelectedImage(placeholder);
-  //           setRetrieving(false);
-  //           setMoreInfo(true);
-  //         }
-  //       };
-
-  //       req.onerror = function (e) {
-  //         //console.log("http request error")
-  //         obj.displayImage = "";
-  //         setAsset(obj);
-  //         setSelectedImage(obj.displayImage);
-  //         setRetrieving(false);
-  //         setMoreInfo(true);
-  //         return;
-  //       };
-  //       req.open("GET", url, true);
-  //       try {
-  //         req.send();
-  //       } catch {
-  //         obj.displayImage = "";
-  //         setAsset(obj);
-  //         setSelectedImage(obj.displayImage);
-  //         setRetrieving(false);
-  //         setMoreInfo(true);
-  //         return;
-  //       }
-  //     };
-  //     if (obj.ContentType.includes("pdf") || obj.ContentType.includes("zip")) {
-  //       getAndSet(obj.nonMutableStorage.PrimaryContent)
-  //     } else if (
-  //       obj.nonMutableStorage !== "" &&
-  //       obj.nonMutableStorage.displayImage !== "" &&
-  //       obj.nonMutableStorage.displayImage !== undefined
-  //     ) {
-  //       getAndSet(obj.nonMutableStorage.displayImage);
-  //     } else if (
-  //       obj.mutableStorage !== "" &&
-  //       obj.mutableStorage.displayImage !== "" &&
-  //       obj.mutableStorage.displayImage !== undefined
-  //     ) {
-  //       getAndSet(obj.mutableStorage.displayImage);
-  //     }
-  //   } else if (keys.length > 0) {
-  //     for (let i = 0; i < keys.length; i++) {
-
-  //       // We call this function repeatedly until all options for displayImage have been exhausted.
-  //       const get = () => {
-  //         if (vals[i].includes("data") && vals[i].includes("base64")) {
-  //           obj.photo[keys[i]] = vals[i];
-  //           if (keys[i] === "displayImage") {
-  //             obj.displayImage = obj.photo[keys[i]];
-  //           } else if (i === keys.length - 1) {
-  //             //console.log("Setting Display Image")
-  //             obj.displayImage = obj.photo[keys[0]];
-  //           }
-  //           setAsset(obj);
-  //           setSelectedImage(obj.displayImage);
-  //           forceUpdate();
-  //           setRetrieving(false);
-  //           setMoreInfo(true);
-  //           return;
-  //         } else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
-  //           obj.photo[keys[i]] = vals[i];
-  //           if (keys[i] === "displayImage") {
-  //             //console.log("Setting Display Image")
-  //             obj.displayImage = obj.photo[keys[i]];
-  //           } else if (i === keys.length - 1) {
-  //             //console.log("Setting Display Image")
-  //             obj.displayImage = obj.photo[keys[0]];
-  //           }
-  //           setAsset(obj);
-  //           setSelectedImage(obj.displayImage);
-  //           forceUpdate();
-  //           setRetrieving(false);
-  //           setMoreInfo(true);
-  //           return;
-  //         } else {
-  //           const req = new XMLHttpRequest();
-  //           req.responseType = "text";
-
-  //           req.onload = function (e) {
-  //             //console.log("in onload")
-  //             if (this.response.includes("base64")) {
-  //               obj.photo[keys[i]] = this.response;
-  //               if (keys[i] === "displayImage") {
-  //                 //console.log("Setting Display Image")
-  //                 obj.displayImage = obj.photo[keys[i]];
-  //               } else if (i === keys.length - 1) {
-  //                 //console.log("Setting Display Image")
-  //                 obj.displayImage = obj.photo[keys[0]];
-  //               }
-  //               setAsset(obj);
-  //               setSelectedImage(obj.displayImage);
-  //               forceUpdate();
-  //               setRetrieving(false);
-  //               setMoreInfo(true);
-  //               return;
-  //             }
-  //           };
-
-  //           req.onerror = function (e) {
-  //             //console.log("http request error")
-  //             if (vals[i].includes("http")) {
-  //               obj.photo[keys[i]] = vals[i];
-  //               if (keys[i] === "displayImage") {
-  //                 //console.log("Setting Display Image")
-  //                 obj.displayImage = obj.photo[keys[i]];
-  //               } else if (i === keys.length - 1) {
-  //                 //console.log("Setting Display Image")
-  //                 obj.displayImage = obj.photo[keys[0]];
-  //               }
-  //               setAsset(obj);
-  //               setSelectedImage(obj.displayImage);
-  //               forceUpdate();
-  //               setRetrieving(false);
-  //               setMoreInfo(true);
-  //               return;
-  //             }
-  //           };
-  //           req.open("GET", vals[i], true);
-  //           req.send();
-  //         }
-  //       };
-  //       get();
-  //     }
-  //   } else {
-  //     console.log("No conditions met");
-  //   }
-  // };
-
-  const generateSubCatList = (arr) => {
-    let subCatSelection = [
-      <MenuItem
-        disabled
-        classes={{
-          root: classes.selectMenuItem,
-        }}
-      >
-        Select Node
-      </MenuItem>,
-    ];
-    for (let i = 0; i < arr.length; i++) {
-      subCatSelection.push(
-        <MenuItem
-          classes={{
-            root: classes.selectMenuItem,
-            selected: classes.selectMenuItemSelected,
-          }}
-          key={"key" + arr[i].name}
-          value={String(arr[i].id)}
-        >
-          {arr[i].name}
-        </MenuItem>
-      );
-    }
-    console.log(arr);
-    return subCatSelection;
-  };
-
-  const generateRootList = (arr) => {
-    let rootNames = props.rootNames;
-    let rootSelection = [
-      <MenuItem
-        disabled
-        classes={{
-          root: classes.selectMenuItem,
-        }}
-      >
-        Select Class
-      </MenuItem>,
-    ];
-
-    for (let i = 0; i < arr.length; i++) {
-      rootSelection.push(
-        <MenuItem
-          classes={{
-            root: classes.selectMenuItem,
-            selected: classes.selectMenuItemSelected,
-          }}
-          value={String(arr[i])}
-        >
-          {rootNames[i]}
-        </MenuItem>
-      );
-    }
-
-    return rootSelection;
   };
 
   const back = () => {
@@ -2466,7 +1701,7 @@ export default function Search(props) {
                 </CardHeader>
                 <CardBody>
                   <form>
-                    {IDXRawInput === true && !retrieving && (
+                    {IDXRawInput === true && !window.isSearching && (
                       <>
                         {/* <CustomInput
                         success={loginManufacturerState === "success"}
@@ -2553,7 +1788,7 @@ export default function Search(props) {
                         </div>
                       </>
                     )}
-                    {IDXRawInput === true && retrieving && (
+                    {IDXRawInput === true && window.isSearching && (
                       <>
                         {/* <CustomInput
                         labelText={manufacturer}
@@ -2597,7 +1832,7 @@ export default function Search(props) {
                         />
                       </>
                     )}
-                    {IDXRawInput === false && !retrieving && (
+                    {IDXRawInput === false && !window.isSearching && (
                       <>
                         <CustomInput
                           success={loginIDXState === "success"}
@@ -2629,7 +1864,7 @@ export default function Search(props) {
                         </div>
                       </>
                     )}
-                    {IDXRawInput === false && retrieving && (
+                    {IDXRawInput === false && window.isSearching && (
                       <>
                         <CustomInput
                           labelText={
@@ -2647,7 +1882,7 @@ export default function Search(props) {
                         />
                       </>
                     )}
-                    {!retrieving && (
+                    {!window.isSearching && (
                       <>
                         <div
                           className="QRScanner"
@@ -2683,18 +1918,18 @@ export default function Search(props) {
                       </div> */}
                       </>
                     )}
-                    {!retrieving && (
+                    {!window.isSearching && (
                       <div className="MLBGradientSubmit">
                         <Button
                           color="info"
                           className="MLBGradient"
-                          onClick={(e) => checkInputs()}
+                          onClick={() => checkInputs()}
                         >
                           Search Asset
                         </Button>
                       </div>
                     )}
-                    {retrieving && (
+                    {window.isSearching && (
                       <h3>
                         Retrieving Asset
                         <div className="lds-ellipsisIF">
@@ -2725,7 +1960,7 @@ export default function Search(props) {
                   <h4 className={classes.cardIconTitle}>QR Scanner</h4>
                 </CardHeader>
                 <CardBody>
-                  {!retrieving && (
+                  {!window.isSearching && (
                     <QrReader
                       className="qrReader"
                       scanDelay={500}
@@ -2738,7 +1973,7 @@ export default function Search(props) {
                       style={{ width: "100%" }}
                     />
                   )}
-                  {retrieving && (
+                  {window.isSearching && (
                     <h3>
                       Retrieving Asset
                       <div className="lds-ellipsisIF">
@@ -3008,498 +2243,12 @@ export default function Search(props) {
                             </div>
                           </h3>
                         )}
-                      {isRecycling && (
-                        <>
-                          {!props.addr && (
-                            <Card>
-                              <CardHeader icon>
-                                <CardIcon className="headerIconBack">
-                                  <Category />
-                                </CardIcon>
-                                <h4 className={classes.cardIconTitle}>
-                                  Node Selection
-                                </h4>
-                              </CardHeader>
-                              <CardBody>
-                                <form>
-                                  <h3 className="bump">
-                                    <br />
-                                    Please{" "}
-                                    <a
-                                      onClick={() => {
-                                        if (props.addr) {
-                                          props.addr
-                                            .request({
-                                              method: "eth_accounts",
-                                              params: {},
-                                            })
-                                            .then(async (accounts) => {
-                                              setAddr(
-                                                window.web3.utils.toChecksumAddress(
-                                                  accounts[0]
-                                                )
-                                              );
-                                              setIsMounted(true);
-                                              awaitPrufInit(
-                                                _prufClient,
-                                                window.web3.utils.toChecksumAddress(
-                                                  accounts[0]
-                                                )
-                                              );
-                                            });
-                                        } else
-                                          swalReact(
-                                            "No ethereum provider detected"
-                                          );
-                                      }}
-                                    >
-                                      connect
-                                    </a>{" "}
-                                    to an Ethereum provider.
-                                  </h3>
-                                </form>
-                              </CardBody>
-                              <br />
-                            </Card>
-                          )}
-                          {props.prufClient === undefined && props.addr && (
-                            <Card>
-                              <CardHeader icon>
-                                <CardIcon className="headerIconBack">
-                                  <Category />
-                                </CardIcon>
-                                <h4 className={classes.cardIconTitle}>
-                                  Node Selection
-                                </h4>
-                              </CardHeader>
-                              <CardBody>
-                                <form>
-                                  <h3>
-                                    Connecting to the blockchain
-                                    <div className="lds-ellipsisIF">
-                                      <div></div>
-                                      <div></div>
-                                      <div></div>
-                                    </div>
-                                  </h3>
-                                </form>
-                              </CardBody>
-                              <br />
-                            </Card>
-                          )}
-                          {/* eslint-disable-next-line react/prop-types */}
-                          {props.prufClient !== undefined && props.addr && (
-                            <Card>
-                              <CardHeader icon>
-                                <CardIcon className="headerIconBack">
-                                  <Category />
-                                </CardIcon>
-                                <h4 className={classes.cardIconTitle}>
-                                  Node Selection
-                                </h4>
-                              </CardHeader>
-                              <CardBody>
-                                <form>
-                                  <h3>
-                                    Getting Token Balances
-                                    <div className="lds-ellipsisIF">
-                                      <div></div>
-                                      <div></div>
-                                      <div></div>
-                                    </div>
-                                  </h3>
-                                </form>
-                              </CardBody>
-                              <br />
-                            </Card>
-                          )}
-                          {/* eslint-disable-next-line react/prop-types */}
-                          {props.prufClient !== undefined &&
-                            // eslint-disable-next-line react/prop-types
-                            props.nodeSets === undefined && (
-                              <Card>
-                                <CardHeader icon>
-                                  <CardIcon className="headerIconBack">
-                                    <Category />
-                                  </CardIcon>
-                                  <h4 className={classes.cardIconTitle}>
-                                    Node Selection
-                                  </h4>
-                                </CardHeader>
-                                <CardBody>
-                                  <form>
-                                    <h3>
-                                      Getting Node Data
-                                      <div className="lds-ellipsisIF">
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                      </div>
-                                    </h3>
-                                  </form>
-                                </CardBody>
-                                <br />
-                              </Card>
-                            )}
-                          {props.prufClient !== undefined &&
-                            props.nodeSets !== undefined && (
-                              <>
-                                <>
-                                  {nodeId === "" && !transactionActive && (
-                                    <Card>
-                                      <CardHeader icon>
-                                        <CardIcon className="headerIconBack">
-                                          <Category />
-                                        </CardIcon>
-                                        <h4 className={classes.cardIconTitle}>
-                                          Select Node
-                                        </h4>
-                                      </CardHeader>
-                                      <CardBody>
-                                        <form>
-                                          <FormControl
-                                            fullWidth
-                                            className={
-                                              classes.selectFormControl
-                                            }
-                                          >
-                                            {selectedRootID === "" ? (
-                                              <>
-                                                <InputLabel>
-                                                  Select Node
-                                                </InputLabel>
-                                                <Select
-                                                  disabled
-                                                  MenuProps={{
-                                                    className:
-                                                      classes.selectMenu,
-                                                  }}
-                                                  classes={{
-                                                    select: classes.select,
-                                                  }}
-                                                  value={classSelect}
-                                                  onChange={() => {}}
-                                                  inputProps={{
-                                                    name: "classSelect",
-                                                    id: "class-select",
-                                                  }}
-                                                ></Select>
-                                              </>
-                                            ) : (
-                                              <>
-                                                <InputLabel>
-                                                  Select Node
-                                                </InputLabel>
-                                                <Select
-                                                  MenuProps={{
-                                                    className:
-                                                      classes.selectMenu,
-                                                  }}
-                                                  classes={{
-                                                    select: classes.select,
-                                                  }}
-                                                  value={classSelect}
-                                                  onChange={(e) => {
-                                                    ACLogin(e);
-                                                  }}
-                                                  inputProps={{
-                                                    name: "classSelect",
-                                                    id: "class-select",
-                                                  }}
-                                                >
-                                                  {generateSubCatList(
-                                                    props.nodeSets[
-                                                      selectedRootID
-                                                    ]
-                                                  )}
-                                                </Select>
-                                              </>
-                                            )}
-                                          </FormControl>
-                                        </form>
-                                      </CardBody>
-                                      <br />
-                                    </Card>
-                                  )}
-                                </>
-                                {nodeId !== "" && (
-                                  <Card>
-                                    <CardHeader icon>
-                                      <CardIcon className="headerIconBack">
-                                        <AccountBox />
-                                      </CardIcon>
-                                      <h4 className={classes.cardIconTitle}>
-                                        New Owner Info
-                                      </h4>
-                                    </CardHeader>
-                                    <CardBody>
-                                      <form>
-                                        <h5>Asset Selected: {asset.name}</h5>
-                                        <>
-                                          {!transaction && (
-                                            <>
-                                              <CustomInput
-                                                success={
-                                                  loginFirstState === "success"
-                                                }
-                                                error={
-                                                  loginFirstState === "error"
-                                                }
-                                                labelText="First Name *"
-                                                id="firstName"
-                                                formControlProps={{
-                                                  fullWidth: true,
-                                                }}
-                                                inputProps={{
-                                                  onChange: (event) => {
-                                                    setFirst(
-                                                      event.target.value.trim()
-                                                    );
-                                                    if (
-                                                      event.target.value !== ""
-                                                    ) {
-                                                      setloginFirstState(
-                                                        "success"
-                                                      );
-                                                    } else {
-                                                      setloginFirstState(
-                                                        "error"
-                                                      );
-                                                    }
-                                                    setloginFirst(
-                                                      event.target.value
-                                                    );
-                                                  },
-                                                }}
-                                              />
-                                              <CustomInput
-                                                labelText="Middle Name"
-                                                id="middleName"
-                                                formControlProps={{
-                                                  fullWidth: true,
-                                                }}
-                                                inputProps={{
-                                                  onChange: (event) => {
-                                                    setMiddle(
-                                                      event.target.value.trim()
-                                                    );
-                                                  },
-                                                }}
-                                              />
-                                              <CustomInput
-                                                success={
-                                                  loginLastState === "success"
-                                                }
-                                                error={
-                                                  loginLastState === "error"
-                                                }
-                                                labelText="Last Name *"
-                                                id="lastName"
-                                                formControlProps={{
-                                                  fullWidth: true,
-                                                }}
-                                                inputProps={{
-                                                  onChange: (event) => {
-                                                    setLast(
-                                                      event.target.value.trim()
-                                                    );
-                                                    if (
-                                                      event.target.value !== ""
-                                                    ) {
-                                                      setloginLastState(
-                                                        "success"
-                                                      );
-                                                    } else {
-                                                      setloginLastState(
-                                                        "error"
-                                                      );
-                                                    }
-                                                    setloginLast(
-                                                      event.target.value
-                                                    );
-                                                  },
-                                                }}
-                                              />
-                                              <CustomInput
-                                                success={
-                                                  loginIDState === "success"
-                                                }
-                                                error={loginIDState === "error"}
-                                                labelText="ID Number *"
-                                                id="idNumber"
-                                                formControlProps={{
-                                                  fullWidth: true,
-                                                }}
-                                                inputProps={{
-                                                  onChange: (event) => {
-                                                    setID(
-                                                      event.target.value.trim()
-                                                    );
-                                                    if (
-                                                      event.target.value !== ""
-                                                    ) {
-                                                      setloginIDState(
-                                                        "success"
-                                                      );
-                                                    } else {
-                                                      setloginIDState("error");
-                                                    }
-                                                    setloginID(
-                                                      event.target.value
-                                                    );
-                                                  },
-                                                }}
-                                              />
-                                              <CustomInput
-                                                success={
-                                                  loginPasswordState ===
-                                                  "success"
-                                                }
-                                                error={
-                                                  loginPasswordState === "error"
-                                                }
-                                                labelText="Password *"
-                                                id="ownerpassword"
-                                                formControlProps={{
-                                                  fullWidth: true,
-                                                }}
-                                                inputProps={{
-                                                  type: "password",
-                                                  onChange: (event) => {
-                                                    setPassword(
-                                                      event.target.value.trim()
-                                                    );
-                                                    if (
-                                                      event.target.value !== ""
-                                                    ) {
-                                                      setloginPasswordState(
-                                                        "success"
-                                                      );
-                                                    } else {
-                                                      setloginPasswordState(
-                                                        "error"
-                                                      );
-                                                    }
-                                                    setloginPassword(
-                                                      event.target.value
-                                                    );
-                                                  },
-                                                }}
-                                              />
-                                              <div
-                                                className={classes.formCategory}
-                                              >
-                                                <small>*</small> Required fields
-                                              </div>
-                                            </>
-                                          )}
-                                          {transaction && (
-                                            <>
-                                              <CustomInput
-                                                labelText={first}
-                                                id="first"
-                                                formControlProps={{
-                                                  fullWidth: true,
-                                                }}
-                                                inputProps={{
-                                                  disabled: true,
-                                                }}
-                                              />
-                                              <CustomInput
-                                                labelText={middle}
-                                                id="middle"
-                                                formControlProps={{
-                                                  fullWidth: true,
-                                                }}
-                                                inputProps={{
-                                                  disabled: true,
-                                                }}
-                                              />
-                                              <CustomInput
-                                                labelText={last}
-                                                id="last"
-                                                formControlProps={{
-                                                  fullWidth: true,
-                                                }}
-                                                inputProps={{
-                                                  disabled: true,
-                                                }}
-                                              />
-                                              <CustomInput
-                                                labelText={ID}
-                                                id="ID"
-                                                formControlProps={{
-                                                  fullWidth: true,
-                                                }}
-                                                inputProps={{
-                                                  disabled: true,
-                                                }}
-                                              />
-                                              <CustomInput
-                                                labelText={password}
-                                                id="ownerpassword"
-                                                formControlProps={{
-                                                  fullWidth: true,
-                                                }}
-                                                inputProps={{
-                                                  type: "password",
-                                                  disabled: true,
-                                                }}
-                                              />
-                                            </>
-                                          )}
-                                        </>
-                                        {!transaction && (
-                                          <>
-                                            {recycleCost > 0 ? (
-                                              <h4 className="costsText">
-                                                Cost: ü{recycleCost}
-                                              </h4>
-                                            ) : (
-                                              <h4 className="costsText">
-                                                Cost: None
-                                              </h4>
-                                            )}
-                                            <Button
-                                              color="info"
-                                              className="MLBGradient"
-                                              onClick={(e) => recycleAsset()}
-                                            >
-                                              Recycle Asset
-                                            </Button>
-                                          </>
-                                        )}
-                                        {transaction && (
-                                          <h3>
-                                            Recycling Asset
-                                            <div className="lds-ellipsisIF">
-                                              <div></div>
-                                              <div></div>
-                                              <div></div>
-                                            </div>
-                                          </h3>
-                                        )}
-                                      </form>
-                                    </CardBody>
-                                  </Card>
-                                )}
-                              </>
-                            )}
-                        </>
-                      )}
                       {isVerifying && (
                         <Card>
                           <CardHeader icon>
                             <CardIcon className="headerIconBack">
                               <AccountBox />
                             </CardIcon>
-                            <Button
-                              color="info"
-                              className="MLBGradient"
-                              onClick={() => goBack()}
-                            >
-                              Go Back
-                            </Button>
                             <h4 className={classes.cardIconTitle}>
                               Verify Owner Info
                             </h4>
@@ -3681,7 +2430,7 @@ export default function Search(props) {
                                   className="MLBGradient"
                                   onClick={(e) => verifyAsset()}
                                 >
-                                  Verify Owner
+                                  Verify
                                 </Button>
                               )}
                               {transaction && (

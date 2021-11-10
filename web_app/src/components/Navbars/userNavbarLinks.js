@@ -26,13 +26,6 @@ export default function HeaderLinks(props) {
     //   setSearchBarVal(e.target.value);
     // };
     const handleSearch = () => {
-        console.log(searchBarVal.includes('0x'))
-        console.log(
-            searchBarVal.substring(
-                searchBarVal.trim().indexOf('0x'),
-                searchBarVal.trim().length
-            ).length === 66
-        )
         if (
             searchBarVal.includes('0x') &&
             searchBarVal.substring(
@@ -46,7 +39,12 @@ export default function HeaderLinks(props) {
                     searchBarVal.indexOf('0x'),
                     searchBarVal.trim().length
                 )
-            return window.location.reload()
+            window.idxQuery = searchBarVal.substring(
+                searchBarVal.indexOf('0x'),
+                searchBarVal.trim().length
+            )
+            window.location.reload()
+            //return window.dispatchEvent(props.search)
         } else {
             return swalReact({
                 title: 'Not a valid asset ID!',
@@ -99,6 +97,7 @@ export default function HeaderLinks(props) {
                         aria-label="edit"
                         justIcon
                         round
+                        disabled={window.location.href.includes("user/search")}
                         className={searchButton}
                     >
                         <Search
