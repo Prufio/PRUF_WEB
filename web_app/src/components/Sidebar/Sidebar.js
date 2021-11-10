@@ -606,7 +606,7 @@ class Sidebar extends React.Component {
                 <>
                   {addr !== undefined && (
                     <>
-                      {!this.state.copyText && bgColor !== "white" && (
+                      {!this.state.copyText && bgColor !== "white" && !this.state.miniActive && (
                         <Tooltip title="Copy to Clipboard" arrow>
                           <h5>
                             <button
@@ -624,7 +624,7 @@ class Sidebar extends React.Component {
                       )}
 
                       {this.state.copyText &&
-                        (bgColor !== "white" || bgColor === undefined) && (
+                        (bgColor !== "white" || bgColor === undefined) && !this.state.miniActive && (
                           <Tooltip title="Copied to Clipboard" arrow>
                             <h5>
                               <button
@@ -641,7 +641,7 @@ class Sidebar extends React.Component {
                           </Tooltip>
                         )}
 
-                      {!this.state.copyText && bgColor === "white" && (
+                      {!this.state.copyText && bgColor === "white" && !this.state.miniActive && (
                         <Tooltip title="Copy to Clipboard" arrow>
                           <h5>
                             <button
@@ -658,7 +658,7 @@ class Sidebar extends React.Component {
                         </Tooltip>
                       )}
 
-                      {this.state.copyText && bgColor === "white" && (
+                      {this.state.copyText && bgColor === "white" && !this.state.miniActive && (
                         <Tooltip title="Copied to Clipboard" arrow>
                           <h5>
                             <button

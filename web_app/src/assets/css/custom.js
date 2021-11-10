@@ -12,6 +12,7 @@ import "./custom.css";
             color: "rgba(0, 0, 0,.65) !important",
           },
       },
+      
   });
   
   export default engravingStyles;
