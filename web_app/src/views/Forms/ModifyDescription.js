@@ -323,7 +323,7 @@ export default function ModifyDescription(props) {
             label="Content"
             multiline
             rows={4}
-            formControlProps={{onChange: (e) => (value = e.target.value)}}
+            onChange={e => (value = e.target.value)}
             variant="outlined"
             fullWidth
           />
@@ -334,56 +334,56 @@ export default function ModifyDescription(props) {
     });
   };
 
-  const editElement = (key, value) => {
-    // if (!key)
-    //   key = `Mutable Element #${
-    //     Object.values(asset.mutableStorage).length + 1
-    //   }`;
-    // let value = "";
-    swalReact({
-      buttons: {
-        back: {
-          text: "⬅️ Go Back",
-          value: "back",
-          className: "delegationButtonBack",
-        },
-        confirm: {
-          text: "Submit ✅",
-          value: "confirm",
-          className: "delegationButtonBack",
-        },
-      },
-      content: (
-        <Card className="delegationCard">
-          <CustomInput
-            // labelText={key}
-            id="model"
-            formControlProps={{
-              onChange: (e) => (key = e.target.value),
-              fullWidth: true,
-            }}
-            inputProps={{
-              disabled:true, 
-              defaultValue:key
-            }}
-          />
-          <CustomInput
-            // labelText={value}
-            id="model"
-            formControlProps={{
-              fullWidth: true,
-              onChange: (e) => (value = e.target.value),
-            }}
-            inputProps={{
-              defaultValue:value
-            }}
-          />
-        </Card>
-      ),
-    }).then((val) => {
-      if (val === "confirm" && value.length > 0) handleChanges(key, value);
-    });
-  }
+  // const editElement = (key, value) => {
+  //   // if (!key)
+  //   //   key = `Mutable Element #${
+  //   //     Object.values(asset.mutableStorage).length + 1
+  //   //   }`;
+  //   // let value = "";
+  //   swalReact({
+  //     buttons: {
+  //       back: {
+  //         text: "⬅️ Go Back",
+  //         value: "back",
+  //         className: "delegationButtonBack",
+  //       },
+  //       confirm: {
+  //         text: "Submit ✅",
+  //         value: "confirm",
+  //         className: "delegationButtonBack",
+  //       },
+  //     },
+  //     content: (
+  //       <Card className="delegationCard">
+  //         <CustomInput
+  //           // labelText={key}
+  //           id="model"
+  //           formControlProps={{
+  //             onChange: (e) => (key = e.target.value),
+  //             fullWidth: true,
+  //           }}
+  //           inputProps={{
+  //             disabled:true, 
+  //             defaultValue:key
+  //           }}
+  //         />
+  //         <CustomInput
+  //           // labelText={value}
+  //           id="model"
+  //           formControlProps={{
+  //             fullWidth: true,
+  //             onChange: (e) => (value = e.target.value),
+  //           }}
+  //           inputProps={{
+  //             defaultValue:value
+  //           }}
+  //         />
+  //       </Card>
+  //     ),
+  //   }).then((val) => {
+  //     if (val === "confirm" && value.length > 0) handleChanges(key, value);
+  //   });
+  // }
 
   const updateAssetMS = (hashes) => {
     setHelp(false);

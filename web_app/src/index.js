@@ -17,7 +17,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
-import AdminLayout from "layouts/user.js";
+import UserLayout from "layouts/user.js";
 import { CookiesProvider } from "react-cookie";
 
 import "assets/scss/material-dashboard-pro-react.scss?v=1.9.0";
@@ -35,7 +35,7 @@ ReactDOM.render(
   <CookiesProvider>
     <HashRouter>
       <Switch>
-        <Route path="/user" component={AdminLayout} />
+        <Route path="/user" component={UserLayout} />
         {
           /* fullUrl ? <Redirect from="/" to={fullUrl} /> :   */ <Redirect
             from="/"

@@ -78,7 +78,7 @@ export default function HeaderLinks(props) {
     return (
         <>
             {!isMobile && (
-                <div className={wrapper}>
+                <div>
                     <CustomInput
                         // rtlActive={rtlActive}
                         formControlProps={{

@@ -37,6 +37,7 @@ import CardFooter from "components/Card/CardFooter.js";
 
 import placeholder from "../../assets/img/placeholder.jpg";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
+import selectStyles from "assets/jss/material-dashboard-pro-react/customSelectStyle.js";
 import engravingStyles from "../../assets/css/custom";
 import {
   ArrowBackIos,
@@ -54,6 +55,7 @@ import IPFSPNG from "../../assets/img/ipfs.png";
 
 const useStyles = makeStyles(styles);
 const useEngravingStyles = makeStyles(engravingStyles);
+const useSelectStyles = makeStyles(selectStyles);
 
 export default function Dashboard(props) {
   React.useEffect(() => {
@@ -1137,6 +1139,7 @@ export default function Dashboard(props) {
           );
         } else {
           accordionContent.push(
+            <>
               <TextField
                 key={`AccordionStack${key}`}
                 // id="outlined-multiline"
@@ -1148,20 +1151,26 @@ export default function Dashboard(props) {
                 fullWidth
                 // className={engravingClasses.engraving}
               />
-          )
+        <br/>
+        <br/>
+        </>
+        )
         }
       });
       if (accordionContent.length > 0)
       component.push(
-        <Accordion key={`DetailsAccordionStack`}>
-            {/* <h4>Details</h4> */}
+        <>
+        {/* <br/> */}
+        {/* <br/> */}
+        <Accordion key={`DetailsAccordionStack`}
+        className="smallAccordian">
             <AccordionSummary
               expandIcon={<ExpandMoreOutlined />}
               aria-label="Expand"
               aria-controls="additional-actions1-content"
               id={`additional-actions1-header-details`}
             >
-              <h4>Details</h4>
+              <h4 className="mutDataAccordian">More...</h4>
             </AccordionSummary>
             <AccordionDetails>
               <div>
@@ -1169,6 +1178,7 @@ export default function Dashboard(props) {
               </div>
             </AccordionDetails>
             </Accordion>
+            </>
       )
   
       return component;
@@ -1272,6 +1282,7 @@ export default function Dashboard(props) {
 
   const classes = useStyles();
   const engravingClasses = useEngravingStyles();
+  const selectClasses = useSelectStyles();
   return (
     <div>
       {/* <GridContainer> */}
@@ -1564,12 +1575,6 @@ export default function Dashboard(props) {
                   </a>
                 </h6>
               )}
-              {selectedAssetObj.nodeData.storageProvider === "1" && (
-                <h6 className="storageProviderText">
-                  Stored on&nbsp;
-                  <img src={IPFSPNG} className="IPFS" alt="" />
-                </h6>
-              )}
               {/*@dev URLs go here*/}
               <br />
               <div>
@@ -1587,6 +1592,12 @@ export default function Dashboard(props) {
             <CardFooter>
               {!isMobile && (
                 <>
+                {selectedAssetObj.nodeData.storageProvider === "1" && (
+                  <h6 className="storageProviderText">
+                    Stored on&nbsp;
+                    <img src={IPFSPNG} className="IPFS" alt="" />
+                  </h6>
+                )}
                   {!copyText && (
                     <Tooltip title="Copy to Clipboard">
                       <div className={classes.stats}>
@@ -1727,27 +1738,28 @@ export default function Dashboard(props) {
 
       {!viewAsset && (
         <Card className="dashboardFooter">
-          {isMobile && <h6>Assets Per Page: </h6>}
-          {!isMobile && <h4>Assets Per Page: </h4>}
+          {isMobile && <h6 className="dashboardFooterText">Assets Per Page: </h6>}
+          {!isMobile && <h4 className="dashboardFooterText">Assets Per Page: </h4>}
           <br />
           <Select
-            MenuProps={{
-              className: classes.selectMenu,
-            }}
+            // MenuProps={{
+            //   className: selectClasses.selectMenu,
+            // }}
             className="assetNumDropdown"
             value={props.assetsPerPage}
             onChange={(e) => {
               handleShowNum(e.target.value);
             }}
             inputProps={{
-              name: "simpleSelect",
-              id: "simple-select",
+              classes: {
+                icon: "white",
+              }
             }}
           >
             <MenuItem
               classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                root: selectClasses.selectMenuItem,
+                selected: selectClasses.selectMenuItemSelected,
               }}
               value={4}
             >
@@ -1755,8 +1767,8 @@ export default function Dashboard(props) {
             </MenuItem>
             <MenuItem
               classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                root: selectClasses.selectMenuItem,
+                selected: selectClasses.selectMenuItemSelected,
               }}
               value={8}
             >
@@ -1764,8 +1776,8 @@ export default function Dashboard(props) {
             </MenuItem>
             <MenuItem
               classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                root: selectClasses.selectMenuItem,
+                selected: selectClasses.selectMenuItemSelected,
               }}
               value={12}
             >
@@ -1773,8 +1785,8 @@ export default function Dashboard(props) {
             </MenuItem>
             <MenuItem
               classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                root: selectClasses.selectMenuItem,
+                selected: selectClasses.selectMenuItemSelected,
               }}
               value={16}
             >
@@ -1782,21 +1794,12 @@ export default function Dashboard(props) {
             </MenuItem>
             <MenuItem
               classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                root: selectClasses.selectMenuItem,
+                selected: selectClasses.selectMenuItemSelected,
               }}
               value={20}
             >
               20
-            </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value={60}
-            >
-              60
             </MenuItem>
           </Select>
           <div className="dashboardFooterPage">
@@ -1825,13 +1828,13 @@ export default function Dashboard(props) {
             )}
 
             {numOfPages > 0 && !isMobile && (
-              <h4>
+              <h4 className="dashboardFooterText">
                 Page {pageNum} / {numOfPages}
               </h4>
             )}
 
             {numOfPages > 0 && isMobile && (
-              <h6>
+              <h6 className="dashboardFooterText">
                 Page {pageNum} / {numOfPages}
               </h6>
             )}

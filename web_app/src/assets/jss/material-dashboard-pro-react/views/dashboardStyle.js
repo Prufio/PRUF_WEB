@@ -93,6 +93,52 @@ const dashboardStyle = {
       marginTop: "0px",
     },
   },
+  // selectMenu: {
+  //   "& > div > ul": {
+  //     border: "0",
+  //     padding: "5px 0",
+  //     margin: "0",
+  //     boxShadow: "none",
+  //     minWidth: "100%",
+  //     borderRadius: "4px",
+  //     boxSizing: "border-box",
+  //     display: "block",
+  //     fontSize: "14px",
+  //     textAlign: "left",
+  //     listStyle: "none",
+  //     backgroundColor: "white",
+  //     backgroundClip: "padding-box",
+  //   },
+  //   selectMenuItem: {
+  //     fontSize: "13px",
+  //     padding: "10px 20px",
+  //     margin: "0 5px",
+  //     borderRadius: "2px",
+  //     transition: "all 150ms linear",
+  //     display: "block",
+  //     clear: "both",
+  //     fontWeight: "400",
+  //     lineHeight: "2",
+  //     whiteSpace: "nowrap",
+  //     color: "white",
+  //     paddingRight: "30px",
+  //     "&:hover": {
+  //       backgroundColor: "white",
+  //       color: "white",
+  //       // ...primaryBoxShadow,
+  //     },
+  //   },
+  //   selectMenuItemSelected: {
+  //     backgroundColor: "white" + "!important",
+  //     color: "white",
+  //   },
+  //   "& $selectPaper $selectMenuItemSelectedMultiple": {
+  //     backgroundColor: "inherit",
+  //   },
+  //   "& > div + div": {
+  //     maxHeight: "266px !important",
+  //   },
+  // },
 };
 
 export default dashboardStyle;
