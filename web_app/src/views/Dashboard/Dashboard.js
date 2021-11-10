@@ -58,22 +58,6 @@ const useEngravingStyles = makeStyles(engravingStyles);
 const useSelectStyles = makeStyles(selectStyles);
 
 export default function Dashboard(props) {
-  React.useEffect(() => {
-    // eslint-disable-next-line react/prop-types
-    if (props.ps) {
-      // eslint-disable-next-line react/prop-types
-      props.ps.element.scrollTop = 0;
-      //console.log("Scrolled to ", props.ps.element.scrollTop)
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      document.documentElement.scrollTop = 0;
-      document.scrollingElement.scrollTop = 0;
-    }
-    if (window.assetsPerPage) {
-      setAssetsPerPage(window.assetsPerPage);
-    }
-  }, []);
-
   const [viewAsset, setViewAsset] = React.useState(false);
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [selectedAssetObj, setSelectedAssetObj] = React.useState({});
@@ -97,6 +81,23 @@ export default function Dashboard(props) {
 
   // eslint-disable-next-line react/prop-types
   const numOfPages = Math.ceil(assetArr.length / props.assetsPerPage);
+
+  React.useEffect(() => {
+    // eslint-disable-next-line react/prop-types
+    if (props.ps) {
+      // eslint-disable-next-line react/prop-types
+      props.ps.element.scrollTop = 0;
+      //console.log("Scrolled to ", props.ps.element.scrollTop)
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+    }
+  }, []);
+
+  React.useEffect(() => {
+    setAssetsPerPage(props.assetsPerPage)
+  }, [props.assetsPerPage])
 
   const moreInfo = (e) => {
     //console.log(e);
@@ -1378,9 +1379,7 @@ export default function Dashboard(props) {
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
-                      {selectedAssetObj.nodeData.storageProvider === "1" && (
                         <img src={selectedImage} alt="" />
-                      )}
                     </>
                   )}
                   {selectedAssetObj.displayImage === "" && (
@@ -1549,18 +1548,6 @@ export default function Dashboard(props) {
                 />
               )}
               {displayMutableStorage(selectedAssetObj)}
-              {selectedAssetObj.nodeData.storageProvider === "2" && (
-                <h6 className="storageProviderText">
-                  See it on&nbsp;
-                  <a
-                    href={`${selectedAssetObj.displayImage}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img src={ARweavePNG} className="ARweave" alt=""></img>
-                  </a>
-                </h6>
-              )}
               {/*@dev URLs go here*/}
               <br />
               <div>
@@ -1585,15 +1572,16 @@ export default function Dashboard(props) {
                     </h6>
                   )}
                   {selectedAssetObj.nodeData.storageProvider === "2" && (
-                    <Tooltip title="See it on ARweave">
-                      <a
+                    <h6 className="storageProviderText">
+                       See it on&nbsp;
+                       <a
                         href={`${selectedAssetObj.displayImage}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <img src={selectedImage} alt="" />
+                        <img src={ARweavePNG} className="ARweave" alt=""/>
                       </a>
-                    </Tooltip>
+                    </h6>
                   )}
                   {!copyText && (
                     <Tooltip title="Copy to Clipboard">
