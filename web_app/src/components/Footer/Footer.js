@@ -25,23 +25,28 @@ export default function Footer(props) {
   const [counter, setCounter] = React.useState(0);
 
   const copy = () => {
-    document.body.style.cursor = 'help'
+    document.body.style.cursor = "help";
     swalReact({
       content: (
         <>
-          <button onClick={() => { setCounter(1) }}><span className="bug">&#128128;</span></button>
+          <button
+            onClick={() => {
+              setCounter(1);
+            }}
+          >
+            <span className="bug">&#128128;</span>
+          </button>
         </>
       ),
       buttons: "Close",
-    })
-  }
+    });
+  };
 
   const copy2 = () => {
-    document.body.style.cursor = 'auto'
-    window.location.href = "/#/user/counter"
-    setCounter(0)
-  }
-
+    document.body.style.cursor = "auto";
+    window.location.href = "/#/user/counter";
+    setCounter(0);
+  };
 
   var container = cx({
     [classes.container]: !fluid,
@@ -67,155 +72,194 @@ export default function Footer(props) {
               {/* <a href="https://pruf.io/" className="links" target="_blank">
                 {rtlActive ? "شركة" : "Company"}
               </a> */}
-                  <Button color="github" simple href="https://twitter.com/prufteam" target="_blank">
-                    <i
-                      className={
-                        classes.socialButtonsIcons +
-                        " " +
-                        classes.marginRight +
-                        " fab fa-grav"
-                      }
-                    />{" "}
-                    Website
-                  </Button>
+              <Button simple href="https://pruf.io/" target="_blank">
+                <i
+                  className={
+                    classes.socialButtonsIcons +
+                    " " +
+                    classes.marginRight +
+                    " fab fa-grav"
+                  }
+                />{" "}
+                Website
+              </Button>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-                  <Button color="twitter" simple href="https://twitter.com/prufteam" target="_blank">
-                    <i
-                      className={
-                        classes.socialButtonsIcons +
-                        " " +
-                        classes.marginRight +
-                        " fab fa-twitter"
-                      }
-                    />{" "}
-                    Connect with Twitter
-                  </Button>
+              <Button
+                color="twitter"
+                simple
+                href="https://twitter.com/prufteam"
+                target="_blank"
+              >
+                <i
+                  className={
+                    classes.socialButtonsIcons +
+                    " " +
+                    classes.marginRight +
+                    " fab fa-twitter"
+                  }
+                />{" "}
+                Connect with Twitter
+              </Button>
               {/* <a href="https://twitter.com/prufteam" className="links" target="_blank">
                 {rtlActive ? "شركة" : "Twitter"}
-              </a> */}
-            </ListItem>
-            <ListItem className={classes.inlineBlock}>
-                  <Button color="twitter" simple href="https://t.me/pruftalk" target="_blank">
-                    <i
-                      className={
-                        classes.socialButtonsIcons +
-                        " " +
-                        classes.marginRight +
-                        " fab fa-telegram"
-                      }
-                    />{" "}
-                    Connect with Telegram
-                  </Button>
-              {/* <a href="https://t.me/pruftalk" className="links" target="_blank">
-                {rtlActive ? "شركة" : "Telegram"}
               </a> */}
             </ListItem>
             <ListItem className={classes.inlineBlock}>
               {/* <a href="https://github.com/Prufio" className="links" target="_blank">
                 {rtlActive ? "شركة" : "Github"}
               </a> */}
-                  <Button color="github" simple href="https://github.com/Prufio" target="_blank">
-                    <i
-                      className={
-                        classes.socialButtonsIcons +
-                        " " +
-                        classes.marginRight +
-                        " fab fa-github"
-                      }
-                    />{" "}
-                    Connect with Github
-                  </Button>
+              <Button simple href="https://github.com/Prufio" target="_blank">
+                <i
+                  className={
+                    classes.socialButtonsIcons +
+                    " " +
+                    classes.marginRight +
+                    " fab fa-github"
+                  }
+                />{" "}
+                Connect with Github
+              </Button>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              {/* <a href="https://www.reddit.com/r/PRuF/" className="links" target="_blank">
-                {rtlActive ? "شركة" : "Reddit"}
+              <Button
+                color="twitter"
+                simple
+                href="https://t.me/pruftalk"
+                target="_blank"
+              >
+                <i
+                  className={
+                    classes.socialButtonsIcons +
+                    " " +
+                    classes.marginRight +
+                    " fab fa-telegram"
+                  }
+                />{" "}
+                Connect with Telegram
+              </Button>
+              {/* <a href="https://t.me/pruftalk" className="links" target="_blank">
+                {rtlActive ? "شركة" : "Telegram"}
               </a> */}
-                  <Button color="reddit" simple href="https://www.reddit.com/r/PRuF/" target="_blank">
-                    <i
-                      className={
-                        classes.socialButtonsIcons +
-                        " " +
-                        classes.marginRight +
-                        " fab fa-reddit"
-                      }
-                    />{" "}
-                    Connect on Reddit
-                  </Button>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
               {/* <a href="https://discord.com/invite/m4jsh6y" className="links" target="_blank">
                 {rtlActive ? "شركة" : "Discord"}
               </a> */}
-                  <Button color="facebook" simple href="https://discord.com/invite/m4jsh6y" target="_blank">
-                    <i
-                      className={
-                        classes.socialButtonsIcons +
-                        " " +
-                        classes.marginRight +
-                        " fab fa-discord"
-                      }
-                    />{" "}
-                    Connect on Discord
-                  </Button>
+              <Button
+                simple
+                href="https://discord.com/invite/m4jsh6y"
+                target="_blank"
+              >
+                <i
+                  className={
+                    classes.socialButtonsIcons +
+                    " " +
+                    classes.marginRight +
+                    " fab fa-discord"
+                  }
+                />{" "}
+                Connect on Discord
+              </Button>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-        {isMobile && (
-          <p className={classes.rightLogo}>
-            &copy;
-            {1900 + new Date().getYear()
-            }
-            <a href="https://pruf.io/" className="lightBlue" target="_blank">
-              PRüF
-            </a>
-          </p>
-        )}
-        {!isMobile && (
-          <p className={classes.rightLogo}>
-            <button
-              className="clearButton"
-              onClick={() => { copy() }}>
-              &copy;
-                      </button>
-            {counter === 0 && (
-              <>
-                {1900 + new Date().getYear()
-                }
-              </>
-            )}
-            {counter === 1 && (
-              <button onClick={() => {
-                swalReact({
-                  content: (
-                    <button onClick={() => { setCounter(2) }}><span className="bug">&#128125;</span></button>
-                  ),
-                  buttons: "Close",
-                })
-              }} className="clearButton">2021</button>
-            )}
-            {counter === 2 && (
-              <>
-                {1900 + new Date().getYear()
-                }
-              </>
-            )}
-            {counter === 0 && (
-              <button href="https://pruf.io/" className="clearButton" target="_blank">
-                PRüF
-              </button>
-            )}
-            {counter === 1 && (
-              <button href="https://pruf.io/" className="clearButton" target="_blank">
-                PRüF
-              </button>
-            )}
-            {counter === 2 && (
-              <button onClick={() => { copy2() }} className="clearButtonRed">
-                PRüF
-              </button>
-            )}
-          </p>
-        )}
+              {/* <a href="https://www.reddit.com/r/PRuF/" className="links" target="_blank">
+                {rtlActive ? "شركة" : "Reddit"}
+              </a> */}
+              <Button
+                color="reddit"
+                simple
+                href="https://www.reddit.com/r/PRuF/"
+                target="_blank"
+              >
+                <i
+                  className={
+                    classes.socialButtonsIcons +
+                    " " +
+                    classes.marginRight +
+                    " fab fa-reddit"
+                  }
+                />{" "}
+                Connect on Reddit
+              </Button>
+            </ListItem>
+            <ListItem className={classes.inlineBlock}>
+              {isMobile && (
+                <p className={classes.rightLogo}>
+                  &copy;
+                  {1900 + new Date().getYear()}
+                  <a
+                    href="https://pruf.io/"
+                    className="lightBlue"
+                    target="_blank"
+                  >
+                    PRüF
+                  </a>
+                </p>
+              )}
+              {!isMobile && (
+                <p className="black">
+                  <button
+                    className="clearButton"
+                    onClick={() => {
+                      copy();
+                    }}
+                  >
+                    &copy;
+                  </button>
+                  {counter === 0 && <>{1900 + new Date().getYear()}</>}
+                  {counter === 1 && (
+                    <button
+                      onClick={() => {
+                        swalReact({
+                          content: (
+                            <button
+                              onClick={() => {
+                                setCounter(2);
+                              }}
+                            >
+                              <span className="bug">&#128125;</span>
+                            </button>
+                          ),
+                          buttons: "Close",
+                        });
+                      }}
+                      className="clearButton"
+                    >
+                      2021
+                    </button>
+                  )}
+                  {counter === 2 && <>{1900 + new Date().getYear()}</>}
+                  {counter === 0 && (
+                    <button
+                      href="https://pruf.io/"
+                      className="clearButton"
+                      target="_blank"
+                    >
+                      PRüF
+                    </button>
+                  )}
+                  {counter === 1 && (
+                    <button
+                      href="https://pruf.io/"
+                      className="clearButton"
+                      target="_blank"
+                    >
+                      PRüF
+                    </button>
+                  )}
+                  {counter === 2 && (
+                    <button
+                      onClick={() => {
+                        copy2();
+                      }}
+                      className="clearButtonRed"
+                    >
+                      PRüF
+                    </button>
+                  )}
+                </p>
+              )}
             </ListItem>
           </List>
         </div>
