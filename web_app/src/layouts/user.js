@@ -63,6 +63,19 @@ import userStyle from "assets/jss/material-dashboard-pro-react/layouts/userStyle
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import { Icon } from "@material-ui/core";
 
+const uauth = new UAuth({
+  // Client credentials copied from https://unstoppabledomains.com/app-dashboard
+  clientID: "Q2pO03hsT5gMk0IxAacVZoloemjGBzvVEzxaofTHnmA=",
+  clientSecret: "+2Kdmv50Sl3zGxhV2ZnfCuDYmPfpbE5ulPRHPtzIoO4=",
+
+  // Requested scopes.
+  scope: 'openid wallet',
+
+  // Redirect Uris copied from https://unstoppabledomains.com/app-dashboard
+  redirectUri: "https://staking.pruf.io/callback",
+  // postLogoutRedirectUri: "https://staking.pruf.io/#/",
+})
+
 var ps;
 
 const KOVAN_UTIL_ADDRESS = "0xaAa5a0D9dfC5B21A8100f608D12924dEfDd90E43",
@@ -122,7 +135,6 @@ export default function Dashboard(props) {
   const [loadingSums, setLoadingSums] = React.useState(false);
   const [yearlyRewards, setYearlyRewards] = React.useState(0);
   const [rewardsDivisor, setRewardsDivisor] = React.useState(1);
-  //const [uauth, setUauth] = React.useState();
   const [rewardsUnit, setRewardsUnit] = React.useState("Year");
   const unitOptions = [
     "Create a merge commit",
@@ -160,20 +172,6 @@ export default function Dashboard(props) {
   const udLoginEvent = new Event("udLogin")
   const mmLoginEvent = new Event("mmLogin")
 
-  const uauth = new UAuth({
-    // Client credentials copied from https://unstoppabledomains.com/app-dashboard
-    clientID: "Q2pO03hsT5gMk0IxAacVZoloemjGBzvVEzxaofTHnmA=",
-    clientSecret: "+2Kdmv50Sl3zGxhV2ZnfCuDYmPfpbE5ulPRHPtzIoO4=",
-    responseMode: "query",
-  
-    // Requested scopes.
-    // scope: 'openid email wallet',
-  
-    // Redirect Uris copied from https://unstoppabledomains.com/app-dashboard
-    redirectUri: "https://staking.pruf.io/callback#/",
-    postLogoutRedirectUri: "https://staking.pruf.io/#/",
-  })
-
   //classes for main panel
   const mainPanelClasses =
     classes.mainPanel +
@@ -189,7 +187,7 @@ export default function Dashboard(props) {
 
   React.useEffect(() => {
     if (window.ethereum) {
-      console.log(window.ethereum);
+      //console.log(window.ethereum);
       window.ethereum.on("chainChanged", (chainId) => {
         console.log(chainId);
         window.location.reload();
@@ -242,11 +240,13 @@ export default function Dashboard(props) {
   }
 
   const udHandle = () => {
-    uauth.login()
-    .catch("Error")
+    uauth.loginWithPopup()
+    .then(() => uauth.user().then(console.log))
+    .catch(console.error)
+    .finally(() => console.log("Finished logging in!"))
   }
 
-  const determineProvider = async () => {  
+  const determineProvider = async () => { 
     let _web3 = require("web3");
 
     _web3 = new Web3(
