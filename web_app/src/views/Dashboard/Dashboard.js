@@ -1108,22 +1108,22 @@ export default function Dashboard(props) {
   };
 
   const displayMutableStorage = (asset) => {
-    if(!asset.mutableStorage || asset.mutableStorage === "") {
-      console.log("Bad inputs")
-      return []
+    if (!asset.mutableStorage || asset.mutableStorage === "") {
+      console.log("Bad inputs");
+      return [];
     }
-      let component = [];
-      let accordionContent = []
-  
-      let keys = Object.keys(asset.mutableStorage);
-      keys.forEach((key, i) => {
-        if (key !== "Signing-Client" && key !== "Signing-Client-Version")
-        if (i === 0){
+    let component = [];
+    let accordionContent = [];
+
+    let keys = Object.keys(asset.mutableStorage);
+    keys.forEach((key, i) => {
+      if (key !== "Signing-Client" && key !== "Signing-Client-Version")
+        if (i === 0) {
           component.push(
             <>
               <br />
               <br />
-    
+
               <TextField
                 key={`AccordionStack${key}`}
                 // id="outlined-multiline"
@@ -1151,19 +1151,18 @@ export default function Dashboard(props) {
                 fullWidth
                 // className={engravingClasses.engraving}
               />
-        <br/>
-        <br/>
-        </>
-        )
+              <br />
+              <br />
+            </>
+          );
         }
-      });
-      if (accordionContent.length > 0)
+    });
+    if (accordionContent.length > 0)
       component.push(
         <>
-        {/* <br/> */}
-        {/* <br/> */}
-        <Accordion key={`DetailsAccordionStack`}
-        className="smallAccordian">
+          {/* <br/> */}
+          {/* <br/> */}
+          <Accordion key={`DetailsAccordionStack`} className="smallAccordian">
             <AccordionSummary
               expandIcon={<ExpandMoreOutlined />}
               aria-label="Expand"
@@ -1173,16 +1172,14 @@ export default function Dashboard(props) {
               <h4 className="mutDataAccordian">More...</h4>
             </AccordionSummary>
             <AccordionDetails>
-              <div>
-              {accordionContent}
-              </div>
+              <div>{accordionContent}</div>
             </AccordionDetails>
-            </Accordion>
-            </>
-      )
-  
-      return component;
-    };
+          </Accordion>
+        </>
+      );
+
+    return component;
+  };
 
   const handleSimple = (event) => {
     // eslint-disable-next-line react/prop-types
@@ -1381,17 +1378,6 @@ export default function Dashboard(props) {
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
-                      {selectedAssetObj.nodeData.storageProvider === "2" && (
-                        <Tooltip title="See it on ARweave">
-                          <a
-                            href={`${selectedAssetObj.displayImage}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <img src={selectedImage} alt="" />
-                          </a>
-                        </Tooltip>
-                      )}
                       {selectedAssetObj.nodeData.storageProvider === "1" && (
                         <img src={selectedImage} alt="" />
                       )}
@@ -1592,12 +1578,23 @@ export default function Dashboard(props) {
             <CardFooter>
               {!isMobile && (
                 <>
-                {selectedAssetObj.nodeData.storageProvider === "1" && (
-                  <h6 className="storageProviderText">
-                    Stored on&nbsp;
-                    <img src={IPFSPNG} className="IPFS" alt="" />
-                  </h6>
-                )}
+                  {selectedAssetObj.nodeData.storageProvider === "1" && (
+                    <h6 className="storageProviderText">
+                      Stored on&nbsp;
+                      <img src={IPFSPNG} className="IPFS" alt="" />
+                    </h6>
+                  )}
+                  {selectedAssetObj.nodeData.storageProvider === "2" && (
+                    <Tooltip title="See it on ARweave">
+                      <a
+                        href={`${selectedAssetObj.displayImage}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img src={selectedImage} alt="" />
+                      </a>
+                    </Tooltip>
+                  )}
                   {!copyText && (
                     <Tooltip title="Copy to Clipboard">
                       <div className={classes.stats}>
@@ -1736,10 +1733,14 @@ export default function Dashboard(props) {
         </div>
       )}
 
-      {!viewAsset && (
+      {!viewAsset && props.assets > 8 && (
         <Card className="dashboardFooter">
-          {isMobile && <h6 className="dashboardFooterText">Assets Per Page: </h6>}
-          {!isMobile && <h4 className="dashboardFooterText">Assets Per Page: </h4>}
+          {isMobile && (
+            <h6 className="dashboardFooterText">Assets Per Page: </h6>
+          )}
+          {!isMobile && (
+            <h4 className="dashboardFooterText">Assets Per Page: </h4>
+          )}
           <br />
           <Select
             // MenuProps={{
@@ -1753,10 +1754,10 @@ export default function Dashboard(props) {
             inputProps={{
               classes: {
                 icon: "white",
-              }
+              },
             }}
           >
-            <MenuItem
+            {/* <MenuItem
               classes={{
                 root: selectClasses.selectMenuItem,
                 selected: selectClasses.selectMenuItemSelected,
@@ -1764,7 +1765,7 @@ export default function Dashboard(props) {
               value={4}
             >
               4
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               classes={{
                 root: selectClasses.selectMenuItem,
