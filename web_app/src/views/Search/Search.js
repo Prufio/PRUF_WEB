@@ -151,16 +151,20 @@ export default function Search(props) {
     if (window.backIndex) {
       window.backIndex = undefined;
     }
-    window.isSearching = false
+    window.isSearching = false;
   }, []);
 
-  React.useEffect(()=>{
-    if(!window.hasSearched && props.searchQuery && props.searchQuery.includes("0x")) {
-      console.log("Search query has changed")
-      checkInputs(props.searchQuery)
+  React.useEffect(() => {
+    if (
+      !window.hasSearched &&
+      props.searchQuery &&
+      props.searchQuery.includes("0x")
+    ) {
+      console.log("Search query has changed");
+      checkInputs(props.searchQuery);
     }
-    window.idxQuery = ""
-  }, [props.searchQuery])
+    window.idxQuery = "";
+  }, [props.searchQuery]);
 
   const ACLogin = (event) => {
     // if (!props.IDHolder) {
@@ -207,60 +211,70 @@ export default function Search(props) {
       return [];
     }
     let component = [];
-    let keys = Object.keys(asset.mutableStorage);
+    let accordionContent = [];
 
-    keys.forEach((key) => {
+    let keys = Object.keys(asset.mutableStorage);
+    keys.forEach((key, i) => {
       if (key !== "Signing-Client" && key !== "Signing-Client-Version")
-        component.push(
-          <Accordion key={`AccordionStack${key}`}>
-            {/* <h4>{key}</h4> */}
+        if (i === 0) {
+          component.push(
+            <>
+              <br />
+              <br />
+
+              <TextField
+                key={`AccordionStack${key}`}
+                // id="outlined-multiline"
+                label={key}
+                disabled
+                rows={2}
+                defaultValue={asset.mutableStorage[key]}
+                variant="outlined"
+                fullWidth
+                // className={engravingClasses.engraving}
+              />
+            </>
+          );
+        } else {
+          accordionContent.push(
+            <>
+              <TextField
+                key={`AccordionStack${key}`}
+                // id="outlined-multiline"
+                label={key}
+                disabled
+                rows={2}
+                defaultValue={asset.mutableStorage[key]}
+                variant="outlined"
+                fullWidth
+                // className={engravingClasses.engraving}
+              />
+              <br />
+              <br />
+            </>
+          );
+        }
+    });
+    if (accordionContent.length > 0)
+      component.push(
+        <>
+          {/* <br/> */}
+          {/* <br/> */}
+          <Accordion key={`DetailsAccordionStack`} className="smallAccordian">
             <AccordionSummary
               expandIcon={<ExpandMoreOutlined />}
               aria-label="Expand"
               aria-controls="additional-actions1-content"
-              id={`additional-actions1-header-${key}`}
+              id={`additional-actions1-header-details`}
             >
-              <div className="flexRowWithGap">
-                <h4>{key}</h4> <br />{" "}
-                <h4 className="">{asset.mutableStorage[key]}</h4>
-              </div>
-              {/* <FormControlLabel
-              aria-label="Acknowledge"
-              onClick={(event) => {
-                event.stopPropagation();
-              }}
-              onFocus={(event) => {
-                event.stopPropagation();
-              }}
-              // control={
-              //   <Checkbox
-              //     disabled={!(prufBalance > props.min)}
-              //     onClick={() =>
-              //       (isTierChecked[`chk${props.pos}`] =
-              //         !isTierChecked[`chk${props.pos}`])
-              //     }
-              //     classes={{
-              //       checked: classes.checked,
-              //       root: classes.checkRoot,
-              //     }}
-              //   />
-              // }
-              label={`${key} ${asset.mutableStorage[key].substring(0, 28)}...`}
-            /> */}
+              <h4 className="mutDataAccordian">More...</h4>
             </AccordionSummary>
             <AccordionDetails>
-              <div>
-                <div className="delegationTips">
-                  <FiberManualRecordTwoTone className="delegationPin" />
-                  <h5 className="delegationTipsContent">
-                    {asset.mutableStorage[key]}
-                  </h5>
-                </div>
-              </div>
+              <div>{accordionContent}</div>
             </AccordionDetails>
           </Accordion>
-        );
-    });
+        </>
+      );
 
     return component;
   };
@@ -1255,8 +1269,8 @@ export default function Search(props) {
   };
 
   const checkInputs = (fromQR) => {
-    window.hasSearched = true
-    window.dispatchEvent(props.clearSearch)
+    window.hasSearched = true;
+    window.dispatchEvent(props.clearSearch);
     window.idxQuery = "";
 
     let id;
@@ -1339,7 +1353,7 @@ export default function Search(props) {
     _addr = props.addr,
     _prufClient = props.prufClient
   ) => {
-    window.isSearching = true
+    window.isSearching = true;
     checkIsHolder(id);
     _prufClient.get.asset.record(id).then(async (rec) => {
       console.log({ rec });
@@ -1358,88 +1372,88 @@ export default function Search(props) {
           setResult(rec);
           setError("");
           getNonMutableOf(rec, _prufClient, _arweaveClient);
-        })
-      })
+        });
+      });
     });
   };
 
   const getNonMutableOf = async (rec, _prufClient, _arweaveClient) => {
-        if (
-          rec.nonMutableStorage1 ===
-          "0x0000000000000000000000000000000000000000000000000000000000000000"
-        ) {
-          rec.nonMutableStorage = "";
-          getMutableOf(rec, _prufClient, _arweaveClient);
-        } else if (rec.nodeData.storageProvider === "1") {
-          _prufClient.utils
-            .ipfsFromB32(rec.nonMutableStorage1)
-            .then(async (query) => {
-              console.log("MDQ", query);
+    if (
+      rec.nonMutableStorage1 ===
+      "0x0000000000000000000000000000000000000000000000000000000000000000"
+    ) {
+      rec.nonMutableStorage = "";
+      getMutableOf(rec, _prufClient, _arweaveClient);
+    } else if (rec.nodeData.storageProvider === "1") {
+      _prufClient.utils
+        .ipfsFromB32(rec.nonMutableStorage1)
+        .then(async (query) => {
+          console.log("MDQ", query);
 
-              for await (const chunk of window.ipfs.cat(query)) {
-                let str = new TextDecoder("utf-8").decode(chunk);
-                try {
-                  rec.nonMutableStorage = JSON.parse(str);
-                } catch {
-                  rec.nonMutableStorage = str;
-                }
-                getMutableOf(rec, _prufClient, _arweaveClient);
+          for await (const chunk of window.ipfs.cat(query)) {
+            let str = new TextDecoder("utf-8").decode(chunk);
+            try {
+              rec.nonMutableStorage = JSON.parse(str);
+            } catch {
+              rec.nonMutableStorage = str;
+            }
+            getMutableOf(rec, _prufClient, _arweaveClient);
+          }
+        });
+    } else if (rec.nodeData.storageProvider === "2") {
+      _prufClient.utils
+        .arweaveTxFromB32(rec.nonMutableStorage1, rec.nonMutableStorage2)
+        .then((query) => {
+          rec.contentUrl = `https://arweave.net/${query}`;
+          let xhr = new XMLHttpRequest();
+          xhr.responseType = "text";
+          xhr.onload = () => {
+            if (xhr.status !== 404 && xhr.status !== 202) {
+              rec.nonMutableStorage = {};
+              // console.log(xhr.response);
+              if (xhr.response === "Pending") {
+                rec.nonMutableStorage = { Pending: "" };
+                return getMutableOf(rec, _prufClient, _arweaveClient);
               }
-            });
-        } else if (rec.nodeData.storageProvider === "2") {
-          _prufClient.utils
-            .arweaveTxFromB32(rec.nonMutableStorage1, rec.nonMutableStorage2)
-            .then((query) => {
-              rec.contentUrl = `https://arweave.net/${query}`;
-              let xhr = new XMLHttpRequest();
-              xhr.responseType = "text";
-              xhr.onload = () => {
-                if (xhr.status !== 404 && xhr.status !== 202) {
-                  rec.nonMutableStorage = {};
-                  // console.log(xhr.response);
-                  if (xhr.response === "Pending") {
-                    rec.nonMutableStorage = { Pending: "" };
-                    return getMutableOf(rec, _prufClient, _arweaveClient);
-                  }
-                  _arweaveClient.transactions
-                    .get(query)
-                    .then((e) => {
-                      console.log(e);
-                      e.get("tags").forEach((tag) => {
-                        let key = tag.get("name", {
-                          decode: true,
-                          string: true,
-                        });
-                        let value = tag.get("value", {
-                          decode: true,
-                          string: true,
-                        });
-                        rec.nonMutableStorage[key] = value;
-                      });
-                      getMutableOf(rec, _prufClient, _arweaveClient);
-                    })
-                    .catch((e) => {
-                      console.log(e);
-                      rec.nonMutableStorage = "";
-                      getMutableOf(rec, _prufClient, _arweaveClient);
+              _arweaveClient.transactions
+                .get(query)
+                .then((e) => {
+                  console.log(e);
+                  e.get("tags").forEach((tag) => {
+                    let key = tag.get("name", {
+                      decode: true,
+                      string: true,
                     });
-                } else {
-                  console.log("Id returned 404");
+                    let value = tag.get("value", {
+                      decode: true,
+                      string: true,
+                    });
+                    rec.nonMutableStorage[key] = value;
+                  });
+                  getMutableOf(rec, _prufClient, _arweaveClient);
+                })
+                .catch((e) => {
+                  console.log(e);
                   rec.nonMutableStorage = "";
                   getMutableOf(rec, _prufClient, _arweaveClient);
-                }
-              };
+                });
+            } else {
+              console.log("Id returned 404");
+              rec.nonMutableStorage = "";
+              getMutableOf(rec, _prufClient, _arweaveClient);
+            }
+          };
 
-              xhr.onerror = () => {
-                console.log("Gateway returned 404");
-                rec.nonMutableStorage = "";
-                getMutableOf(rec, _prufClient, _arweaveClient);
-              };
+          xhr.onerror = () => {
+            console.log("Gateway returned 404");
+            rec.nonMutableStorage = "";
+            getMutableOf(rec, _prufClient, _arweaveClient);
+          };
 
-              xhr.open("GET", `https://arweave.net/${query}`);
-              xhr.send(null);
-            });
-        }
+          xhr.open("GET", `https://arweave.net/${query}`);
+          xhr.send(null);
+        });
+    }
   };
 
   const getMutableOf = async (rec, _prufClient, _arweaveClient) => {
@@ -2147,28 +2161,6 @@ export default function Search(props) {
                         />
                       )}
                       {displayMutableStorage(asset)}
-                      {asset.storageProvider === "2" && (
-                        <h6 className="storageProviderText">
-                          See it on
-                          <a
-                            href={`${asset.ContentUrl}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <img
-                              src={ARweavePNG}
-                              className="ARweave"
-                              alt=""
-                            ></img>
-                          </a>
-                        </h6>
-                      )}
-                      {asset.storageProvider === "1" && (
-                        <h6 className="storageProviderText">
-                          Stored on&nbsp;
-                          <img src={IPFSPNG} className="IPFS" alt="" />
-                        </h6>
-                      )}
                       {/*@dev URLs go here*/}
                       <br />
                     </>
@@ -2678,6 +2670,28 @@ export default function Search(props) {
                 <CardFooter>
                   {!isMobile && (
                     <>
+                      {asset.nodeData.storageProvider === "2" && (
+                        <h6 className="storageProviderText">
+                          See it on
+                          <a
+                            href={`${asset.ContentUrl}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <img
+                              src={ARweavePNG}
+                              className="ARweave"
+                              alt=""
+                            ></img>
+                          </a>
+                        </h6>
+                      )}
+                      {asset.nodeData.storageProvider === "1" && (
+                        <h6 className="storageProviderText">
+                          Stored on&nbsp;
+                          <img src={IPFSPNG} className="IPFS" alt="" />
+                        </h6>
+                      )}
                       {!copyText && (
                         <Tooltip title="Copy to Clipboard">
                           <div className={classes.stats}>

@@ -4,7 +4,8 @@
 } */
 body {
     /* background: linear-gradient(0deg, rgba(0, 83, 128, 0.212), #015f9218) !important; */
-    background: linear-gradient(0deg, rgb(0, 85, 131), #002a40) !important;
+    background: linear-gradient(0deg, rgba(0, 85, 131, 0.795), #002a40) !important;
+    /* background: linear-gradient(0deg, rgba(0, 85, 131, 0.795), #003b5a) !important; */
     /* background: #002a40 !important; */
     /* overflow-x: hidden !important; */
 }

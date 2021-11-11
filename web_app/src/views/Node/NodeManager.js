@@ -40,6 +40,7 @@ import Pruf from "../../assets/img/pruftoken.png";
 import { simpleBarChart, pieChart } from "variables/charts.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import chartStyles from "assets/jss/material-dashboard-pro-react/views/chartsStyle.js";
+import selectStyles from "assets/jss/material-dashboard-pro-react/customSelectStyle.js";
 import { isMobile } from "react-device-detect";
 // import { tooltip } from 'assets/jss/material-dashboard-pro-react'
 
@@ -53,6 +54,7 @@ import { isMobile } from "react-device-detect";
 
 const useStyles = makeStyles(styles);
 const useChartStyles = makeStyles(chartStyles);
+const useSelectStyles = makeStyles(selectStyles);
 
 export default function NodeManager(props) {
   // eslint-disable-next-line no-unused-vars
@@ -76,8 +78,8 @@ export default function NodeManager(props) {
     React.useState(0x0000000000000000000000000000000000000000);
   const [loginOperationState, setloginOperationState] = React.useState({});
   const link = document.createElement("div");
+  const selectClasses = useSelectStyles();
   const classes = useStyles();
-  const chartClasses = useChartStyles();
 
   const [delegationList, setDelegationList] = React.useState([
     ["Loading Nodes...", "~", "~", "~"],
@@ -208,61 +210,6 @@ export default function NodeManager(props) {
     setTotalRewards(true);
   };
 
-  const handleChangeCost = (op, val) => {
-    if (!formChanged) setFormChanged(true);
-    let obj = costPacket;
-    obj[op] = val;
-    setCostPacket(obj);
-    console.log("op", op, "val", val);
-  };
-
-  const generateCostForm = (obj) => {
-    if (!obj.costs) return;
-    return Object.values(obj.costs).map((prop, key) => {
-      // console.log(key, prop)
-      return (
-        <>
-          {!transactionActive ? (
-            <CustomInput
-              // success={loginOperationState[key + 1] === 'success'}
-              // error={loginOperationState[key + 1] === 'error'}
-              labelText={`Operation ${key + 1}`}
-              id={`cost${key + 1}`}
-              formControlProps={{
-                fullWidth: true,
-              }}
-              inputProps={{
-                type: "number",
-                defaultValue: prop.node,
-                onChange: (e) => {
-                  handleChangeCost(
-                    e.target.id.substring(
-                      e.target.id.length - 1,
-                      e.target.id.length
-                    ),
-                    e.target.value
-                  );
-                },
-              }}
-            />
-          ) : (
-            <CustomInput
-              labelText={`Operation ${key + 1}`}
-              id=""
-              formControlProps={{
-                fullWidth: true,
-              }}
-              inputProps={{
-                defaultValue: prop.node,
-                disabled: true,
-              }}
-            />
-          )}
-        </>
-      );
-    });
-  };
-
   const changeCosts = async (obj, tempObj, _beneficiaryAddress, iteration) => {
     console.log(obj);
 
@@ -289,7 +236,8 @@ export default function NodeManager(props) {
       _beneficiaryAddress = obj.beneficiaryAddress;
     }
 
-    if(!Object.values(tempObj)[iteration]) return console.log("DONE CHANGING COSTS");
+    if (!Object.values(tempObj)[iteration])
+      return console.log("DONE CHANGING COSTS");
 
     let tempTxHash;
 
@@ -318,7 +266,7 @@ export default function NodeManager(props) {
     let calculatedCost = await window.web3.utils.toWei(
       String(Object.values(tempObj)[iteration].value)
     );
-    
+
     props.prufClient.do.node
       .setOperationCost(
         obj.id,
@@ -332,7 +280,7 @@ export default function NodeManager(props) {
         setFormChanged(false);
         setBeneficiaryAddress("");
         setTransactionActive(false);
-        console.error(_error)
+        console.error(_error);
         tempTxHash = Object.values(_error)[0].transactionHash;
         let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
         let str2 = "' target='_blank'>here</a>";
@@ -353,12 +301,7 @@ export default function NodeManager(props) {
             button: "Close",
           });
         }
-        return changeCosts(
-          obj,
-          tempObj,
-          _beneficiaryAddress,
-          iteration + 1
-        );
+        return changeCosts(obj, tempObj, _beneficiaryAddress, iteration + 1);
       })
       .on("receipt", (receipt) => {
         setTransactionActive(false);
@@ -371,17 +314,14 @@ export default function NodeManager(props) {
         window.dispatchEvent(props.refresh);
 
         swalReact({
-          title: `Changed cost of id ${Object.values(tempObj)[iteration].id} to ü${Object.values(tempObj)[iteration].value}`,
+          title: `Changed cost of id ${
+            Object.values(tempObj)[iteration].id
+          } to ü${Object.values(tempObj)[iteration].value}`,
           content: link,
           icon: "success",
           button: "close",
-        }).then(()=>{
-          return changeCosts(
-            obj,
-            tempObj,
-            _beneficiaryAddress,
-            iteration + 1
-          );
+        }).then(() => {
+          return changeCosts(obj, tempObj, _beneficiaryAddress, iteration + 1);
         });
         // setTxHash(receipt.transactionHash);
       });
@@ -589,7 +529,371 @@ export default function NodeManager(props) {
     });
   };
 
+  const authorizeUser = async (e) => {
+    let tempTxHash;
+    console.log(e);
+    let addressHash = await window.web3.utils.soliditySha3(e.authorizedAddress);
+
+    setTransactionActive(true);
+    props.prufClient.do.node
+      .authorizeUser(e.id, addressHash, "1")
+      // eslint-disable-next-line react/prop-types
+      .send({ from: props.addr })
+      .on("error", (_error) => {
+        setTransactionActive(false);
+        // setTxStatus(false)
+        // setTxHash(Object.values(_error)[0].transactionHash)
+        console.error(_error);
+        tempTxHash = Object.values(_error)[0].transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
+        if (tempTxHash !== undefined) {
+          swalReact({
+            title: "Something went wrong!",
+            content: link,
+            icon: "warning",
+            button: "Close",
+          });
+        }
+        if (tempTxHash === undefined) {
+          swalReact({
+            title: "Something went wrong!",
+            icon: "warning",
+            button: "Close",
+          });
+        }
+      })
+      .on("receipt", (receipt) => {
+        console.log(receipt);
+        setTransactionActive(false);
+        // setTxStatus(receipt.status)
+        tempTxHash = receipt.transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
+        swalReact({
+          title: "User Authorized!",
+          content: link,
+          icon: "success",
+          button: "Close",
+        });
+        // window.replaceAssetData.refreshBals = true
+        window.dispatchEvent(props.refresh);
+        // window.location.href = nodeInfo.lastRef
+      });
+  };
+
+  const transferNode = async (e) => {
+    let tempTxHash;
+    console.log(e);
+
+    setTransactionActive(true);
+    props.prufClient.do.node
+      .transfer(props.addr, e.address, e.id)
+      // eslint-disable-next-line react/prop-types
+      .send({ from: props.addr })
+      .on("error", (_error) => {
+        setTransactionActive(false);
+        // setTxStatus(false)
+        // setTxHash(Object.values(_error)[0].transactionHash)
+        console.error(_error);
+        tempTxHash = Object.values(_error)[0].transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
+        if (tempTxHash !== undefined) {
+          swalReact({
+            title: "Something went wrong!",
+            content: link,
+            icon: "warning",
+            button: "Close",
+          });
+        }
+        if (tempTxHash === undefined) {
+          swalReact({
+            title: "Something went wrong!",
+            icon: "warning",
+            button: "Close",
+          });
+        }
+      })
+      .on("receipt", (receipt) => {
+        console.log(receipt);
+        setTransactionActive(false);
+        // setTxStatus(receipt.status)
+        tempTxHash = receipt.transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
+        swalReact({
+          title: "Node Transferred!",
+          content: link,
+          icon: "success",
+          button: "Close",
+        });
+        // window.replaceAssetData.refreshBals = true
+        window.dispatchEvent(props.refresh);
+        // window.location.href = nodeInfo.lastRef
+      });
+  };
+
+  const transferNodeSwal = (e) => {
+    let index = e.index;
+    // let authorizedAddress
+    // return console.log(e)
+    swalReact({
+      content: (
+        <Card>
+          <CardHeader icon>
+            <h4 className={classes.cardIconTitle}>Transfer Node</h4>
+          </CardHeader>
+          <CardBody>
+            <form>
+              <h4>
+                Node Selected: {props.nodeExtData[index].name}, (
+                {props.nodeExtData[index].id})
+              </h4>
+              {!transactionActive ? (
+                <CustomInput
+                  labelText={"To"}
+                  formControlProps={{
+                    fullWidth: true,
+                  }}
+                  inputProps={{
+                    onChange: (event) => {
+                      console.log(event.target.value);
+                      e.address = event.target.value;
+                    },
+                  }}
+                />
+              ) : (
+                <CustomInput
+                  labelText={"To"}
+                  id=""
+                  formControlProps={{
+                    fullWidth: true,
+                  }}
+                  inputProps={{
+                    defaultValue: e.address,
+                    disabled: true,
+                  }}
+                />
+              )}
+              <div className={classes.formCategory}></div>
+            </form>
+          </CardBody>
+        </Card>
+      ),
+      buttons: {
+        close: {
+          text: "Close",
+          // className: "delegationButtonBack",
+        },
+        transfer: {
+          text: "Transfer Node",
+          className: "MLBGradient",
+        },
+      },
+    }).then(async (value) => {
+      switch (value) {
+        case "close":
+          // setResetToDefault("");
+          break;
+
+        case "transfer":
+          let isAddress = await window.web3.utils.isAddress(e.address);
+          if (!isAddress) {
+            return swalReact({
+              title: "Submitted address is not valid!",
+              text: "Please check form and input a valid ethereum address.",
+              icon: "warning",
+              button: "Close",
+            });
+          }
+          swalReact({
+            icon: "warning",
+            content: (
+              <Card className="delegationCard">
+                <h4 className="delegationTitle">
+                  Submitted information is critical!
+                </h4>
+                <h5 className="finalizingTipsContent">
+                  Please make sure the following account is correct before
+                  submitting!
+                </h5>
+                <div className="delegationTips">
+                  <h4 className="alertText">
+                    Recieving Address:{" "}
+                    {` ${e.address.substring(0, 8)}...${e.address.substring(
+                      34
+                    )}`}
+                  </h4>
+                </div>
+              </Card>
+            ),
+            buttons: {
+              back: {
+                text: "Go Back",
+                className: "delegationButtonBack",
+              },
+              authorize: {
+                text: "Authorize User",
+                className: "delegationButtonBack",
+              },
+            },
+          }).then((value) => {
+            switch (value) {
+              case "back":
+                break;
+              case "authorize":
+                transferNode(e);
+              // break;
+              default:
+                break;
+            }
+          });
+          break;
+
+        default:
+          break;
+      }
+    });
+  };
+
+  const authorizeUserSwal = (e) => {
+    let index = e.index;
+    // let authorizedAddress
+    // return console.log(e)
+    swalReact({
+      content: (
+        <Card>
+          <CardHeader icon>
+            <h4 className={classes.cardIconTitle}>Authorize address to mint</h4>
+          </CardHeader>
+          <CardBody>
+            <form>
+              <h4>
+                Node Selected: {props.nodeExtData[index].name}, (
+                {props.nodeExtData[index].id})
+              </h4>
+              {!transactionActive ? (
+                <CustomInput
+                  labelText={"Address"}
+                  formControlProps={{
+                    fullWidth: true,
+                  }}
+                  inputProps={{
+                    onChange: (event) => {
+                      console.log(event.target.value);
+                      e.authorizedAddress = event.target.value;
+                    },
+                  }}
+                />
+              ) : (
+                <CustomInput
+                  labelText={"Address"}
+                  id=""
+                  formControlProps={{
+                    fullWidth: true,
+                  }}
+                  inputProps={{
+                    defaultValue: e.authorizedAddress,
+                    disabled: true,
+                  }}
+                />
+              )}
+              <div className={classes.formCategory}></div>
+            </form>
+          </CardBody>
+        </Card>
+      ),
+      buttons: {
+        close: {
+          text: "Close",
+          // className: "delegationButtonBack",
+        },
+        authAddr: {
+          text: "Authorize Address",
+          className: "MLBGradient",
+        },
+      },
+    }).then(async (value) => {
+      switch (value) {
+        case "close":
+          // setResetToDefault("");
+          break;
+
+        case "authAddr":
+          let isAddress = await window.web3.utils.isAddress(
+            e.authorizedAddress
+          );
+          if (!isAddress) {
+            return swalReact({
+              title: "Submitted address is not valid!",
+              text: "Please check form and input a valid ethereum address.",
+              icon: "warning",
+              button: "Close",
+            });
+          }
+          swalReact({
+            icon: "warning",
+            content: (
+              <Card className="delegationCard">
+                <h4 className="delegationTitle">
+                  Submitted information is critical!
+                </h4>
+                <h5 className="finalizingTipsContent">
+                  Please make sure the following account is correct before
+                  submitting!
+                </h5>
+                <div className="delegationTips">
+                  <h4 className="alertText">
+                    User:{" "}
+                    {` ${e.authorizedAddress.substring(
+                      0,
+                      8
+                    )}...${e.authorizedAddress.substring(34)}`}
+                  </h4>
+                </div>
+              </Card>
+            ),
+            buttons: {
+              back: {
+                text: "Go Back",
+                className: "delegationButtonBack",
+              },
+              authorize: {
+                text: "Authorize User",
+                className: "delegationButtonBack",
+              },
+            },
+          }).then((value) => {
+            switch (value) {
+              case "back":
+                break;
+              case "authorize":
+                authorizeUser(e);
+                break;
+              default:
+                break;
+            }
+          });
+          break;
+
+        default:
+          break;
+      }
+    });
+  };
+
   const handleSimple = (e) => {
+    if(!e) return
+    let index = e.index;
+
+    // console.log(document.getElementById(`simpleSelectDefault${index}`))
+    // document.getElementById(`simpleSelectDefault${index}`).reset()
+
     switch (e.value) {
       case "change-costs":
         getAllCosts(e);
@@ -599,6 +903,32 @@ export default function NodeManager(props) {
         break;
       case "transfer-node":
         transferNodeSwal(e);
+        break;
+      case "finalize":
+        document.body.style.cursor = "wait";
+        // eslint-disable-next-line react/prop-types
+        if (props.ps) {
+          // eslint-disable-next-line react/prop-types
+          props.ps.element.scrollTop = 0;
+          //console.log(props.ps.element.scrollTop)
+        }
+        let tempObj = JSON.parse(JSON.stringify(e));
+        tempObj.lastRef = "/#/user/node-manager";
+        tempObj.root = props.nodeExtData[index].root;
+        tempObj.id = props.nodeExtData[index].id;
+        tempObj.name = props.nodeExtData[index].name;
+        tempObj.custodyType = props.nodeExtData[index].custodyType;
+        tempObj.usesAuth = props.nodeExtData[index].usesAuth;
+        tempObj.discount = props.nodeExtData[index].discount;
+        tempObj.referenceAddress = props.nodeExtData[index].referenceAddress;
+        tempObj.index = index;
+        window.sentPacket = JSON.parse(JSON.stringify(e));
+        console.log(e);
+        console.log(window.sentPacket);
+        // setSimpleSelect(obj);
+        return (window.location.href = "/#/user/finalize-node");
+        break;
+      default:
         break;
     }
   };
@@ -883,14 +1213,13 @@ export default function NodeManager(props) {
                                   Options
                                 </InputLabel>
                                 <Select
-                                  ref={actionInput}
                                   MenuProps={{
-                                    className: classes.selectMenu,
+                                    className: selectClasses.selectMenu,
                                   }}
                                   classes={{
-                                    select: classes.select,
+                                    select: selectClasses.select,
                                   }}
-                                  onChange={(e) =>
+                                  onChange={(e) => {
                                     handleSimple({
                                       name: prop[0],
                                       id: prop[1],
@@ -898,7 +1227,9 @@ export default function NodeManager(props) {
                                       value: e.target.value,
                                     })
                                   }
+                                  }
                                   inputProps={{
+                                    value: "",
                                     name: "simpleSelect",
                                     id: `simpleSelectDefault${key}`,
                                   }}
@@ -907,7 +1238,7 @@ export default function NodeManager(props) {
                                     id={`selectDefault${key}`}
                                     disabled
                                     classes={{
-                                      root: classes.selectMenuItem,
+                                      root: selectClasses.selectMenuItem,
                                     }}
                                   >
                                     Select an option from the list
@@ -934,8 +1265,9 @@ export default function NodeManager(props) {
                                   <MenuItem
                                     id={`changecosts${key}`}
                                     classes={{
-                                      root: classes.selectMenuItem,
-                                      selected: classes.selectMenuItemSelected,
+                                      root: selectClasses.selectMenuItem,
+                                      selected:
+                                        selectClasses.selectMenuItemSelected,
                                     }}
                                     value={"change-costs"}
                                   >
@@ -947,24 +1279,25 @@ export default function NodeManager(props) {
                                       <MenuItem
                                         id={`authuser${key}`}
                                         classes={{
-                                          root: classes.selectMenuItem,
+                                          root: selectClasses.selectMenuItem,
                                           selected:
-                                            classes.selectMenuItemSelected,
+                                            selectClasses.selectMenuItemSelected,
                                         }}
                                         value={"authorize-user"}
                                       >
-                                        Authorize User
+                                        Authorize User Access
                                       </MenuItem>
                                     )}
                                   <MenuItem
                                     id={`transfer${key}`}
                                     classes={{
-                                      root: classes.selectMenuItem,
-                                      selected: classes.selectMenuItemSelected,
+                                      root: selectClasses.selectMenuItem,
+                                      selected:
+                                        selectClasses.selectMenuItemSelected,
                                     }}
                                     value={"transfer-node"}
                                   >
-                                    Transfer
+                                    Transfer Node
                                   </MenuItem>
                                   {props.nodeExtData[key] &&
                                     props.nodeExtData[key].managementType ===
@@ -972,11 +1305,11 @@ export default function NodeManager(props) {
                                       <MenuItem
                                         id={`finalize${key}`}
                                         classes={{
-                                          root: classes.selectMenuItem,
+                                          root: selectClasses.selectMenuItem,
                                           selected:
-                                            classes.selectMenuItemSelected,
+                                            selectClasses.selectMenuItemSelected,
                                         }}
-                                        value={"/#/user/finalize-node"}
+                                        value={"finalize"}
                                       >
                                         Finalize
                                       </MenuItem>
@@ -1069,130 +1402,130 @@ export default function NodeManager(props) {
                           prop[0] !== "Loading Nodes..." &&
                           prop[0] !== "" && (
                             <form>
-                              <FormControl className="nodeOptions">
-                                <InputLabel className="functionSelectorText">
-                                  {/* <Danger> */}
-                                  <Settings className="functionSelectorIcon" />
-                                  {/* </Danger> */}
-                                  Options
-                                </InputLabel>
-                                <Select
-                                  MenuProps={{
-                                    className: classes.selectMenu,
-                                  }}
+                              {/* <FormControl className="nodeOptions"> */}
+                              <InputLabel className="functionSelectorText">
+                                {/* <Danger> */}
+                                <Settings className="functionSelectorIcon" />
+                                {/* </Danger> */}
+                                Options
+                              </InputLabel>
+                              <Select
+                                // MenuProps={{
+                                //   className: classes.selectMenu,
+                                // }}
+                                classes={{
+                                  select: classes.select,
+                                }}
+                                onClick={(e) => handleSimple(e.target.value)}
+                                // inputProps={{
+                                //   name: "simpleSelect",
+                                //   id: "",
+                                // }}
+                              >
+                                <MenuItem
+                                  disabled
                                   classes={{
-                                    select: classes.select,
-                                  }}
-                                  onChange={(e) => handleSimple(e.target.value)}
-                                  inputProps={{
-                                    name: "simpleSelect",
-                                    id: "",
+                                    root: classes.selectMenuItem,
                                   }}
                                 >
-                                  <MenuItem
-                                    disabled
-                                    classes={{
-                                      root: classes.selectMenuItem,
-                                    }}
-                                  >
-                                    Select an option from the list
-                                  </MenuItem>
-                                  <MenuItem
-                                    classes={{
-                                      root: classes.selectMenuItem,
-                                      selected: classes.selectMenuItemSelected,
-                                    }}
-                                    value={{
-                                      href: "/#/user/change-name",
-                                      name: prop[0],
-                                      id: prop[1],
-                                      index: key,
-                                    }}
-                                  >
-                                    Change Name
-                                  </MenuItem>
-                                  <MenuItem
-                                    classes={{
-                                      root: classes.selectMenuItem,
-                                      selected: classes.selectMenuItemSelected,
-                                    }}
-                                    value={{
-                                      href: "/#/user/change-data",
-                                      name: prop[0],
-                                      id: prop[1],
-                                      index: key,
-                                    }}
-                                  >
-                                    Update Data
-                                  </MenuItem>
-                                  <MenuItem
-                                    classes={{
-                                      root: classes.selectMenuItem,
-                                      selected: classes.selectMenuItemSelected,
-                                    }}
-                                    value={{
-                                      href: "/#/user/change-costs",
-                                      name: prop[0],
-                                      id: prop[1],
-                                      index: key,
-                                    }}
-                                  >
-                                    Update Operation Costs
-                                  </MenuItem>
-                                  {props.nodeExtData[key] &&
-                                    props.nodeExtData[key].managementType ===
-                                      "3" && (
-                                      <MenuItem
-                                        classes={{
-                                          root: classes.selectMenuItem,
-                                          selected:
-                                            classes.selectMenuItemSelected,
-                                        }}
-                                        value={{
-                                          href: "/#/user/authorize-user",
-                                          name: prop[0],
-                                          id: prop[1],
-                                          index: key,
-                                        }}
-                                      >
-                                        Authorize User
-                                      </MenuItem>
-                                    )}
-                                  <MenuItem
-                                    classes={{
-                                      root: classes.selectMenuItem,
-                                      selected: classes.selectMenuItemSelected,
-                                    }}
-                                    value={{
-                                      href: "/#/user/transfer-node",
-                                      name: prop[0],
-                                      id: prop[1],
-                                      index: key,
-                                    }}
-                                  >
-                                    Transfer
-                                  </MenuItem>
-                                  {props.nodeExtData[key] &&
-                                    props.nodeExtData[key].managementType ===
-                                      "255" && (
-                                      <MenuItem
-                                        classes={{
-                                          root: classes.selectMenuItem,
-                                          selected:
-                                            classes.selectMenuItemSelected,
-                                        }}
-                                        value={{
-                                          href: "/#/user/finalize-node",
-                                          name: prop[0],
-                                          id: prop[1],
-                                          index: key,
-                                        }}
-                                      >
-                                        Finalize
-                                      </MenuItem>
-                                    )}
-                                </Select>
-                              </FormControl>
+                                  Select an option from the list
+                                </MenuItem>
+                                <MenuItem
+                                  classes={{
+                                    root: classes.selectMenuItem,
+                                    selected: classes.selectMenuItemSelected,
+                                  }}
+                                  value={{
+                                    href: "/#/user/change-name",
+                                    name: prop[0],
+                                    id: prop[1],
+                                    index: key,
+                                  }}
+                                >
+                                  Change Name
+                                </MenuItem>
+                                <MenuItem
+                                  classes={{
+                                    root: classes.selectMenuItem,
+                                    selected: classes.selectMenuItemSelected,
+                                  }}
+                                  value={{
+                                    href: "/#/user/change-data",
+                                    name: prop[0],
+                                    id: prop[1],
+                                    index: key,
+                                  }}
+                                >
+                                  Update Data
+                                </MenuItem>
+                                <MenuItem
+                                  classes={{
+                                    root: classes.selectMenuItem,
+                                    selected: classes.selectMenuItemSelected,
+                                  }}
+                                  value={{
+                                    href: "/#/user/change-costs",
+                                    name: prop[0],
+                                    id: prop[1],
+                                    index: key,
+                                  }}
+                                >
+                                  Update Operation Costs
+                                </MenuItem>
+                                {props.nodeExtData[key] &&
+                                  props.nodeExtData[key].managementType ===
+                                    "3" && (
+                                    <MenuItem
+                                      classes={{
+                                        root: classes.selectMenuItem,
+                                        selected:
+                                          classes.selectMenuItemSelected,
+                                      }}
+                                      value={{
+                                        href: "/#/user/authorize-user",
+                                        name: prop[0],
+                                        id: prop[1],
+                                        index: key,
+                                      }}
+                                    >
+                                      Authorize User Access
+                                    </MenuItem>
+                                  )}
+                                <MenuItem
+                                  classes={{
+                                    root: classes.selectMenuItem,
+                                    selected: classes.selectMenuItemSelected,
+                                  }}
+                                  value={{
+                                    href: "/#/user/transfer-node",
+                                    name: prop[0],
+                                    id: prop[1],
+                                    index: key,
+                                  }}
+                                >
+                                  Transfer Node
+                                </MenuItem>
+                                {props.nodeExtData[key] &&
+                                  props.nodeExtData[key].managementType ===
+                                    "255" && (
+                                    <MenuItem
+                                      classes={{
+                                        root: classes.selectMenuItem,
+                                        selected:
+                                          classes.selectMenuItemSelected,
+                                      }}
+                                      value={{
+                                        href: "finalize",
+                                        name: prop[0],
+                                        id: prop[1],
+                                        index: key,
+                                      }}
+                                    >
+                                      Finalize
+                                    </MenuItem>
+                                  )}
+                              </Select>
+                              {/* </FormControl> */}
                             </form>
                           )}
                       </div>
