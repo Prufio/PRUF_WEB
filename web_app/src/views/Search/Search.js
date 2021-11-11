@@ -206,9 +206,9 @@ export default function Search(props) {
   };
 
   const displayMutableStorage = (asset) => {
-    if (!asset.mutableStorage || asset.mutableStorage === "") {
-      console.log("Bad inputs");
-      return [];
+    if(!asset.mutableStorage || asset.mutableStorage === "") {
+      console.log("Bad inputs")
+      return []
     }
     let component = [];
     let accordionContent = [];

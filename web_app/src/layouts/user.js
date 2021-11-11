@@ -151,8 +151,7 @@ export default function Dashboard(props) {
 
     window.addEventListener("refresh", () => {
       console.log(replaceAssetData);
-      let newNum = replaceAssetData + 1;
-      setReplaceAssetData(newNum);
+      setReplaceAssetData(window.replaceAssetData.assetsPerPage);
     });
 
     window.addEventListener("search", () => {
