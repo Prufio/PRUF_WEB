@@ -3,7 +3,7 @@
   overflow-y:hidden !important;
 } */
 body {
-    background: linear-gradient(0deg, rgba(0, 83, 128, 0.212), #015f9218) !important;
+    background: linear-gradient(0deg, rgba(0, 85, 131, 0.795), #002a40) !important;
     overflow-x: hidden !important;
 }
 .CopyrightBackground {
@@ -289,8 +289,8 @@ body {
     margin-top: -20px;
     margin-right: 15px;
     border-radius: 3px;
-        background: linear-gradient(60deg, #002a40, #01476d);
-        box-shadow: 0 4px 20px 0 rgba(0, 0, 0,.14), 0 7px 10px -5px rgba(0, 172, 193,.4);
+    background: linear-gradient(90deg, #003c5c, #005380);
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0,.14), 0 7px 10px -5px rgba(0, 172, 193,.4);
 }
 
 /* .makeStyles-appBar-79 {

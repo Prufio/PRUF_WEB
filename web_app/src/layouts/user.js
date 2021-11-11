@@ -9,7 +9,6 @@ import ReactTable from "../components/ReactTable/ReactTable.js";
 import CustomLinearProgress from "../components/CustomLinearProgress/CustomLinearProgress.js";
 import { isMobile } from "react-device-detect";
 import swalReact from "@sweetalert/with-react";
-import Web3Modal from "web3modal";
 // creates a beautiful scrollbar
 
 import PerfectScrollbar from "perfect-scrollbar";
@@ -29,7 +28,6 @@ import {
   Cached,
   DashboardOutlined,
   FiberManualRecordTwoTone,
-  InfoOutlined,
 } from "@material-ui/icons";
 
 // core components
@@ -73,7 +71,7 @@ const uauth = new UAuth({
 
   // Redirect Uris copied from https://unstoppabledomains.com/app-dashboard
   redirectUri: "https://staking.pruf.io/callback",
-  // postLogoutRedirectUri: "https://staking.pruf.io/#/",
+  // postLogoutRedirectUri: "",
 })
 
 var ps;
