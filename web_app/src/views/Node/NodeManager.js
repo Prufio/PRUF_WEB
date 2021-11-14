@@ -738,7 +738,7 @@ export default function NodeManager(props) {
                 className: "delegationButtonBack",
               },
               authorize: {
-                text: "Authorize User",
+                text: "Transfer",
                 className: "delegationButtonBack",
               },
             },
