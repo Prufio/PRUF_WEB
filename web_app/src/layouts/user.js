@@ -49,7 +49,7 @@ import Accordion from "@material-ui/core/Accordion";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import UAuth from '@uauth/js'
+import UAuth from "@uauth/js";
 
 import Eth from "../assets/img/eth-logo2.png";
 import Polygon from "../assets/img/matic-token-inverted-icon.png";
@@ -67,12 +67,12 @@ const uauth = new UAuth({
   clientSecret: "wVY1yzeGYoiTk579LvyO1Od4hdrQ3yjCzZu8w3Fzdwk=",
 
   // Requested scopes.
-  scope: 'openid wallet',
+  scope: "openid wallet",
 
   // Redirect Uris copied from https://unstoppabledomains.com/app-dashboard
   redirectUri: "https://staking.pruf.io/callback",
   // postLogoutRedirectUri: "",
-})
+});
 
 var ps;
 
@@ -168,8 +168,8 @@ export default function Dashboard(props) {
     "Diamond Tier",
   ];
 
-  const udLoginEvent = new Event("udLogin")
-  const mmLoginEvent = new Event("mmLogin")
+  const udLoginEvent = new Event("udLogin");
+  const mmLoginEvent = new Event("mmLogin");
 
   //classes for main panel
   const mainPanelClasses =
@@ -208,8 +208,8 @@ export default function Dashboard(props) {
       });
     }
 
-    window.addEventListener('udLogin', udHandle)
-    window.addEventListener('mmLogin', mmHandle)
+    window.addEventListener("udLogin", udHandle);
+    window.addEventListener("mmLogin", mmHandle);
     //console.log({ _web3 });
 
     if (navigator.platform.indexOf("Win") > -1) {
@@ -225,99 +225,131 @@ export default function Dashboard(props) {
 
     // Specify how to clean up after this effect:
     return function cleanup() {
-      window.removeEventListener('udLogin', udHandle)
-      window.removeEventListener('mmLogin', mmHandle)
+      window.removeEventListener("udLogin", udHandle);
+      window.removeEventListener("mmLogin", mmHandle);
       if (navigator.platform.indexOf("Win") > -1) {
         ps.destroy();
       }
     };
   }, []);
 
-
   const mmHandle = () => {
-    getMMAddress()
-  }
+    getMMAddress();
+  };
 
   const udHandle = () => {
-    uauth.loginWithPopup()
-    .then(() => uauth.user().then(e=>{
-      setUpWithUd(e)
-    }))
-    .catch(console.error)
-    .finally(() => console.log(`Finished logging in! Welcome.`))
-  }
+    if (udSub === "Login with UD") {
+      uauth
+        .loginWithPopup()
+        .then(() =>
+          uauth.user().then((e) => {
+            setUpWithUd(e);
+          })
+        )
+        .catch(console.error)
+        .finally(() => console.log(`Finished logging in! Welcome.`));
+    } else {
+      swalReact({
+        icon: "warning",
+        text: `Logged in as ${udSub}.`,
+        buttons: {
+          back: {
+            text: "⬅️ Go Back",
+            value: "back",
+            className: "delegationButtonBack",
+          },
+          logout: {
+            text: "Logout 🔐",
+            value: "logout",
+            className: "delegationButtonBack",
+          },
+          switch: {
+            text: "Switch User 👤",
+            value: "switch",
+            className: "delegationButtonBack",
+          },
+        },
+      }).then((value) => {
+        if (value === "logout") {
+          uauth.logout().then(() => {
+            setUdSub("Login with UD");
+            clearPage();
+          });
+        } else if (value === "switch") {
+          uauth
+            .loginWithPopup()
+            .then(() =>
+              uauth.user().then((e) => {
+                setUpWithUd(e);
+              })
+            )
+            .catch(console.error)
+            .finally(() => console.log(`Finished logging in! Welcome.`));
+        }
+      });
+    }
+  };
 
-  const determineProvider = async () => { 
+  const determineProvider = async () => {
     let _web3 = require("web3");
 
-    _web3 = new Web3(
-      _web3.givenProvider
-    );
+    _web3 = new Web3(_web3.givenProvider);
 
-    setWeb3(_web3)
-  }
+    setWeb3(_web3);
+  };
 
   const clearPage = () => {
-    setAddr(null)
-    setChainId(0)
-    setEtherBalance("")
-    setPrufBalance("")
-    setTotalStaked(0)
-    setTotalRewards(0)
-    setUtil({})
-    setStake({})
-    setStakeTkn({})
-    setTokenAddress("") 
-
-  }
+    setAddr(null);
+    setChainId(0);
+    setEtherBalance("");
+    setPrufBalance("");
+    setTotalStaked(0);
+    setTotalRewards(0);
+    setUtil({});
+    setStake({});
+    setStakeTkn({});
+    setTokenAddress("");
+  };
 
   const addToken = async () => {
-    if(tokenAddress && window.ethereum){
-        await window.ethereum.request({
-            method: 'wallet_watchAsset',
-            params: {
-              type: 'ERC20', // Initially only supports ERC20, but eventually more!
-              options: {
-                address: tokenAddress, // The address that the token is at.
-                symbol: "PRUF", // A ticker symbol or shorthand, up to 5 chars.
-                decimals: "18", // The number of decimals in the token
-                image: "https://preview.redd.it/2yzbaaqa0f361.png?auto=webp&s=b4dcb15cb4a27dd5262116618f4d6f4b9d723d64", // A string url of the token logo
-              },
-            },
-          });
+    if (tokenAddress && window.ethereum) {
+      await window.ethereum.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20", // Initially only supports ERC20, but eventually more!
+          options: {
+            address: tokenAddress, // The address that the token is at.
+            symbol: "PRUF", // A ticker symbol or shorthand, up to 5 chars.
+            decimals: "18", // The number of decimals in the token
+            image:
+              "https://preview.redd.it/2yzbaaqa0f361.png?auto=webp&s=b4dcb15cb4a27dd5262116618f4d6f4b9d723d64", // A string url of the token logo
+          },
+        },
+      });
     }
-}
+  };
 
   const setUpWithUd = (ud) => {
     let _web3 = require("web3");
 
-    setUdSub(ud.sub)
-    setAddr(ud.wallet_address)
+    setUdSub(ud.sub);
+    setAddr(ud.wallet_address);
 
-    _web3 = new Web3(
-      _web3.givenProvider
-    );
+    _web3 = new Web3(_web3.givenProvider);
 
-    setWeb3(_web3)
+    setWeb3(_web3);
 
     _web3.eth.net.getId().then((chainId) => {
-      setUpEnvironment(
-        _web3,
-        ud.wallet_address,
-        chainId
-      );
-    })
-  }
+      setUpEnvironment(_web3, ud.wallet_address, chainId);
+    });
+  };
 
   const getMMAddress = () => {
-
     let _web3 = require("web3");
 
-    _web3 = new Web3(
-      _web3.givenProvider
-    );
+    _web3 = new Web3(_web3.givenProvider);
 
-    setWeb3(_web3)
+    setWeb3(_web3);
 
     _web3.eth.net.getId().then((chainId) => {
       if (
@@ -349,21 +381,17 @@ export default function Dashboard(props) {
                         },
                       });
                     } else {
-                    //if(addr.toLowerCase === accounts[0].toLowerCase) return
-                    console.log(_web3.utils.toChecksumAddress(accounts[0]));
-                    setAddr(_web3.utils.toChecksumAddress(accounts[0]));
-                    setUpEnvironment(_web3, accounts[0], chainId);
+                      //if(addr.toLowerCase === accounts[0].toLowerCase) return
+                      console.log(_web3.utils.toChecksumAddress(accounts[0]));
+                      setAddr(_web3.utils.toChecksumAddress(accounts[0]));
+                      setUpEnvironment(_web3, accounts[0], chainId);
                     }
                   });
               } else {
                 //if(addr.toLowerCase === accounts[0].toLowerCase) return
                 console.log(_web3.utils.toChecksumAddress(accounts[0]));
                 setAddr(_web3.utils.toChecksumAddress(accounts[0]));
-                setUpEnvironment(
-                  _web3,
-                  accounts[0],
-                  chainId
-                );
+                setUpEnvironment(_web3, accounts[0], chainId);
               }
             });
         } else {
@@ -380,7 +408,6 @@ export default function Dashboard(props) {
           // });
         }
       } else if (chainId === 100000000) {
-
       } else {
         swalReact({
           icon: `warning`,
@@ -789,7 +816,7 @@ export default function Dashboard(props) {
         else setPrufBalance(0);
       } else {
         console.error(error);
-        swalReact({text: error})
+        swalReact({ text: error });
         setPrufBalance("NaN");
       }
     });
@@ -1112,7 +1139,7 @@ export default function Dashboard(props) {
   const breakStake = (id, index) => {
     console.log(`BreakStake inputs: id: '${id}' index: '${index}'`);
 
-    if (index < 0 || id < 0) return
+    if (index < 0 || id < 0) return;
     //if (!index || !id) return
 
     let isReady =
@@ -1965,9 +1992,7 @@ export default function Dashboard(props) {
                 <CardHeader color="danger" stats icon>
                   <CardIcon
                     className="headerIconBack"
-                    onClick={() =>
-                      addToken()
-                    }
+                    onClick={() => addToken()}
                   >
                     <img className="Icon" src={Pruf} alt=""></img>
                   </CardIcon>
@@ -2054,19 +2079,19 @@ export default function Dashboard(props) {
                           />
                         </div>
                       </Tooltip>
-                      <span
-                        className="spanSmallText"
-                      >
+                      <span className="spanSmallText">
                         Currently Earning: ü
                         {Math.floor((yearlyRewards / rewardsDivisor) * 100) /
                           100}{" "}
-                        / 
-                      <span
-                        ref={anchorRef}
-                        onClick={() => handleToggle()}
-                        className="spanSmallTextSelect"
-                      >{" "}{rewardsUnit}
-                      </span>
+                        /
+                        <span
+                          ref={anchorRef}
+                          onClick={() => handleToggle()}
+                          className="spanSmallTextSelect"
+                        >
+                          {" "}
+                          {rewardsUnit}
+                        </span>
                       </span>
                       <Popper
                         className="highZPopper"

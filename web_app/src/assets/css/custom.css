@@ -114,12 +114,13 @@ body {
 }
 
 .flexRowButtons {
+  background-color: #4d47f74b;
   display: inline-block;
   cursor: pointer;
   font-weight: bold;
   border-radius: 5px 5px 5px;
   padding-right: 9px;
-  border: 1px solid #4c47f7 !important;
+  border: 1px solid #4d47f7b0 !important;
   flex-direction: row;
   max-height: 48px !important;
 }
