@@ -112,6 +112,7 @@ export default function Dashboard(props) {
   const [redeeming, setRedeeming] = React.useState(false);
   const [currentChainExplorer, setCurrentChainExplorer] = React.useState("");
   const [tokenInfo, setTokenInfo] = React.useState({});
+  const [udSub, setUdSub] = React.useState("Login with UD");
   const [web3, setWeb3] = React.useState();
   const [redeemAmount, setRedeemAmount] = React.useState("0");
   const [redeemList, setRedeemList] = React.useState([]);
@@ -239,9 +240,11 @@ export default function Dashboard(props) {
 
   const udHandle = () => {
     uauth.loginWithPopup()
-    .then(() => uauth.user().then(console.log))
+    .then(() => uauth.user().then(e=>{
+      setUpWithUd(e)
+    }))
     .catch(console.error)
-    .finally(() => console.log("Finished logging in!"))
+    .finally(() => console.log(`Finished logging in! Welcome.`))
   }
 
   const determineProvider = async () => { 
@@ -266,6 +269,44 @@ export default function Dashboard(props) {
     setStakeTkn({})
     setTokenAddress("") 
 
+  }
+
+  const addToken = async () => {
+    if(tokenAddress && window.ethereum){
+        await window.ethereum.request({
+            method: 'wallet_watchAsset',
+            params: {
+              type: 'ERC20', // Initially only supports ERC20, but eventually more!
+              options: {
+                address: tokenAddress, // The address that the token is at.
+                symbol: "PRUF", // A ticker symbol or shorthand, up to 5 chars.
+                decimals: "18", // The number of decimals in the token
+                image: "https://preview.redd.it/2yzbaaqa0f361.png?auto=webp&s=b4dcb15cb4a27dd5262116618f4d6f4b9d723d64", // A string url of the token logo
+              },
+            },
+          });
+    }
+}
+
+  const setUpWithUd = (ud) => {
+    let _web3 = require("web3");
+
+    setUdSub(ud.sub)
+    setAddr(ud.wallet_address)
+
+    _web3 = new Web3(
+      _web3.givenProvider
+    );
+
+    setWeb3(_web3)
+
+    _web3.eth.net.getId().then((chainId) => {
+      setUpEnvironment(
+        _web3,
+        ud.wallet_address,
+        chainId
+      );
+    })
   }
 
   const getMMAddress = () => {
@@ -1831,6 +1872,7 @@ export default function Dashboard(props) {
     <div className={userClasses.wrapper}>
       <AdminNavbar
         udLogin={udLoginEvent}
+        udSub={udSub}
         mmLogin={mmLoginEvent}
         tokenAddress={tokenAddress}
         brandText={getActiveRoute(routes)}
@@ -1924,9 +1966,7 @@ export default function Dashboard(props) {
                   <CardIcon
                     className="headerIconBack"
                     onClick={() =>
-                      window.open(
-                        `https://${currentChainExplorer}/token/${tokenAddress}`
-                      )
+                      addToken()
                     }
                   >
                     <img className="Icon" src={Pruf} alt=""></img>

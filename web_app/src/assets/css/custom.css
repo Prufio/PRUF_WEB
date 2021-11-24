@@ -113,6 +113,17 @@ body {
     /* object-fit: cover !important; */
 }
 
+.flexRowButtons {
+  display: inline-block;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 5px 5px 5px;
+  padding-right: 9px;
+  border: 1px solid #4c47f7 !important;
+  flex-direction: row;
+  max-height: 48px !important;
+}
+
 .flexRowWithGap {
   display: inline-flex;
   gap: 20px;
@@ -610,6 +621,7 @@ body {
 
 .udButton {
   margin-right: 4px;
+  padding-right: 5px;
   max-height: 48px !important;
   max-width: 43px !important;
 }

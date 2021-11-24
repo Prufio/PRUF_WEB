@@ -70,7 +70,7 @@ export default function AdminNavbar(props) {
             {brandText}
           </Button>
         </div>
-          <AdminNavbarLinks tokenAddress={props.tokenAddress} mmLogin={props.mmLogin} udLogin={props.udLogin} rtlActive={rtlActive} />
+          <AdminNavbarLinks udSub={props.udSub} tokenAddress={props.tokenAddress} mmLogin={props.mmLogin} udLogin={props.udLogin} rtlActive={rtlActive} />
 
         <Hidden mdUp implementation="css">
           {/* <Button

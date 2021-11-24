@@ -39,22 +39,6 @@ export default function HeaderLinks(props) {
 
     }
 
-    const addToken = async () => {
-        if(props.tokenAddress && window.ethereum){
-            await window.ethereum.request({
-                method: 'wallet_watchAsset',
-                params: {
-                  type: 'ERC20', // Initially only supports ERC20, but eventually more!
-                  options: {
-                    address: props.tokenAddress, // The address that the token is at.
-                    symbol: "PRUF", // A ticker symbol or shorthand, up to 5 chars.
-                    decimals: "18", // The number of decimals in the token
-                    image: "https://preview.redd.it/2yzbaaqa0f361.png?auto=webp&s=b4dcb15cb4a27dd5262116618f4d6f4b9d723d64", // A string url of the token logo
-                  },
-                },
-              });
-        }
-    }
     const classes = useStyles()
     const { rtlActive } = props
     const searchButton =
@@ -78,27 +62,17 @@ export default function HeaderLinks(props) {
         <>
                 <div className={wrapper}>
                     <span
-                        onClick={() => window.dispatchEvent(props.udLogin)}
-                        className="udButton"
-                    >
-                        <img className="udButton" src={uaDefault}>
-                        </img>
-                    </span>
-                    <span
                         onClick={() => window.dispatchEvent(props.mmLogin)}
-                        className="udButton"
                     >
-                        <img className="udButton" src={mmDefault}>
-                        </img>
+                        <img className="udButton" src={mmDefault}/>
                     </span>
-                    <Button
-                        color="white"
-                        onClick={() => addToken()}
-                        aria-label="edit"
-                        className="info"
+                    <div
+                        onClick={() => window.dispatchEvent(props.udLogin)}
+                        className="flexRowButtons"
                     >
-                        Configure PRUF Token
-                    </Button>
+                        <img className="udButton" src={uaDefault}/>
+                        {props.udSub}
+                    </div>
                 </div>
         </>
     )
