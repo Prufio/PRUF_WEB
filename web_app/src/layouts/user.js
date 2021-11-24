@@ -64,7 +64,7 @@ import { Icon } from "@material-ui/core";
 const uauth = new UAuth({
   // Client credentials copied from https://unstoppabledomains.com/app-dashboard
   clientID: "Q2pO03hsT5gMk0IxAacVZoloemjGBzvVEzxaofTHnmA=",
-  clientSecret: "+2Kdmv50Sl3zGxhV2ZnfCuDYmPfpbE5ulPRHPtzIoO4=",
+  clientSecret: "wVY1yzeGYoiTk579LvyO1Od4hdrQ3yjCzZu8w3Fzdwk=",
 
   // Requested scopes.
   scope: 'openid wallet',
