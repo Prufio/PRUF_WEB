@@ -117,7 +117,7 @@ export default function Dashboard(props) {
   const [redeemAmount, setRedeemAmount] = React.useState("0");
   const [redeemList, setRedeemList] = React.useState([]);
   const [totalRewards, setTotalRewards] = React.useState(0);
-  const [totalStaked, setTotalStaked] = React.useState(0);
+  const [totalSteakd, setTotalSteakd] = React.useState(0);
   const [delegationList, setDelegationList] = React.useState([
     ["Loading Balances...", "~", "~", "~"],
   ]);
@@ -129,8 +129,8 @@ export default function Dashboard(props) {
   //const [tierOptions, setTierOptions] = React.useState([]);
   const [chainId, setChainId] = React.useState();
   const [util, setUtil] = React.useState({});
-  const [stake, setStake] = React.useState({});
-  const [stakeTkn, setStakeTkn] = React.useState({});
+  const [steak, setSteak] = React.useState({});
+  const [steakTkn, setSteakTkn] = React.useState({});
   const [loadingSums, setLoadingSums] = React.useState(false);
   const [yearlyRewards, setYearlyRewards] = React.useState(0);
   const [rewardsDivisor, setRewardsDivisor] = React.useState(1);
@@ -151,12 +151,12 @@ export default function Dashboard(props) {
     units: ["Year", "Month", "Week", "Day"],
     divisors: [1, 12, 52, 365],
   };
-  const tierEmojis = ["", "🥉", "🥈", "🥇", "🚀", "💎"];
+  const tierEmojis = ["", "🥩", "🥩", "🥩", "🥩", "🥩"];
   const tierDescriptions = [
     "",
     "Lowest EO staking tier. For those who prefer a flexible arrangement.",
     "One month of token lock for generous staking rewards.",
-    "60 days of stake unlock means high rewards. For the entry-level HODLer.",
+    "60 days of steak unlock means high rewards. For the entry-level HODLer.",
     "Second highest staking tier. For true believers in the ecosystem.",
     "Highest EO staking tier. For serious HODLers who want serious rewards.",
   ];
@@ -256,17 +256,17 @@ export default function Dashboard(props) {
         title: `Currently logged in as ${window.udSub}`,
         buttons: {
           back: {
-            text: "⬅️ Go Back",
+            text: "🥩 Go Back",
             value: "back",
             className: "delegationButtonBack",
           },
           logout: {
-            text: "Logout 🔐",
+            text: "Logout 🥩",
             value: "logout",
             className: "delegationButtonBack",
           },
           switch: {
-            text: "Switch User 👤",
+            text: "Switch User 🥩",
             value: "switch",
             className: "delegationButtonBack",
           },
@@ -306,11 +306,11 @@ export default function Dashboard(props) {
     setChainId(0);
     setEtherBalance("");
     setPrufBalance("");
-    setTotalStaked(0);
+    setTotalSteakd(0);
     setTotalRewards(0);
     setUtil({});
-    setStake({});
-    setStakeTkn({});
+    setSteak({});
+    setSteakTkn({});
     setTokenAddress("");
   };
 
@@ -454,7 +454,7 @@ export default function Dashboard(props) {
       if (prop.collapse) {
         return getRoutes(prop.views);
       }
-      if (prop.layout === "/stake") {
+      if (prop.layout === "/steak") {
         return (
           <Route
             path={prop.layout + prop.path}
@@ -507,9 +507,9 @@ export default function Dashboard(props) {
   };
 
   const refreshDash = async () => {
-    if (!web3 || !addr || !stake) return;
+    if (!web3 || !addr || !steak) return;
     setLoadingSums(true);
-    getHeldStake(web3, stake, stakeTkn, addr);
+    getHeldSteak(web3, steak, steakTkn, addr);
   };
 
   const handleToggle = () => {
@@ -534,13 +534,13 @@ export default function Dashboard(props) {
 
   const parseTotalRedeemable = (arr) => {
     let _totalRewards = 0;
-    let _totalStaked = 0;
+    let _totalSteakd = 0;
     let yearlyTotalReturns = 0;
 
     arr.forEach((props) => {
       if (props[9]) {
         _totalRewards += Number(props[9]);
-        _totalStaked += Number(props[8]);
+        _totalSteakd += Number(props[8]);
       }
 
       yearlyTotalReturns += props[12];
@@ -549,17 +549,17 @@ export default function Dashboard(props) {
     console.log(yearlyTotalReturns);
     setYearlyRewards(Math.floor(yearlyTotalReturns * 1000) / 1000);
     setTotalRewards(Math.floor(_totalRewards * 1000) / 1000);
-    setTotalStaked(Math.floor(_totalStaked * 1000) / 1000);
+    setTotalSteakd(Math.floor(_totalSteakd * 1000) / 1000);
     setLoadingSums(false);
   };
 
-  const getStakeOffers = (_web3, _stake, arr, iteration) => {
+  const getSteakOffers = (_web3, _steak, arr, iteration) => {
     if (!iteration) iteration = 1;
     if (!arr) arr = [[], [], [], []];
     if (iteration > 5) return setTierOptions(JSON.parse(JSON.stringify(arr)));
-    _stake.getStakeLevel(iteration + startAfter).call(async (error, result) => {
+    _steak.getSteakLevel(iteration + startAfter).call(async (error, result) => {
       if (!error) {
-        console.log(`Stake offer for ID ${iteration + startAfter}: `, result);
+        console.log(`Steak offer for ID ${iteration + startAfter}: `, result);
 
         let obj = {
           pos: iteration,
@@ -644,41 +644,41 @@ export default function Dashboard(props) {
         //   });
         // }
 
-        getStakeOffers(_web3, _stake, arr, iteration + 1);
+        getSteakOffers(_web3, _steak, arr, iteration + 1);
       }
     });
   };
 
-  const getHeldStake = async (_web3, _stake, _tkn, _addr) => {
+  const getHeldSteak = async (_web3, _steak, _tkn, _addr) => {
     let currentBlock = await _web3.eth.getBlock("latest");
 
-    const getStakeIds = (bal, ids, iteration) => {
+    const getSteakIds = (bal, ids, iteration) => {
       if (!bal || String(bal) === "0") {
         setDelegationList([[``, ``, ``, ``, ``]]);
         setTotalRewards(0);
-        setTotalStaked(0);
+        setTotalSteakd(0);
         setLoadingSums(false);
         return console.log(`Balances undefined or zero`);
       }
       if (!iteration) iteration = 0;
       if (!ids) ids = [];
 
-      if (ids.length >= bal) return getStakeData(ids, []);
+      if (ids.length >= bal) return getSteakData(ids, []);
 
       _tkn.tokenOfOwnerByIndex(_addr, iteration).call(async (error, result) => {
         if (!error) {
           console.log(result);
           ids.push(result);
-          return getStakeIds(bal, ids, iteration + 1);
+          return getSteakIds(bal, ids, iteration + 1);
         } else {
           console.error(error);
           bal--;
-          return getStakeIds(bal, ids, iteration + 1);
+          return getSteakIds(bal, ids, iteration + 1);
         }
       });
     };
 
-    const getStakeData = (ids, arr, iteration) => {
+    const getSteakData = (ids, arr, iteration) => {
       if (!iteration) iteration = 0;
       if (ids.length <= arr.length) {
         parseTotalRedeemable(arr);
@@ -686,15 +686,15 @@ export default function Dashboard(props) {
         return setDelegationList(arr);
       }
 
-      _stake.stakeInfo(ids[iteration]).call(async (error, result) => {
+      _steak.steakInfo(ids[iteration]).call(async (error, result) => {
         if (!error) {
-          console.log(`stakeInfo at index ${iteration}: `, result);
+          console.log(`steakInfo at index ${iteration}: `, result);
           let amount = Number(_web3.utils.fromWei(result["0"]));
           let timeElapsed =
             (Number(currentBlock.timestamp) - Number(result["1"])) / 86400;
           let interval = Number(result["3"]);
           let bonus = Number(result["4"]);
-          _stake
+          _steak
             .checkEligibleRewards(ids[iteration])
             .call(async (error, result) => {
               if (!error) {
@@ -727,7 +727,7 @@ export default function Dashboard(props) {
                   isReady,
                   (apr / 100) * amount,
                 ]);
-                getStakeData(ids, arr, iteration + 1);
+                getSteakData(ids, arr, iteration + 1);
               }
             });
         } else {
@@ -738,8 +738,8 @@ export default function Dashboard(props) {
 
     _tkn.balanceOf(_addr).call(async (error, result) => {
       if (!error) {
-        getStakeIds(result);
-        console.log(`User holds ${result} stake tokens`);
+        getSteakIds(result);
+        console.log(`User holds ${result} steak tokens`);
       } else {
         console.error(error);
       }
@@ -754,13 +754,13 @@ export default function Dashboard(props) {
     setChainId(_chainId);
 
     let _util;
-    let _stake;
-    let _stakeTkn;
+    let _steak;
+    let _steakTkn;
 
     if (_chainId === 1) {
       _util = await new _web3.eth.Contract(UTIL_ABI, ETH_UTIL_ADDRESS);
-      _stake = await new _web3.eth.Contract(STAKE_ABI, ETH_STAKE_ADDRESS);
-      _stakeTkn = await new _web3.eth.Contract(
+      _steak = await new _web3.eth.Contract(STAKE_ABI, ETH_STAKE_ADDRESS);
+      _steakTkn = await new _web3.eth.Contract(
         STAKE_TKN_ABI,
         ETH_STAKE_TKN_ADDRESS
       );
@@ -768,8 +768,8 @@ export default function Dashboard(props) {
       setTokenAddress(ETH_UTIL_ADDRESS);
     } else if (_chainId === 42) {
       _util = await new _web3.eth.Contract(UTIL_ABI, KOVAN_UTIL_ADDRESS);
-      _stake = await new _web3.eth.Contract(STAKE_ABI, KOVAN_STAKE_ADDRESS);
-      _stakeTkn = await new _web3.eth.Contract(
+      _steak = await new _web3.eth.Contract(STAKE_ABI, KOVAN_STAKE_ADDRESS);
+      _steakTkn = await new _web3.eth.Contract(
         STAKE_TKN_ABI,
         KOVAN_STAKE_TKN_ADDRESS
       );
@@ -777,8 +777,8 @@ export default function Dashboard(props) {
       setTokenAddress(KOVAN_UTIL_ADDRESS);
     } else if (_chainId === 137) {
       _util = await new _web3.eth.Contract(UTIL_ABI, POLY_UTIL_ADDRESS);
-      _stake = await new _web3.eth.Contract(STAKE_ABI, POLY_STAKE_ADDRESS);
-      _stakeTkn = await new _web3.eth.Contract(
+      _steak = await new _web3.eth.Contract(STAKE_ABI, POLY_STAKE_ADDRESS);
+      _steakTkn = await new _web3.eth.Contract(
         STAKE_TKN_ABI,
         POLY_STAKE_TKN_ADDRESS
       );
@@ -786,8 +786,8 @@ export default function Dashboard(props) {
       setTokenAddress(POLY_UTIL_ADDRESS);
     } else if (_chainId === 80001) {
       _util = await new _web3.eth.Contract(UTIL_ABI, MUMBAI_UTIL_ADDRESS);
-      _stake = await new _web3.eth.Contract(STAKE_ABI, MUMBAI_STAKE_ADDRESS);
-      _stakeTkn = await new _web3.eth.Contract(
+      _steak = await new _web3.eth.Contract(STAKE_ABI, MUMBAI_STAKE_ADDRESS);
+      _steakTkn = await new _web3.eth.Contract(
         STAKE_TKN_ABI,
         MUMBAI_STAKE_TKN_ADDRESS
       );
@@ -806,8 +806,8 @@ export default function Dashboard(props) {
       });
     }
 
-    setStake(_stake.methods);
-    setStakeTkn(_stakeTkn.methods);
+    setSteak(_steak.methods);
+    setSteakTkn(_steakTkn.methods);
     setUtil(_util.methods);
 
     _web3.eth.getBalance(_addr).then(async (e) => {
@@ -827,8 +827,8 @@ export default function Dashboard(props) {
       }
     });
 
-    getStakeOffers(_web3, _stake.methods);
-    getHeldStake(_web3, _stake.methods, _stakeTkn.methods, _addr);
+    getSteakOffers(_web3, _steak.methods);
+    getHeldSteak(_web3, _steak.methods, _steakTkn.methods, _addr);
   };
 
   const claimRewards = (index, id) => {
@@ -849,7 +849,7 @@ export default function Dashboard(props) {
 
     if (isReady) {
       document.body.style.cursor = "progress";
-      stake
+      steak
         .claimBonus(id)
         .send({ from: addr })
         .on("receipt", () => {
@@ -871,7 +871,7 @@ export default function Dashboard(props) {
     } else {
       return swalReact({
         icon: "warning",
-        text: `Holders must wait 24 hours after initial stake 
+        text: `Holders must wait 24 hours after initial steak 
         or reward redemption before claiming rewards. 
         Please try again after ~${timeLeft}.`,
         buttons: {
@@ -882,12 +882,12 @@ export default function Dashboard(props) {
           },
         },
       }).then(() => {
-        viewStake(index);
+        viewSteak(index);
       });
     }
   };
 
-  const stakeRewards = (index) => {
+  const steakRewards = (index) => {
     if (index < 0) return;
     let amount = Number(delegationList[index][9]);
     console.log(amount);
@@ -899,13 +899,13 @@ export default function Dashboard(props) {
         <Card className="delegationCard">
           <h5 className="delegationTitle">Just a moment...</h5>
           <h5 className="delegationTitleSm">
-            Before you increase your stake, please read ahead:
+            Before you increase your steak, please read ahead:
           </h5>
           <div className="left-margin">
             <div className="delegationTips">
               <FiberManualRecordTwoTone className="delegationPin" />
               <h5 className="delegationTipsContent">
-                When a stake balance is increased, the stake period will be
+                When a steak balance is increased, the steak period will be
                 reset, and the current rewards will be sent to your wallet. The
                 selected ID will begin accumilating rewards which reflect your
                 new balance as soon as the increase has been processed.
@@ -929,15 +929,15 @@ export default function Dashboard(props) {
     }).then((value) => {
       if (value === "confirm") {
         document.body.style.cursor = "progress";
-        console.log(`Adding ü${amount} to stake ID ${id}`);
-        stake
-          .increaseMyStake(id, web3.utils.toWei(String(amount)))
+        console.log(`Adding ü${amount} to steak ID ${id}`);
+        steak
+          .increaseMySteak(id, web3.utils.toWei(String(amount)))
           .send({ from: addr })
           .on("receipt", () => {
             document.body.style.cursor = "auto";
             swalReact({
               icon: "success",
-              text: `Successfully increased your stake on ID ${id}!`,
+              text: `Successfully increased your steak on ID ${id}!`,
               buttons: {
                 back: {
                   text: "Okay",
@@ -950,12 +950,12 @@ export default function Dashboard(props) {
             return refreshBalances("both", web3, addr);
           });
       } else {
-        return viewStake(index);
+        return viewSteak(index);
       }
     });
   };
 
-  const increaseStake = (index) => {
+  const increaseSteak = (index) => {
     if (index < 0) return;
     let amount = 0;
     let isReady =
@@ -978,7 +978,7 @@ export default function Dashboard(props) {
       swalReact({
         content: (
           <Card className="delegationCard">
-            <h4 className="delegationTitle">Increase Stake</h4>
+            <h4 className="delegationTitle">Increase Steak</h4>
             {/* <div className="left-margin">
             <div className="delegationTips">
               <FiberManualRecordTwoTone className="delegationPin" />
@@ -994,7 +994,7 @@ export default function Dashboard(props) {
             </div>
           </div> */}
             <h5 className="delegateText">
-              Input the amount you want to add to your stake:
+              Input the amount you want to add to your steak:
             </h5>
             <CustomInput
               labelText={`Minimum: 100`}
@@ -1019,7 +1019,7 @@ export default function Dashboard(props) {
             className: "delegationButtonBack",
           },
           confirm: {
-            text: "Stake Tokens 🏛️",
+            text: "Steak Tokens 🏛️",
             value: "confirm",
             className: "delegationButtonBack",
           },
@@ -1038,7 +1038,7 @@ export default function Dashboard(props) {
                 },
               },
             }).then(() => {
-              increaseStake(index);
+              increaseSteak(index);
             });
           } else if (amount > Number(prufBalance)) {
             return swalReact({
@@ -1054,7 +1054,7 @@ export default function Dashboard(props) {
                 },
               },
             }).then(() => {
-              increaseStake(index);
+              increaseSteak(index);
             });
           }
 
@@ -1064,13 +1064,13 @@ export default function Dashboard(props) {
               <Card className="delegationCard">
                 <h5 className="delegationTitle">Just a moment...</h5>
                 <h5 className="delegationTitleSm">
-                  Before you increase your stake, please read ahead:
+                  Before you increase your steak, please read ahead:
                 </h5>
                 <div className="left-margin">
                   <div className="delegationTips">
                     <FiberManualRecordTwoTone className="delegationPin" />
                     <h5 className="delegationTipsContent">
-                      When a stake balance is increased, the stake period will
+                      When a steak balance is increased, the steak period will
                       be reset, and the current rewards will be sent to your
                       wallet. The selected ID will begin accumilating rewards
                       which reflect your new balance as soon as the increase has
@@ -1095,15 +1095,15 @@ export default function Dashboard(props) {
           }).then((value) => {
             if (value === "confirm") {
               document.body.style.cursor = "progress";
-              console.log(`Adding ü${amount} to stake ID ${id}`);
-              stake
-                .increaseMyStake(id, web3.utils.toWei(String(amount)))
+              console.log(`Adding ü${amount} to steak ID ${id}`);
+              steak
+                .increaseMySteak(id, web3.utils.toWei(String(amount)))
                 .send({ from: addr })
                 .on("receipt", () => {
                   document.body.style.cursor = "auto";
                   swalReact({
                     icon: "success",
-                    text: `Successfully increased your stake on ID ${id}!`,
+                    text: `Successfully increased your steak on ID ${id}!`,
                     buttons: {
                       back: {
                         text: "Okay",
@@ -1116,18 +1116,18 @@ export default function Dashboard(props) {
                   return refreshBalances("both", web3, addr);
                 });
             } else {
-              return viewStake(index);
+              return viewSteak(index);
             }
           });
         } else if (value === "back") {
-          return viewStake(index);
+          return viewSteak(index);
         }
       });
     } else {
       return swalReact({
         icon: "warning",
-        text: `Holders must wait 24 hours after initial stake 
-    or reward redemption before increasing their stake. 
+        text: `Holders must wait 24 hours after initial steak 
+    or reward redemption before increasing their steak. 
     Please try again after ~${timeLeft}.`,
         buttons: {
           back: {
@@ -1137,13 +1137,13 @@ export default function Dashboard(props) {
           },
         },
       }).then(() => {
-        viewStake(index);
+        viewSteak(index);
       });
     }
   };
 
-  const breakStake = (id, index) => {
-    console.log(`BreakStake inputs: id: '${id}' index: '${index}'`);
+  const breakSteak = (id, index) => {
+    console.log(`BreakSteak inputs: id: '${id}' index: '${index}'`);
 
     if (index < 0 || id < 0) return;
     //if (!index || !id) return
@@ -1165,15 +1165,15 @@ export default function Dashboard(props) {
     if (isReady) {
       swalReact({
         icon: "warning",
-        text: `Are you sure you want to break your stake? This action cannot be undone, and you will no longer be able to earn rewards on this ID if you do.`,
+        text: `Are you sure you want to break your steak? This action cannot be undone, and you will no longer be able to earn rewards on this ID if you do.`,
         buttons: {
           back: {
-            text: "⬅️ Go Back",
+            text: "🥩 Go Back",
             value: "back",
             className: "delegationButtonBack",
           },
           confirm: {
-            text: "Break Stake ❌",
+            text: "Break Steak 🥩",
             value: "break",
             className: "delegationButtonBack",
           },
@@ -1181,14 +1181,14 @@ export default function Dashboard(props) {
       }).then((value) => {
         if (value === "break") {
           document.body.style.cursor = "progress";
-          stake
-            .breakStake(id)
+          steak
+            .breakSteak(id)
             .send({ from: addr })
             .on("receipt", () => {
               document.body.style.cursor = "auto";
               swalReact({
                 icon: "success",
-                text: `Successfully broke stake and refunded PRUF!`,
+                text: `Successfully broke steak and refunded PRUF!`,
                 buttons: {
                   back: {
                     text: "Okay",
@@ -1201,14 +1201,14 @@ export default function Dashboard(props) {
               return refreshBalances("both", web3, addr);
             });
         } else if (value === "back") {
-          return viewStake(index);
+          return viewSteak(index);
         }
       });
     } else {
       return swalReact({
         icon: "warning",
-        text: `Holders must wait 24 hours after initial stake 
-      or reward redemption before breaking their stake. 
+        text: `Holders must wait 24 hours after initial steak 
+      or reward redemption before breaking their steak. 
       Please try again after ~${timeLeft}.`,
         buttons: {
           back: {
@@ -1218,12 +1218,12 @@ export default function Dashboard(props) {
           },
         },
       }).then(() => {
-        viewStake(index);
+        viewSteak(index);
       });
     }
   };
 
-  const viewStake = (index) => {
+  const viewSteak = (index) => {
     let confirmText = "Redeem Rewards",
       swalButtons;
 
@@ -1244,10 +1244,10 @@ export default function Dashboard(props) {
     }
 
     if (delegationList[index][11]) {
-      confirmText += "💰";
+      confirmText += "🥩";
       swalButtons = {
         back: {
-          text: "⬅️ Go Back",
+          text: "🥩 Go Back",
           value: "back",
           className: "delegationButtonBack",
         },
@@ -1260,18 +1260,18 @@ export default function Dashboard(props) {
     } else {
       swalButtons = {
         back: {
-          text: "⬅️ Go Back",
+          text: "🥩 Go Back",
           value: "back",
           className: "delegateButtonBackCentered",
         },
       };
-      confirmText = "Pending ⏳";
+      confirmText = "Pending 🥩";
     }
     swalReact({
       //icon: "warning",
       content: (
         <Card className="delegationCard">
-          <h4 className="delegationTitle">Stake Details</h4>
+          <h4 className="delegationTitle">Steak Details</h4>
           {/* <Accordion key={`AccordionStack${index}`}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -1335,7 +1335,7 @@ export default function Dashboard(props) {
           </h5>
           <h5 className="">
             {`
-                Amount staked: ${delegationList[index][2]}
+                Amount steakd: ${delegationList[index][2]}
               `}
           </h5>
           <h5 className="">
@@ -1364,11 +1364,11 @@ export default function Dashboard(props) {
               <Button
                 className="MLBGradient"
                 onClick={() => {
-                  return increaseStake(index);
+                  return increaseSteak(index);
                 }}
               >
                 {" "}
-                Increase Stake 🏛️{" "}
+                Increase Steak 🏛️{" "}
               </Button>
             ) : (
               <></>
@@ -1386,11 +1386,11 @@ export default function Dashboard(props) {
               <Button
                 className="MLBGradient"
                 onClick={() => {
-                  return stakeRewards(index);
+                  return steakRewards(index);
                 }}
               >
                 {" "}
-                Stake Rewards Balance 💰{" "}
+                Steak Rewards Balance 💰{" "}
               </Button>
             ) : (
               <></>
@@ -1409,7 +1409,7 @@ export default function Dashboard(props) {
               <Button
                 className="transparentButton"
                 onClick={() => {
-                  return breakStake(String(delegationList[index][0]), index);
+                  return breakSteak(String(delegationList[index][0]), index);
                 }}
               >
                 {" "}
@@ -1431,11 +1431,11 @@ export default function Dashboard(props) {
     });
   };
 
-  const newStake = () => {
+  const newSteak = () => {
     if (Number(prufBalance) < 1) {
       return swalReact({
         icon: "warning",
-        text: "You don't hold enough PRUF to create a stake!",
+        text: "You don't hold enough PRUF to create a steak!",
         buttons: {
           back: {
             text: "Okay",
@@ -1540,7 +1540,7 @@ export default function Dashboard(props) {
                 <div className="delegationTips">
                   <FiberManualRecordTwoTone className="delegationPin" />
                   <h5 className="delegationTipsContent">
-                    Stake Unlock Period: {props.interval} days
+                    Steak Unlock Period: {props.interval} days
                   </h5>
                 </div>
                 <div className="delegationTips">
@@ -1561,19 +1561,19 @@ export default function Dashboard(props) {
         //icon: "warning",
         content: (
           <Card className="delegationCard">
-            <h4 className="delegationTitle">Stake Your PRUF</h4>
-            <h5 className="delegateText">How long do you want to stake?</h5>
+            <h4 className="delegationTitle">Steak Your PRUF</h4>
+            <h5 className="delegateText">How long do you want to steak?</h5>
             {showDurationOptions(0)}
           </Card>
         ),
         buttons: {
           back: {
-            text: "⬅️ Go Back",
+            text: "🥩 Go Back",
             value: "back",
             className: "delegationButtonBack",
           },
           confirm: {
-            text: "Next ✅",
+            text: "Next 🥩",
             value: isDurationChecked,
             className: "delegationButtonBack",
           },
@@ -1606,12 +1606,12 @@ export default function Dashboard(props) {
       //   return swalReact({
       //     icon: "warning",
       //     text: "Please select only 1 option!",
-      //   }).then(() => newStake());
+      //   }).then(() => newSteak());
       // } else if (trues.length === 0) {
       //   return swalReact({
       //     icon: "warning",
       //     text: "Please select an option!",
-      //   }).then(() => newStake());
+      //   }).then(() => newSteak());
       // }
       // else{
       //let row = String(Object.values(value).indexOf(true));
@@ -1620,12 +1620,12 @@ export default function Dashboard(props) {
         //icon: "warning",
         content: (
           <Card className="delegationCard">
-            <h4 className="delegationTitle"> Stake Your PRUF</h4>
+            <h4 className="delegationTitle"> Steak Your PRUF</h4>
             <h5 className="delegateText">
               Select your preferred staking tier:
             </h5>
             <h5 className="delegateText">
-              Minimum stake: 5,000 -- Maximum stake: 10,000,000
+              Minimum steak: 5,000 -- Maximum steak: 10,000,000
             </h5>
             {showTierOptions(0)}
           </Card>
@@ -1633,13 +1633,13 @@ export default function Dashboard(props) {
 
         buttons: {
           back: {
-            text: "⬅️ Go Back",
+            text: "🥩 Go Back",
             value: "back",
             className: "delegationButtonBack",
           },
 
           confirm: {
-            text: "Next ✅",
+            text: "Next 🥩",
             value: { isTierChecked, last: value },
             className: "delegationButtonBack",
           },
@@ -1694,7 +1694,7 @@ export default function Dashboard(props) {
         swalReact({
           content: (
             <Card className="delegationCard">
-              <h4 className="delegationTitle">Stake Details</h4>
+              <h4 className="delegationTitle">Steak Details</h4>
               <div className="left-margin">
                 <div className="delegationTips">
                   <FiberManualRecordTwoTone className="delegationPin" />
@@ -1710,7 +1710,7 @@ export default function Dashboard(props) {
                 </div>
               </div>
               <h5 className="delegateText">
-                Input the amount you want to stake:
+                Input the amount you want to steak:
               </h5>
               <CustomInput
                 labelText={`Minimum: ${tierOptions[0][Number(id)].min}`}
@@ -1731,12 +1731,12 @@ export default function Dashboard(props) {
           ),
           buttons: {
             back: {
-              text: "⬅️ Go Back",
+              text: "🥩 Go Back",
               value: "back",
               className: "delegationButtonBack",
             },
             confirm: {
-              text: "Stake Tokens 🏛️",
+              text: "Steak Tokens 🥩",
               value: { id, this: "confirm", last: value },
               className: "delegationButtonBack",
             },
@@ -1753,7 +1753,7 @@ export default function Dashboard(props) {
       if (delegateAmount > Number(prufBalance)) {
         swalReact({
           icon: "warning",
-          text: `Insufficient PRUF!\n\n You are trying to stake ü${delegateAmount}, but you only hold ü${
+          text: `Insufficient PRUF!\n\n You are trying to steak ü${delegateAmount}, but you only hold ü${
             Math.round(Number(prufBalance) * 1000000) / 1000000
           }.`,
           buttons: {
@@ -1788,35 +1788,35 @@ export default function Dashboard(props) {
             <Card className="delegationCard">
               <h5 className="delegationTitle">Just a moment...</h5>
               <h5 className="delegationTitleSm">
-                Before you submit your stake, please read ahead:
+                Before you submit your steak, please read ahead:
               </h5>
               <div className="left-margin">
                 <div className="delegationTips">
                   <FiberManualRecordTwoTone className="delegationPin" />
                   <h5 className="delegationTipsContent">
                     {" "}
-                    Once you have created a stake, no additional steps are
+                    Once you have created a steak, no additional steps are
                     needed. You may begin to claim staking rewards 24 hours
-                    after creating your stake.
+                    after creating your steak.
                   </h5>
                 </div>
                 <div className="delegationTips">
                   <FiberManualRecordTwoTone className="delegationPin" />
                   <h5 className="delegationTipsContent">
-                    Your staked PRUF tokens will be locked until the stake
+                    Your steakd PRUF tokens will be locked until the steak
                     unlock period ends ({tierOptions[0][Number(id)].interval}{" "}
-                    Days). Your stake will continue to earn rewards even after
+                    Days). Your steak will continue to earn rewards even after
                     the staking period has ended. No action is required after
-                    you stake.
+                    you steak.
                   </h5>
                 </div>
                 <div className="delegationTips">
                   <FiberManualRecordTwoTone className="delegationPin" />
                   <h5 className="delegationTipsContent">
-                    Once the stake unlock period (
+                    Once the steak unlock period (
                     {tierOptions[0][Number(id)].interval} Days) has concluded,
-                    you may break your stake if you wish. This is optional. Once
-                    your stake is broken, your PRUF tokens will be refunded.
+                    you may break your steak if you wish. This is optional. Once
+                    your steak is broken, your PRUF tokens will be refunded.
                     NOTE: IF YOU BREAK YOUR STAKE, THE STAKE ID IS BURNED, AND
                     IT WILL STOP EARNING REWARDS.
                   </h5>
@@ -1824,16 +1824,16 @@ export default function Dashboard(props) {
                 <div className="delegationTips">
                   <FiberManualRecordTwoTone className="delegationPin" />
                   <h5 className="delegationTipsContent">
-                    Remember, your stake will continue to earn rewards, even
-                    after the stake unlock period has ended! Holders are free to
-                    stake as long as they want.
+                    Remember, your steak will continue to earn rewards, even
+                    after the steak unlock period has ended! Holders are free to
+                    steak as long as they want.
                   </h5>
                 </div>
                 <div className="delegationTips">
                   <FiberManualRecordTwoTone className="delegationPin" />
                   <h5 className="delegationTipsContent">
                     {" "}
-                    You are about to stake ü{delegateAmount} at an APR of{" "}
+                    You are about to steak ü{delegateAmount} at an APR of{" "}
                     {tierOptions[0][Number(id)].apr}%
                   </h5>
                 </div>
@@ -1854,12 +1854,12 @@ export default function Dashboard(props) {
           ),
           buttons: {
             back: {
-              text: "⬅️ Go Back",
+              text: "🥩 Go Back",
               value: "back",
               className: "delegationButtonBack",
             },
             confirm: {
-              text: "Stake my PRUF 👍",
+              text: "Steak my PRUF 🥩",
               value: "confirm",
               className: "delegationButtonBack",
             },
@@ -1869,14 +1869,14 @@ export default function Dashboard(props) {
             document.body.style.cursor = "progress";
             let amount = web3.utils.toWei(String(delegateAmount));
             console.log(amount);
-            stake
-              .stakeMyTokens(amount, tierOptions[0][Number(id)].id)
+            steak
+              .steakMyTokens(amount, tierOptions[0][Number(id)].id)
               .send({ from: addr })
               .on("receipt", () => {
                 document.body.style.cursor = "auto";
                 swalReact({
                   icon: "success",
-                  text: "Your PRUF has been staked successfully!",
+                  text: "Your PRUF has been steakd successfully!",
                   buttons: {
                     back: {
                       text: "Okay",
@@ -2057,11 +2057,11 @@ export default function Dashboard(props) {
                   >
                     <span className="material-icons">savings</span>
                   </CardIcon>
-                  <p className={classes.cardCategory}>PRUF Staked</p>
-                  {totalStaked ? (
+                  <p className={classes.cardCategory}>PRUF Steakd</p>
+                  {totalSteakd ? (
                     <>
                       <h3 className={classes.cardTitle}>
-                        <>ü{String(totalStaked)} </>
+                        <>ü{String(totalSteakd)} </>
                       </h3>
                     </>
                   ) : (
@@ -2073,7 +2073,7 @@ export default function Dashboard(props) {
                     <>
                       <Tooltip
                         id="tooltip-top"
-                        title="Refresh Stake"
+                        title="Refresh Steak"
                         placement="bottom"
                         classes={{ tooltip: userClasses.toolTip }}
                       >
@@ -2181,7 +2181,7 @@ export default function Dashboard(props) {
                     <>
                       <Tooltip
                         id="tooltip-top"
-                        title="Refresh Stake"
+                        title="Refresh Steak"
                         placement="bottom"
                         classes={{ tooltip: userClasses.toolTip }}
                       >
@@ -2243,27 +2243,27 @@ export default function Dashboard(props) {
                 <ReactTable
                   columns={[
                     {
-                      Header: "Stake ID #️⃣",
+                      Header: "Steak ID #🥩",
                       accessor: "id",
                     },
                     {
-                      Header: "Staking Yield (APR) 📈",
+                      Header: "Staking Yield (APR) 🥩",
                       accessor: "lvl",
                     },
                     {
-                      Header: "Amount Staked 🏛️",
+                      Header: "Amount Steakd 🥩",
                       accessor: "balance",
                     },
                     {
-                      Header: "Rewards Balance 🎁",
+                      Header: "Rewards Balance 🥩",
                       accessor: "rewards",
                     },
                     {
-                      Header: "Unlock Status ⏱️",
+                      Header: "Unlock Status 🥩",
                       accessor: "date",
                     },
                     {
-                      Header: "Details 🕵️‍♀️",
+                      Header: "Details 🥩",
                       accessor: "actions",
                     },
                   ]}
@@ -2291,7 +2291,7 @@ export default function Dashboard(props) {
                               //round
                               //simple
                               onClick={() => {
-                                viewStake(key);
+                                viewSteak(key);
                               }}
                               color="info"
                               //className="delegateButton"
@@ -2307,12 +2307,12 @@ export default function Dashboard(props) {
                 />
                 <Button
                   onClick={() => {
-                    newStake();
+                    newSteak();
                   }}
                   color="info"
                   className="delegateButtonCentered"
                 >
-                  New Stake
+                  New Steak
                 </Button>
               </CardBody>
             )}
@@ -2325,7 +2325,7 @@ export default function Dashboard(props) {
                       accessor: "id",
                     },
                     {
-                      Header: "Stake",
+                      Header: "Steak",
                       accessor: "balance",
                     },
                     {
@@ -2333,7 +2333,7 @@ export default function Dashboard(props) {
                       accessor: "rewards",
                     },
                     {
-                      Header: "🔍",
+                      Header: "🥩",
                       accessor: "actions",
                     },
                   ]}
@@ -2352,7 +2352,7 @@ export default function Dashboard(props) {
                               //round
                               //simple
                               onClick={() => {
-                                viewStake(key);
+                                viewSteak(key);
                               }}
                               color="info"
                               //className="delegateButton"
@@ -2368,12 +2368,12 @@ export default function Dashboard(props) {
                 />
                 <Button
                   onClick={() => {
-                    newStake();
+                    newSteak();
                   }}
                   color="info"
                   className="delegateButtonMobile"
                 >
-                  New Stake
+                  New Steak
                 </Button>
               </CardBody>
             )}
