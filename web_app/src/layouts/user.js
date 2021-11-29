@@ -74,6 +74,8 @@ const uauth = new UAuth({
   // postLogoutRedirectUri: "",
 });
 
+window.udSub === "Login with UD"
+
 var ps;
 
 const KOVAN_UTIL_ADDRESS = "0xaAa5a0D9dfC5B21A8100f608D12924dEfDd90E43",
