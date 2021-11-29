@@ -239,6 +239,7 @@ export default function Dashboard(props) {
   };
 
   const udHandle = () => {
+    console.log(`window udSub: ${window.udSub}`)
     if (window.udSub === "") {
       uauth
         .loginWithPopup()
