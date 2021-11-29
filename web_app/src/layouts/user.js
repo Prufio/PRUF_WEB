@@ -117,7 +117,7 @@ export default function Dashboard(props) {
   const [redeemAmount, setRedeemAmount] = React.useState("0");
   const [redeemList, setRedeemList] = React.useState([]);
   const [totalRewards, setTotalRewards] = React.useState(0);
-  const [totalSteakd, setTotalSteakd] = React.useState(0);
+  const [totalSteaked, setTotalSteaked] = React.useState(0);
   const [delegationList, setDelegationList] = React.useState([
     ["Loading Balances...", "~", "~", "~"],
   ]);
@@ -306,7 +306,7 @@ export default function Dashboard(props) {
     setChainId(0);
     setEtherBalance("");
     setPrufBalance("");
-    setTotalSteakd(0);
+    setTotalSteaked(0);
     setTotalRewards(0);
     setUtil({});
     setSteak({});
@@ -534,13 +534,13 @@ export default function Dashboard(props) {
 
   const parseTotalRedeemable = (arr) => {
     let _totalRewards = 0;
-    let _totalSteakd = 0;
+    let _totalSteaked = 0;
     let yearlyTotalReturns = 0;
 
     arr.forEach((props) => {
       if (props[9]) {
         _totalRewards += Number(props[9]);
-        _totalSteakd += Number(props[8]);
+        _totalSteaked += Number(props[8]);
       }
 
       yearlyTotalReturns += props[12];
@@ -549,7 +549,7 @@ export default function Dashboard(props) {
     console.log(yearlyTotalReturns);
     setYearlyRewards(Math.floor(yearlyTotalReturns * 1000) / 1000);
     setTotalRewards(Math.floor(_totalRewards * 1000) / 1000);
-    setTotalSteakd(Math.floor(_totalSteakd * 1000) / 1000);
+    setTotalSteaked(Math.floor(_totalSteaked * 1000) / 1000);
     setLoadingSums(false);
   };
 
@@ -656,7 +656,7 @@ export default function Dashboard(props) {
       if (!bal || String(bal) === "0") {
         setDelegationList([[``, ``, ``, ``, ``]]);
         setTotalRewards(0);
-        setTotalSteakd(0);
+        setTotalSteaked(0);
         setLoadingSums(false);
         return console.log(`Balances undefined or zero`);
       }
@@ -1335,7 +1335,7 @@ export default function Dashboard(props) {
           </h5>
           <h5 className="">
             {`
-                Amount steakd: ${delegationList[index][2]}
+                Amount steaked: ${delegationList[index][2]}
               `}
           </h5>
           <h5 className="">
@@ -1803,7 +1803,7 @@ export default function Dashboard(props) {
                 <div className="delegationTips">
                   <FiberManualRecordTwoTone className="delegationPin" />
                   <h5 className="delegationTipsContent">
-                    Your steakd PRUF tokens will be locked until the steak
+                    Your steaked PRUF tokens will be locked until the steak
                     unlock period ends ({tierOptions[0][Number(id)].interval}{" "}
                     Days). Your steak will continue to earn rewards even after
                     the staking period has ended. No action is required after
@@ -1876,7 +1876,7 @@ export default function Dashboard(props) {
                 document.body.style.cursor = "auto";
                 swalReact({
                   icon: "success",
-                  text: "Your PRUF has been steakd successfully!",
+                  text: "Your PRUF has been steaked successfully!",
                   buttons: {
                     back: {
                       text: "Okay",
@@ -2057,11 +2057,11 @@ export default function Dashboard(props) {
                   >
                     <span className="material-icons">savings</span>
                   </CardIcon>
-                  <p className={classes.cardCategory}>PRUF Steakd</p>
-                  {totalSteakd ? (
+                  <p className={classes.cardCategory}>PRUF Steaked</p>
+                  {totalSteaked ? (
                     <>
                       <h3 className={classes.cardTitle}>
-                        <>ü{String(totalSteakd)} </>
+                        <>ü{String(totalSteaked)} </>
                       </h3>
                     </>
                   ) : (
@@ -2251,7 +2251,7 @@ export default function Dashboard(props) {
                       accessor: "lvl",
                     },
                     {
-                      Header: "Amount Steakd 🥩",
+                      Header: "Amount Steaked 🥩",
                       accessor: "balance",
                     },
                     {
