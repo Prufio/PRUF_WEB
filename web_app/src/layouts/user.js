@@ -140,7 +140,7 @@ export default function Dashboard(props) {
     "Squash and merge",
     "Rebase and merge",
   ];
-  window.udSub = ""
+  
   const anchorRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
   // styles
@@ -208,7 +208,7 @@ export default function Dashboard(props) {
         }
       });
     }
-
+    window.udSub = ""
     window.addEventListener("udLogin", udHandle);
     window.addEventListener("mmLogin", mmHandle);
     //console.log({ _web3 });
