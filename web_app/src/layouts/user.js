@@ -253,7 +253,7 @@ export default function Dashboard(props) {
     } else {
       swalReact({
         icon: "info",
-        text: `Logged in as ${window.udSub}.`,
+        title: `Currently logged in as ${window.udSub}`,
         buttons: {
           back: {
             text: "⬅️ Go Back",
