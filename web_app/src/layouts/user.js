@@ -238,7 +238,7 @@ export default function Dashboard(props) {
   };
 
   const udHandle = () => {
-    if (udSub === "Login with UD") {
+    if (window.udSub === "Login with UD") {
       uauth
         .loginWithPopup()
         .then(() =>
@@ -273,6 +273,7 @@ export default function Dashboard(props) {
         if (value === "logout") {
           uauth.logout().then(() => {
             setUdSub("Login with UD");
+            window.udSub = "Login with UD"
             clearPage();
           });
         } else if (value === "switch") {
@@ -333,6 +334,7 @@ export default function Dashboard(props) {
     let _web3 = require("web3");
 
     setUdSub(ud.sub);
+    window.udSub = ud.sub
     setAddr(ud.wallet_address);
 
     _web3 = new Web3(_web3.givenProvider);
@@ -346,6 +348,7 @@ export default function Dashboard(props) {
 
   const getMMAddress = () => {
     setUdSub("Login with UD")
+    window.udSub = "Login with UD"
     let _web3 = require("web3");
 
     _web3 = new Web3(_web3.givenProvider);

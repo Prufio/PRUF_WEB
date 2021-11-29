@@ -621,6 +621,7 @@ body {
 }
 
 .udButton {
+  cursor: pointer;
   margin-right: 4px;
   padding-right: 5px;
   max-height: 48px !important;

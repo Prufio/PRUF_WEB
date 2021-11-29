@@ -27,17 +27,6 @@ export default function HeaderLinks(props) {
     //   console.log(e.target.value);
     //   setSearchBarVal(e.target.value);
     // };
-    const udLogin = () => {
-        if(props.ud){
-            props.ud.login()
-        }
-        console.log(props.ud)
-        console.log("Here")
-    }
-
-    const connectMM = () => {
-
-    }
 
     const classes = useStyles()
     const { rtlActive } = props
