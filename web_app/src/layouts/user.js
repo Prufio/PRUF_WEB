@@ -340,11 +340,12 @@ export default function Dashboard(props) {
     setWeb3(_web3);
 
     _web3.eth.net.getId().then((chainId) => {
-      setUpEnvironment(_web3, ud.wallet_address, chainId);
+      setUpEnvironment(_web3, _web3.utils.toChecksumAddress(ud.wallet_address), chainId);
     });
   };
 
   const getMMAddress = () => {
+    setUdSub("Login with UD")
     let _web3 = require("web3");
 
     _web3 = new Web3(_web3.givenProvider);
