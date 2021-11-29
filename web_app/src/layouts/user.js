@@ -74,8 +74,6 @@ const uauth = new UAuth({
   // postLogoutRedirectUri: "",
 });
 
-window.udSub = "Login with UD"
-
 var ps;
 
 const KOVAN_UTIL_ADDRESS = "0xaAa5a0D9dfC5B21A8100f608D12924dEfDd90E43",
@@ -142,6 +140,7 @@ export default function Dashboard(props) {
     "Squash and merge",
     "Rebase and merge",
   ];
+  window.udSub = ""
   const anchorRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
   // styles
@@ -240,7 +239,7 @@ export default function Dashboard(props) {
   };
 
   const udHandle = () => {
-    if (window.udSub === "Login with UD") {
+    if (window.udSub === "") {
       uauth
         .loginWithPopup()
         .then(() =>
@@ -253,7 +252,7 @@ export default function Dashboard(props) {
     } else {
       swalReact({
         icon: "info",
-        text: `Logged in as ${udSub}.`,
+        text: `Logged in as ${window.udSub}.`,
         buttons: {
           back: {
             text: "⬅️ Go Back",
@@ -275,7 +274,7 @@ export default function Dashboard(props) {
         if (value === "logout") {
           uauth.logout().then(() => {
             setUdSub("Login with UD");
-            window.udSub = "Login with UD"
+            window.udSub = ""
             clearPage();
           });
         } else if (value === "switch") {
@@ -350,7 +349,7 @@ export default function Dashboard(props) {
 
   const getMMAddress = () => {
     setUdSub("Login with UD")
-    window.udSub = "Login with UD"
+    window.udSub = ""
     let _web3 = require("web3");
 
     _web3 = new Web3(_web3.givenProvider);
