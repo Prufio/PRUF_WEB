@@ -74,7 +74,7 @@ const uauth = new UAuth({
   // postLogoutRedirectUri: "",
 });
 
-window.udSub === "Login with UD"
+window.udSub = "Login with UD"
 
 var ps;
 
