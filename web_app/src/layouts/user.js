@@ -250,7 +250,7 @@ export default function Dashboard(props) {
         .finally(() => console.log(`Finished logging in! Welcome.`));
     } else {
       swalReact({
-        icon: "warning",
+        icon: "info",
         text: `Logged in as ${udSub}.`,
         buttons: {
           back: {
