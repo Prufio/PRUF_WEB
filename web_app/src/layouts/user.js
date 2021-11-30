@@ -64,13 +64,13 @@ import { Icon } from "@material-ui/core";
 const uauth = new UAuth({
   // Client credentials copied from https://unstoppabledomains.com/app-dashboard
   clientID: "Q2pO03hsT5gMk0IxAacVZoloemjGBzvVEzxaofTHnmA=",
-  clientSecret: "wVY1yzeGYoiTk579LvyO1Od4hdrQ3yjCzZu8w3Fzdwk=",
+  clientSecret: "IVRIdT4eUyUo8HVpC2INGo15eNLr7c6VS79G69dtwKA=",
 
   // Requested scopes.
   scope: "openid wallet",
 
   // Redirect Uris copied from https://unstoppabledomains.com/app-dashboard
-  redirectUri: "https://staking.pruf.io/callback",
+  redirectUri: "https://stake.pruf.io/callback",
   // postLogoutRedirectUri: "",
 });
 
