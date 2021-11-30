@@ -1,4 +1,4 @@
-//PRUF WEB APP
+//PRUF WEB APP RC1-Release
 import React from "react";
 import cx from "classnames";
 import Jdenticon from "react-jdenticon";
