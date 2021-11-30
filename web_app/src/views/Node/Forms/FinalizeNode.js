@@ -377,7 +377,7 @@ export default function FinalizeNode(props) {
               };
               window.replaceAssetData.refreshBals = true;
               window.dispatchEvent(props.refresh);
-              window.location.href = nodeInfo.lastRef;
+              window.location.href = "/#/user/node-manager"
             });
 
           break;
