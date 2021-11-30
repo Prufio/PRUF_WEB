@@ -65,7 +65,7 @@ export default function Dashboard(props) {
   const [identicon, setIdenticon] = React.useState(<></>);
   // eslint-disable-next-line no-unused-vars
   const [baseURL, setBaseURL] = React.useState(
-    "https://app.pruf.io/#/user/search/"
+    "https://indevapp.pruf.io/#/user/search/"
   );
   const [URL, setURL] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("");

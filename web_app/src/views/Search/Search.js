@@ -80,7 +80,7 @@ export default function Search(props) {
   const [ownerOf, setOwnerOf] = React.useState(false);
   const [assetURL, setURL] = React.useState("");
   const [baseURL, setBaseURL] = React.useState(
-    "https://app.pruf.io/#/user/search/"
+    "https://indevapp.pruf.io/#/user/search/"
   );
   const [isVerifying, setIsVerifying] = React.useState(false);
   const [isRecycling, setIsRecycling] = React.useState(false);

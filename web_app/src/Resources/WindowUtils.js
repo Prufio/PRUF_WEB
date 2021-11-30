@@ -14,7 +14,7 @@ function buildWindowUtils() {
           <>
             <div className="printQR">
               <QRCode
-                value={"https://app.pruf.io/#/retrieve-record?" + obj.idxHash}
+                value={"https://indevapp.pruf.io/#/user/search/" + obj.idxHash}
                 size="160"
                 fgColor="#002a40"
                 // logoWidth="24.4"
@@ -33,7 +33,7 @@ function buildWindowUtils() {
                 alt="Pruf Print Background" /> */}
               <div className="printQR2">
                 <QRCode
-                  value={"https://app.pruf.io/#/retrieve-record?" + obj.idxHash}
+                  value={"https://indevapp.pruf.io/#/user/search/" + obj.idxHash}
                   size="120"
                   fgColor="#002a40"
                   quietZone="2"
