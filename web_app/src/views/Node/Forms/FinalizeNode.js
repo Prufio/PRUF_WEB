@@ -109,7 +109,7 @@ export default function FinalizeNode(props) {
 
   const goBack = () => {
     window.backIndex = nodeInfo.dBIndex;
-    window.location.href = nodeInfo.lastRef;
+    window.location.href = "/#/user/node-manager";
   };
 
   //   const setManagementType1Button = () => {
