@@ -224,6 +224,7 @@ export default function NewRecord(props) {
   };
 
   const nodeLogin = (event) => {
+
     document.body.style.cursor = 'wait'
     console.log(event.target.value);
     props.prufClient.get
@@ -244,7 +245,22 @@ export default function NewRecord(props) {
         )
     );
     // console.log(nodeData)
-    setNodeId(event.target.value.id);
+    props.prufClient.get.node.switchAt(event.target.value.id, 7)
+    .then(pos=>{
+      if (Number(pos) > 0) {
+        props.prufClient.get.node.userType(props.addr, event.target.value.id)
+        .then(type=>{
+          if(Number(type) > 0) setNodeId(event.target.value.id);
+          else {
+            clearForms();
+            return swalReact({icon:"warning", title:"User not authorized!"})
+            }
+          })
+      } else {
+        setNodeId(event.target.value.id);
+      }
+    })
+    
     setClassSelect(event.target.value.id);
     document.body.style.cursor = 'auto',
       props.prufClient.get.node
@@ -362,8 +378,6 @@ export default function NewRecord(props) {
   const clearForms = () => {
     setDisplayImage("");
     setDisplayImageUrl("");
-    setMake("");
-    setType("");
     setModel("");
     setSerial("");
     setFirst("");
@@ -372,15 +386,11 @@ export default function NewRecord(props) {
     setID("");
     setPassword("");
 
-    setloginMakeState("");
-    setloginTypeState("");
     setloginModelState("");
     setloginSerialState("");
     setloginFirstState("");
     setloginLastState("");
     setloginIDState("");
-    setloginPasswordState("");
-    setloginPasswordState("");
     setloginPasswordState("");
 
     setNodeId("");
