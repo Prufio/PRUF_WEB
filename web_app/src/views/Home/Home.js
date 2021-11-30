@@ -461,7 +461,7 @@ export default function Home(props) {
         <CardHeader color="danger" stats icon>
           <CardIcon className="headerIconBack">
             <div className="centerJustifiedIcon">
-            <span class="material-icons">store</span>
+            <span className="material-icons">store</span>
             </div>
             {/* <h4 className="centerJustifiedTitle"> */}
             <h4>Marketspace</h4>

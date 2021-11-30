@@ -274,6 +274,14 @@ export default function FinalizeNode(props) {
               </h4>
             </div>
           )}
+          {advancedNodePreferences1 === false && advancedNodePreferences2 === false && advancedNodePreferences3 === false && (
+            <div className="delegationTips">
+            <FiberManualRecordTwoTone className="delegationPin" />
+            <h4 className="alertTextSm">
+            No advanced options selected.
+            </h4>
+          </div>
+          )}
         </Card>
       ),
       buttons: {
@@ -581,7 +589,7 @@ export default function FinalizeNode(props) {
       {card2 && (
         <Card>
           <CardHeader>
-            <h2 className={classes.cardIconTitle}>Advanced Node Preferences</h2>
+            <h2 className={classes.cardIconTitle}>Advanced Node Preferences (optional)</h2>
           </CardHeader>
           <GridContainer>
             <GridItem xs={12} sm={4}>
