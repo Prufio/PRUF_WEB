@@ -1402,130 +1402,117 @@ export default function NodeManager(props) {
                           prop[0] !== "Loading Nodes..." &&
                           prop[0] !== "" && (
                             <form>
-                              {/* <FormControl className="nodeOptions"> */}
-                              <InputLabel className="functionSelectorText">
-                                {/* <Danger> */}
-                                <Settings className="functionSelectorIcon" />
-                                {/* </Danger> */}
-                                Options
-                              </InputLabel>
-                              <Select
-                                // MenuProps={{
-                                //   className: classes.selectMenu,
-                                // }}
-                                classes={{
-                                  select: classes.select,
-                                }}
-                                onClick={(e) => handleSimple(e.target.value)}
-                                // inputProps={{
-                                //   name: "simpleSelect",
-                                //   id: "",
-                                // }}
-                              >
-                                <MenuItem
-                                  disabled
+                              <FormControl className="nodeOptions">
+                                <InputLabel className="functionSelectorText">
+                                  <Danger>
+                                    <Settings className="functionSelectorIcon" />
+                                  </Danger>
+                                  Options
+                                </InputLabel>
+                                <Select
+                                  MenuProps={{
+                                    className: selectClasses.selectMenu,
+                                  }}
                                   classes={{
-                                    root: classes.selectMenuItem,
+                                    select: selectClasses.select,
+                                  }}
+                                  onChange={(e) => {
+                                    handleSimple({
+                                      name: prop[0],
+                                      id: prop[1],
+                                      index: key,
+                                      value: e.target.value,
+                                    })
+                                  }
+                                  }
+                                  inputProps={{
+                                    value: "",
+                                    name: "simpleSelect",
+                                    id: `simpleSelectDefault${key}`,
                                   }}
                                 >
-                                  Select an option from the list
-                                </MenuItem>
-                                <MenuItem
-                                  classes={{
-                                    root: classes.selectMenuItem,
-                                    selected: classes.selectMenuItemSelected,
-                                  }}
-                                  value={{
-                                    href: "/#/user/change-name",
-                                    name: prop[0],
-                                    id: prop[1],
-                                    index: key,
-                                  }}
-                                >
-                                  Change Name
-                                </MenuItem>
-                                <MenuItem
-                                  classes={{
-                                    root: classes.selectMenuItem,
-                                    selected: classes.selectMenuItemSelected,
-                                  }}
-                                  value={{
-                                    href: "/#/user/change-data",
-                                    name: prop[0],
-                                    id: prop[1],
-                                    index: key,
-                                  }}
-                                >
-                                  Update Data
-                                </MenuItem>
-                                <MenuItem
-                                  classes={{
-                                    root: classes.selectMenuItem,
-                                    selected: classes.selectMenuItemSelected,
-                                  }}
-                                  value={{
-                                    href: "/#/user/change-costs",
-                                    name: prop[0],
-                                    id: prop[1],
-                                    index: key,
-                                  }}
-                                >
-                                  Update Operation Costs
-                                </MenuItem>
-                                {props.nodeExtData[key] &&
-                                  props.nodeExtData[key].managementType ===
-                                    "3" && (
-                                    <MenuItem
-                                      classes={{
-                                        root: classes.selectMenuItem,
-                                        selected:
-                                          classes.selectMenuItemSelected,
-                                      }}
-                                      value={{
-                                        href: "/#/user/authorize-user",
-                                        name: prop[0],
-                                        id: prop[1],
-                                        index: key,
-                                      }}
-                                    >
-                                      Authorize User Access
-                                    </MenuItem>
-                                  )}
-                                <MenuItem
-                                  classes={{
-                                    root: classes.selectMenuItem,
-                                    selected: classes.selectMenuItemSelected,
-                                  }}
-                                  value={{
-                                    href: "/#/user/transfer-node",
-                                    name: prop[0],
-                                    id: prop[1],
-                                    index: key,
-                                  }}
-                                >
-                                  Transfer Node
-                                </MenuItem>
-                                {props.nodeExtData[key] &&
-                                  props.nodeExtData[key].managementType ===
-                                    "255" && (
-                                    <MenuItem
-                                      classes={{
-                                        root: classes.selectMenuItem,
-                                        selected:
-                                          classes.selectMenuItemSelected,
-                                      }}
-                                      value={{
-                                        href: "finalize",
-                                        name: prop[0],
-                                        id: prop[1],
-                                        index: key,
-                                      }}
-                                    >
-                                      Finalize
-                                    </MenuItem>
-                                  )}
-                              </Select>
-                              {/* </FormControl> */}
+                                  <MenuItem
+                                    id={`selectDefault${key}`}
+                                    disabled
+                                    classes={{
+                                      root: selectClasses.selectMenuItem,
+                                    }}
+                                  >
+                                    Select an option from the list
+                                  </MenuItem>
+                                  {/* <MenuItem
+                                    id="ChangeName"
+                                    classes={{
+                                      root: classes.selectMenuItem,
+                                      selected: classes.selectMenuItemSelected,
+                                    }}
+                                    value={"/#/user/change-name"}
+                                  >
+                                    Change Name
+                                  </MenuItem> */}
+                                  {/* <MenuItem
+                                    classes={{
+                                      root: classes.selectMenuItem,
+                                      selected: classes.selectMenuItemSelected,
+                                    }}
+                                    value={"/#/user/change-node-data"}
+                                  >
+                                    Update Data
+                                  </MenuItem> */}
+                                  <MenuItem
+                                    id={`changecosts${key}`}
+                                    classes={{
+                                      root: selectClasses.selectMenuItem,
+                                      selected:
+                                        selectClasses.selectMenuItemSelected,
+                                    }}
+                                    value={"change-costs"}
+                                  >
+                                    Update Operation Costs
+                                  </MenuItem>
+                                  {props.nodeExtData[key] &&
+                                    props.nodeExtData[key].usesAuth ===
+                                      true && (
+                                      <MenuItem
+                                        id={`authuser${key}`}
+                                        classes={{
+                                          root: selectClasses.selectMenuItem,
+                                          selected:
+                                            selectClasses.selectMenuItemSelected,
+                                        }}
+                                        value={"authorize-user"}
+                                      >
+                                        Authorize User Access
+                                      </MenuItem>
+                                    )}
+                                  <MenuItem
+                                    id={`transfer${key}`}
+                                    classes={{
+                                      root: selectClasses.selectMenuItem,
+                                      selected:
+                                        selectClasses.selectMenuItemSelected,
+                                    }}
+                                    value={"transfer-node"}
+                                  >
+                                    Transfer Node
+                                  </MenuItem>
+                                  {props.nodeExtData[key] &&
+                                    props.nodeExtData[key].managementType ===
+                                      "255" && (
+                                      <MenuItem
+                                        id={`finalize${key}`}
+                                        classes={{
+                                          root: selectClasses.selectMenuItem,
+                                          selected:
+                                            selectClasses.selectMenuItemSelected,
+                                        }}
+                                        value={"finalize"}
+                                      >
+                                        Finalize
+                                      </MenuItem>
+                                    )}
+                                </Select>
+                              </FormControl>
                             </form>
                           )}
                       </div>
