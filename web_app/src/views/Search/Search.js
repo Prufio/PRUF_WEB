@@ -206,9 +206,9 @@ export default function Search(props) {
   };
 
   const displayMutableStorage = (asset) => {
-    if(!asset.mutableStorage || asset.mutableStorage === "") {
-      console.log("Bad inputs")
-      return []
+    if (!asset.mutableStorage || asset.mutableStorage === "") {
+      console.log("Bad inputs");
+      return [];
     }
     let component = [];
     let accordionContent = [];
@@ -1320,19 +1320,43 @@ export default function Search(props) {
           button: "Close",
         });
 
-      props.prufClient.get.asset.tokenExists(id).then((e) => {
-        if (e) {
-          getAsset(id);
-        } else {
-          setIDXRaw("");
-          setIDXRawInput(false);
-          return swalReact({
-            title: "Asset does not exist!",
-            icon: "warning",
-            button: "Close",
-          });
-        }
-      });
+      //return getAsset(id, "m1tn")
+
+      props.prufClient.get.asset
+        .record(id)
+        .then((e) => {
+          if (e.nodeId !== "0") {
+            getAsset(id, props.prufClient.network.name);
+          } else {
+            console.log("Here!");
+            props.kovanPruf.get.asset
+              .record(id)
+              .then((e) => {
+                if (e.nodeId !== "0") getAsset(id, "kovan");
+                else{
+                  console.log("Here!");
+                  props.m1tnPruf.get.asset
+                    .record(id)
+                    .then((e) => {
+                      if (e.nodeId !== "0") getAsset(id, "m1tn");
+                      else {
+                        console.log("Here!");
+                        setIDXRaw("");
+                        setIDXRawInput(false);
+                        return swalReact({
+                          title: "Asset does not exist!",
+                          icon: "warning",
+                          button: "Close",
+                        });
+                      }
+                    })
+                    .catch(e => {
+                      console.error(e)
+                    });
+                }
+              })
+          }
+        })
     });
   };
 
@@ -1349,13 +1373,40 @@ export default function Search(props) {
 
   const getAsset = (
     id,
+    netName,
     _arweaveClient = props.arweaveClient,
     _addr = props.addr,
     _prufClient = props.prufClient
   ) => {
+    if (netName !== _prufClient.network.name) {
+      switch (netName) {
+        case "kovan":
+          _prufClient = props.kovanPruf;
+          break;
+        case "mumbai":
+          _prufClient = props.mumbaiPruf;
+          break;
+        case "m1tn":
+          _prufClient = props.m1tnPruf;
+          break;
+        default:
+          console.log("Bad inputs in switch");
+          break;
+      }
+    }
+
     window.isSearching = true;
-    checkIsHolder(id);
+    // checkIsHolder(id);
     _prufClient.get.asset.record(id).then(async (rec) => {
+      if (props.addr && window.web3.utils.isAddress(props.addr)) {
+        _prufClient.get.asset.ownerOf(id).then((e) => {
+          window.web3.utils.toChecksumAddress(e) ===
+          window.web3.utils.toChecksumAddress(props.addr)
+            ? setOwnerOf(true)
+            : setOwnerOf(false);
+        });
+      }
+
       console.log({ rec });
       rec.id = id;
       rec.identicon = <Jdenticon value={rec.id} />;
@@ -1939,7 +1990,7 @@ export default function Search(props) {
                           className="MLBGradient"
                           onClick={() => checkInputs()}
                         >
-                          Search Asset
+                          Find Asset
                         </Button>
                       </div>
                     )}
@@ -2784,7 +2835,7 @@ export default function Search(props) {
                       className="shareMenu"
                       data={{
                         text: "Check out my PRüF-verified asset!",
-                        url: assetURL,
+                        url: `${baseURL}${asset.id}`,
                         title: "Share Asset Link",
                       }}
                     >
@@ -2810,7 +2861,7 @@ export default function Search(props) {
                           swalReact({
                             content: (
                               <QRCode
-                                value={assetURL}
+                                value={`${baseURL}${asset.id}`}
                                 size="160"
                                 fgColor="#002a40"
                                 quietZone="2"

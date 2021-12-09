@@ -9,6 +9,8 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 
 import Eth from "../../assets/img/eth-logo.png";
 import Pruf from "../../assets/img/pruftoken.png";
+import Ada from "../../assets/img/adaCoin.png";
+import Matic from "../../assets/img/adaCoin.png"
 import Add from "@material-ui/icons/Add";
 import CheckShield from "@material-ui/icons/VerifiedUser";
 import NoAccount from "@material-ui/icons/PersonAdd";
@@ -29,6 +31,7 @@ import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle
 import "../../assets/css/custom.css";
 
 import { Cached, DashboardOutlined } from "@material-ui/icons";
+import { Polygon } from "@react-pdf/renderer";
 
 const useStyles = makeStyles(styles);
 
@@ -268,6 +271,17 @@ export default function Home(props) {
                   </Button>
                 </div>
               )}
+              {!prufTransactionActive && props.chainId === 1000 && (
+                <div className="MLBGradientSubmit">
+                  <Button
+                    color="info"
+                    className="MLBGradient"
+                    onClick={() => purchasePRUF()}
+                  >
+                    Get PRUF
+                  </Button>
+                </div>
+              )}
               {prufTransactionActive && (
                 <h5 className="transactionMessage">
                   Getting PRUF from the faucet
@@ -288,9 +302,28 @@ export default function Home(props) {
                 className="headerIconBack"
                 onClick={() => window.open("https://ethereum.org/en/")}
               >
+                {props.chainId === 1000
+                ? 
+                <img className="Icon" src={Ada} alt=""></img>
+                : 
+                props.chainId === 80001 
+                ? 
+                <img className="Icon" src={Matic} alt=""></img>
+                :
                 <img className="Icon" src={Eth} alt=""></img>
+                }
               </CardIcon>
-              <p className={classes.cardCategory}>ETH Balance</p>
+
+              {props.chainId === 1000
+                ? 
+                <p className={classes.cardCategory}>TWADA Balance</p>
+                : 
+                props.chainId === 80001 
+                ? 
+                <p className={classes.cardCategory}>MumMatic Balance</p>
+                :
+                <p className={classes.cardCategory}>KETH Balance</p>
+              }
               {updatedEther ? (
                 <h3 className={classes.cardTitle}>
                   {updatedEther.substring(0, 7)}{" "}

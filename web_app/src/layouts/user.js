@@ -7,7 +7,7 @@ import swalReact from "@sweetalert/with-react";
 import Web3 from "web3";
 import Arweave from "arweave";
 import TestWeave from "testweave-sdk";
-import Particles from 'react-particles-js';
+import Particles from "react-particles-js";
 //import arconf from "../Resources/arconf";
 import placeholder from "../assets/img/placeholder.jpg";
 
@@ -76,6 +76,9 @@ export default function Dashboard(props) {
   const [listenersLaunched, setListenersLaunched] = React.useState(false);
   const [prufBalance, setPrufBalance] = React.useState("~");
   const [prufClient, setPrufClient] = React.useState();
+  const [mumbaiPruf, setMumbaiPruf] = React.useState();
+  const [m1tnPruf, setM1tnPruf] = React.useState();
+  const [kovanPruf, setKovanPruf] = React.useState();
   const [roots, setRoots] = React.useState(undefined);
   const [rootNames, setRootNames] = React.useState(undefined);
   const [nodeSets, setNodeSets] = React.useState(undefined);
@@ -114,7 +117,7 @@ export default function Dashboard(props) {
   const refreshEvent = new Event("refresh");
   const connectArweaveEvent = new Event("connectArweave");
   const searchEvent = new Event("search");
-  const clearSearchEvent = new Event("clearSearch")
+  const clearSearchEvent = new Event("clearSearch");
 
   //classes for main panel
   const mainPanelClasses =
@@ -356,14 +359,24 @@ export default function Dashboard(props) {
     return arweave;
   };
 
-  const handleNoEthereum = () => {
+  const handleNoEthereum = async () => {
     //if(isMobile) swalReact("No ethereum detected")
     console.log("No ethereum object available");
     let web3;
     web3 = require("web3");
+
     web3 = new Web3(
       "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
     );
+
+    let m1tnWeb3 = require("web3");
+    m1tnWeb3 = new Web3("http://use-util.cloud.milkomeda.com:8545/");
+    let kovanWeb3 = require("web3");
+    kovanWeb3 = new Web3(
+      "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
+    );
+    let mumbaiWeb3 = require("web3");
+    mumbaiWeb3 = new Web3("https://rpc-endpoints.superfluid.dev/mumbai");
 
     web3.eth.net.getId().then(async (chainId) => {
       const _prufClient = new PRUF(web3, chainId, false, true);
@@ -379,6 +392,16 @@ export default function Dashboard(props) {
       window.web3 = web3;
       return setIsMounted(true);
     });
+
+    const _mumbaiPruf = new PRUF(mumbaiWeb3, 80001, false, true);
+    const _m1tnPruf = new PRUF(m1tnWeb3, 1000, false, true);
+    const _kovanPruf = new PRUF(kovanWeb3, 42, false, true);
+    await _mumbaiPruf.init();
+    await _m1tnPruf.init();
+    await _kovanPruf.init();
+    setMumbaiPruf(_mumbaiPruf);
+    setM1tnPruf(_m1tnPruf);
+    setKovanPruf(_kovanPruf);
   };
 
   const checkForCookies = () => {
@@ -449,13 +472,33 @@ export default function Dashboard(props) {
     });
   };
 
-  const handleEthereum = () => {
+  const handleEthereum = async () => {
     if (window.ethereum) {
       let web3;
       web3 = require("web3");
       const ethereum = window.ethereum;
       web3 = new Web3(web3.givenProvider);
       window.web3 = web3;
+
+      let m1tnWeb3 = require("web3");
+      m1tnWeb3 = new Web3("http://use-util.cloud.milkomeda.com:8545/");
+      let kovanWeb3 = require("web3");
+      kovanWeb3 = new Web3(
+        "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
+      );
+      let mumbaiWeb3 = require("web3");
+      mumbaiWeb3 = new Web3("https://rpc-endpoints.superfluid.dev/mumbai");
+
+      const _mumbaiPruf = new PRUF(mumbaiWeb3, 80001, false, true);
+      const _m1tnPruf = new PRUF(m1tnWeb3, 1000, false, true);
+      const _kovanPruf = new PRUF(kovanWeb3, 42, false, true);
+      await _mumbaiPruf.init();
+      await _m1tnPruf.init();
+      await _kovanPruf.init();
+      setMumbaiPruf(_mumbaiPruf);
+      setM1tnPruf(_m1tnPruf);
+      setKovanPruf(_kovanPruf);
+
       web3.eth.net.getId().then(async (chainId) => {
         setChainId(chainId);
         window.ethereum.on("chainChanged", (chainId) => {
@@ -486,7 +529,10 @@ export default function Dashboard(props) {
         setPrufClient(_prufClient);
         // setIsIDHolder(false);
 
-        if (_prufClient.network.name === "kovan") {
+        if (
+          _prufClient.network.name === "kovan" ||
+          _prufClient.network.name === "m1tn"
+        ) {
           window.isKovan = true;
           ethereum
             .request({
@@ -573,7 +619,7 @@ export default function Dashboard(props) {
         window.location.href.indexOf("0x"),
         window.location.href.indexOf("0x") + 66
       );
-      window.isSearching = true
+      window.isSearching = true;
       window.location.href = `/#/user/search/${window.idxQuery}`;
     }
 
@@ -723,6 +769,9 @@ export default function Dashboard(props) {
             path={prop.layout + prop.path}
             render={() => (
               <prop.component
+                kovanPruf={kovanPruf}
+                mumbaiPruf={mumbaiPruf}
+                m1tnPruf={m1tnPruf}
                 assetsPerPage={assetsPerPage}
                 searchQuery={searchQuery}
                 roots={roots}
@@ -784,7 +833,7 @@ export default function Dashboard(props) {
           buildRoots(_addr, _prufClient);
         }
       } else {
-        setArweaveClient(e)
+        setArweaveClient(e);
       }
     });
   };
@@ -859,15 +908,17 @@ export default function Dashboard(props) {
   /*******************************************************************************************************************************************************/
   const buildRoots = (_addr, _prufClient, iteration, arr) => {
     if (!_prufClient) return;
-    if (!arr) arr = cookies[`${_addr}roots`] || [];
-    if (!iteration && cookies[`${_addr}roots`])
-      iteration = cookies[`${_addr}roots`].length + 1;
+    if (!arr) arr = cookies[`${_addr}${_prufClient.network.name}roots`] || [];
+    if (!iteration && cookies[`${_addr}${_prufClient.network.name}roots`])
+      iteration =
+        cookies[`${_addr}${_prufClient.network.name}roots`].length + 1;
     else if (!iteration) iteration = 1;
 
     _prufClient.get.node.tokenExists(String(iteration)).then((e) => {
       if (e) {
+        console.log(iteration);
         arr.push(iteration);
-        setCookieTo(`${_addr}roots`, arr);
+        setCookieTo(`${_addr}${_prufClient.network.name}roots`, arr);
         return buildRoots(_addr, _prufClient, iteration + 1, arr);
       } else {
         //noMore = true;
@@ -898,23 +949,28 @@ export default function Dashboard(props) {
 
     if (!iteration) {
       iteration = 1000001;
-      if (cookies[`${_addr}subNodes`]) {
-        iteration += cookies[`${_addr}subNodes`].length;
+      if (cookies[`${_addr}${_prufClient.network.name}subNodes`]) {
+        iteration +=
+          cookies[`${_addr}${_prufClient.network.name}subNodes`].length;
       }
     }
 
     if (!arr) {
       arr = roots || [];
-      subNodes = cookies[`${_addr}subNodes`] || [];
-      if (cookies[`${_addr}subNodes`]) {
-        arr = arr.concat(cookies[`${_addr}subNodes`]);
+      subNodes = cookies[`${_addr}${_prufClient.network.name}subNodes`] || [];
+      if (cookies[`${_addr}${_prufClient.network.name}subNodes`]) {
+        arr = arr.concat(
+          cookies[`${_addr}${_prufClient.network.name}subNodes`]
+        );
       }
       console.log(`Cached nodes: ${arr}`);
     }
 
     if (
-      cookies[`${_addr}dontCount`] &&
-      cookies[`${_addr}dontCount`].includes(iteration)
+      cookies[`${_addr}${_prufClient.network.name}dontCount`] &&
+      cookies[`${_addr}${_prufClient.network.name}dontCount`].includes(
+        iteration
+      )
     ) {
       //console.log(`Caught count exception ${iteration}`);
       return buildSubNodes(_addr, _prufClient, iteration + 1, arr, subNodes);
@@ -924,10 +980,11 @@ export default function Dashboard(props) {
 
     _prufClient.get.node.tokenExists(String(iteration)).then((e) => {
       if (e) {
+        console.log(iteration);
         if (!arr.includes(iteration)) {
           arr.push(iteration);
           subNodes.push(iteration);
-          setCookieTo(`${_addr}subNodes`, subNodes);
+          setCookieTo(`${_addr}${_prufClient.network.name}subNodes`, subNodes);
         }
         return buildSubNodes(_addr, _prufClient, iteration + 1, arr, subNodes);
       } else {
@@ -951,7 +1008,7 @@ export default function Dashboard(props) {
     dontCount
   ) => {
     if (!dontCount) {
-      dontCount = cookies[`${_addr}dontCount`] || [];
+      dontCount = cookies[`${_addr}${_prufClient.network.name}dontCount`] || [];
       console.log({ dontCount });
     }
     if (!iteration) iteration = 0;
@@ -1028,14 +1085,21 @@ export default function Dashboard(props) {
                 if (!dontCount.includes(nodeArray[iteration])) {
                   console.log({ iteration, dontCount });
                   dontCount.push(nodeArray[iteration]);
-                  setCookieTo(`${_addr}dontCount`, dontCount);
+                  setCookieTo(
+                    `${_addr}${_prufClient.network.name}dontCount`,
+                    dontCount
+                  );
                 } else {
                   console.log(
                     "Counted when should not have... Removing cached values"
                   );
-                  let temp = cookies[`${_addr}subNodes`];
+                  let temp =
+                    cookies[`${_addr}${_prufClient.network.name}subNodes`];
                   temp.splice(temp.indexOf(nodeArray[iteration]), 1);
-                  setCookieTo(`${_addr}subNodes`, temp);
+                  setCookieTo(
+                    `${_addr}${_prufClient.network.name}subNodes`,
+                    temp
+                  );
                 }
 
                 return getNodesFromDB(
@@ -1118,12 +1182,13 @@ export default function Dashboard(props) {
       rootArray = obj.rArr,
       _nodeSets = obj.sets;
 
+    console.log("All nodes:", allNodes);
+
     //console.log(allNodes, allClassNames, rootArray)
 
     allNodes.forEach((node) => {
       _prufClient.get.node.record(String(node.id)).then((e) => {
         console.log(e);
-
         _nodeSets[String(rootArray[Number(e.root - 1)].id)].push({
           id: node.id,
           name: node.name
@@ -1470,52 +1535,52 @@ export default function Dashboard(props) {
 
   return (
     <div className={classes.wrapper}>
-         <Particles
-      params={{
-        "particles": {
-            "number": {
-                "value": 60,
-                "density": {
-                    "enable": true,
-                    "value_area": 1500
-                }
+      <Particles
+        params={{
+          particles: {
+            number: {
+              value: 60,
+              density: {
+                enable: true,
+                value_area: 1500,
+              },
             },
-            "line_linked": {
-                "enable": true,
-                "opacity": 0.02
+            line_linked: {
+              enable: true,
+              opacity: 0.02,
             },
-            "move": {
-                "direction": "right",
-                "speed": 0.05
+            move: {
+              direction: "right",
+              speed: 0.05,
             },
-            "size": {
-                "value": 1
+            size: {
+              value: 1,
             },
-            "opacity": {
-                "anim": {
-                    "enable": true,
-                    "speed": 1,
-                    "opacity_min": 0.05
-                }
-            }
-        },
-        "interactivity": {
-            "events": {
-                "onclick": {
-                    "enable": true,
-                    "mode": "push"
-                }
+            opacity: {
+              anim: {
+                enable: true,
+                speed: 1,
+                opacity_min: 0.05,
+              },
             },
-            "modes": {
-                "push": {
-                    "particles_nb": 1
-                }
-            }
-        },
-        "retina_detect": true
-    }} 
-    className="particles"
-    />
+          },
+          interactivity: {
+            events: {
+              onclick: {
+                enable: true,
+                mode: "push",
+              },
+            },
+            modes: {
+              push: {
+                particles_nb: 1,
+              },
+            },
+          },
+          retina_detect: true,
+        }}
+        className="particles"
+      />
       <Sidebar
         routes={sidebarRoutes}
         addr={addr}
