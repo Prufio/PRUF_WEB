@@ -903,6 +903,7 @@ export default function Dashboard(props) {
       });
 
       _prufClient.get.node.priceData().then((e) => {
+        console.log(e)
         setCurrentACIndex(e.currentNodeIndex);
         setCurrentACPrice(e.currentNodePrice);
         console.log(e);
