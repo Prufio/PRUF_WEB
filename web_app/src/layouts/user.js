@@ -118,6 +118,7 @@ export default function Dashboard(props) {
   const connectArweaveEvent = new Event("connectArweave");
   const searchEvent = new Event("search");
   const clearSearchEvent = new Event("clearSearch");
+  const clearNodeCache = new Event("clearNodeCache");
 
   //classes for main panel
   const mainPanelClasses =
@@ -167,10 +168,14 @@ export default function Dashboard(props) {
       setSearchQuery();
     });
 
-    window.addEventListener("clearSearch", () => {
-      console.log("Trying to search for asset");
-      setSearchQuery(window.idxQuery);
-    });
+    // window.addEventListener("clearSearch", () => {
+    //   console.log("Trying to search for asset");
+    //   setSearchQuery(window.idxQuery);
+    // });
+
+    window.addEventListener("clearNodeCache", ()=>{
+      setCookie("")
+    })
 
     window.addEventListener("connectArweave", () => {
       if (!window.arweaveWallet) {
@@ -769,6 +774,7 @@ export default function Dashboard(props) {
             path={prop.layout + prop.path}
             render={() => (
               <prop.component
+                clearNodeCache={clearNodeCache}
                 kovanPruf={kovanPruf}
                 mumbaiPruf={mumbaiPruf}
                 m1tnPruf={m1tnPruf}

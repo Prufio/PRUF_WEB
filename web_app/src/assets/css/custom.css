@@ -108,7 +108,14 @@ body {
 .flexRow {
   display: inline-flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content:space-between;
+}
+
+.flexRowWide {
+  width:90%;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content:space-between;
 }
 
 .MLBGradientSubmit {

@@ -709,6 +709,8 @@ export default function NewRecord(props) {
     ];
 
     arr.forEach(root => {
+      console.log({sets: props.nodeSets, roots: props.roots, names: arr})
+      if(props.nodeSets[root.id] && props.nodeSets[root.id].length > 0)
       rootSelection.push(
         <MenuItem
           key={"key" + String(root.id)}
@@ -1103,9 +1105,12 @@ export default function NewRecord(props) {
                     <CardIcon className="headerIconBack">
                       <Category />
                     </CardIcon>
+                    <div className="flexRowWide">
                     <h4 className={classes.cardIconTitle}>
                       Node Selection
                     </h4>
+                    
+                    </div>
                   </CardHeader>
                   <CardBody>
                     <form>

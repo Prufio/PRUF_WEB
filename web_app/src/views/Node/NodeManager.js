@@ -12,6 +12,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import MenuItem from "@material-ui/core/MenuItem";
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
+import { useCookies } from "react-cookie";
 import GridItem from "components/Grid/GridItem.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
@@ -69,6 +70,7 @@ export default function NodeManager(props) {
   // const [actionState, setActionState] = React.useState({})
   const [forceReload] = React.useState(true);
   const [resetToDefault, setResetToDefault] = React.useState("");
+  const [cookies, setCookie, removeCookie] = useCookies(["nodeList"]);
 
   const [formChanged, setFormChanged] = React.useState(false);
   const [transactionActive, setTransactionActive] = React.useState(false);
@@ -933,6 +935,33 @@ export default function NodeManager(props) {
     }
   };
 
+  const clearNodeCookies = () => {
+    swalReact({
+      icon: "warning",
+      title: "Are you sure?",
+      text: "⚠️ Clearing the cache will cause the page to refresh.",
+      buttons:{
+        back:{
+          text: "⬅️ Go Back",
+          value: "back",
+          className: "delegationButtonBack",
+        },
+        clear:{
+          text: "Clear Cache 🗑️",
+          value: "clear",
+          className: "delegationButtonBack",
+        }
+      }
+    }).then(value=>{
+      if(value==="clear"){
+        removeCookie(`${props.addr}${props.prufClient.network.name}roots`)
+        removeCookie(`${props.addr}${props.prufClient.network.name}subNodes`)
+        removeCookie(`${props.addr}${props.prufClient.network.name}dontCount`)
+        window.location.reload()
+      } 
+    })
+  }
+
   const getAllCosts = (obj, costs, iteration) => {
     if (!obj) return;
     if (!costs) costs = {};
@@ -1055,7 +1084,10 @@ export default function NodeManager(props) {
             <CardIcon className="headerIconBack">
               <AccountBalance />
             </CardIcon>
-            <h4 className={classes.cardIconTitle}>Node Manager</h4>
+            <div className="flexRowWide">
+              <h4 className={classes.cardIconTitle}>Node Manager</h4>
+              <Button onClick={()=>{clearNodeCookies()}} className="MLBGradient">Refresh Node Cache</Button>
+            </div>
             {dash && (
               <Button className="nodeButtonActive">
                 <Dashboard />
