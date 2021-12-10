@@ -375,7 +375,7 @@ export default function Dashboard(props) {
     );
 
     let m1tnWeb3 = require("web3");
-    m1tnWeb3 = new Web3("http://use-util.cloud.milkomeda.com:8545/");
+    m1tnWeb3 = new Web3("https://use-util.cloud.milkomeda.com:8555/");
     let kovanWeb3 = require("web3");
     kovanWeb3 = new Web3(
       "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
@@ -486,7 +486,7 @@ export default function Dashboard(props) {
       window.web3 = web3;
 
       let m1tnWeb3 = require("web3");
-      m1tnWeb3 = new Web3("http://use-util.cloud.milkomeda.com:8545/");
+      m1tnWeb3 = new Web3("https://use-util.cloud.milkomeda.com:8555/");
       let kovanWeb3 = require("web3");
       kovanWeb3 = new Web3(
         "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
