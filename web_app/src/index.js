@@ -28,7 +28,7 @@ ReactDOM.render(
       <Switch>
         <Route path="/user" component={UserLayout} />
         {
-          /* fullUrl ? <Redirect from="/" to={fullUrl} /> :   */ <Redirect
+          <Redirect
             from="/"
             to="/user/home"
           />
