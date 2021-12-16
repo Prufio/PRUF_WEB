@@ -38,56 +38,24 @@ const useStyles = makeStyles(styles);
 export default function Home(props) {
   const classes = useStyles();
 
-  // eslint-disable-next-line no-unused-vars
   const [error, setError] = React.useState("");
-  // const [simpleSelect, setSimpleSelect] = React.useState("");
   const [prufTransactionActive, setPrufTransactionActive] =
     React.useState(false);
-  // const [nodeTransactionActive, setNodeTransactionActive] = React.useState(
-  //     false
-  // )
-  // eslint-disable-next-line no-unused-vars
   const [txStatus, setTxStatus] = React.useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [rootName, setRootName] = React.useState("");
-  // eslint-disable-next-line no-unused-vars
   const [txHash, setTxHash] = React.useState("");
-  // const [ACPrice, setACPrice] = React.useState("");
-  const [isMinting, setIsMinting] = React.useState(false);
   const link = document.createElement("div");
-  // eslint-disable-next-line no-unused-vars
   const [isRefreshingEther, setIsRefreshingEther] = React.useState(false);
-  // eslint-disable-next-line no-unused-vars
   const [isRefreshingPruf, setIsRefreshingPruf] = React.useState(false);
 
   const [updatedEther, setUpdatedEther] = React.useState();
   const [updatedPruf, setUpdatedPruf] = React.useState();
   const [updatedAssets, setUpdatedAssets] = React.useState();
 
-  const [deposit, setDeposit] = React.useState(10000);
-  const [loginDeposit, setloginDeposit] = React.useState(10000);
-  const [loginDepositState, setloginDepositState] = React.useState("");
-  // eslint-disable-next-line no-unused-vars
-  const [root, setRoot] = React.useState("");
-  // const [loginRoot, setloginRoot] = React.useState('')
-  // eslint-disable-next-line no-unused-vars
-  const [loginRootState, setloginRootState] = React.useState("");
-
-  // eslint-disable-next-line no-unused-vars
-  const [ACName, setACName] = React.useState("");
-  // const [loginACName, setloginACName] = React.useState('')
-  // eslint-disable-next-line no-unused-vars
-  const [loginACNameState, setloginACNameState] = React.useState("");
-
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
-  const [hasMinted, setHasMinted] = React.useState(false);
 
   React.useEffect(() => {
-    // eslint-disable-next-line react/prop-types
     if (props.ps) {
-      // eslint-disable-next-line react/prop-types
       props.ps.element.scrollTop = 0;
-      //console.log("Scrolled to ", props.ps.element.scrollTop)
     } else {
       window.scrollTo({ top: 0, behavior: "smooth" });
       document.documentElement.scrollTop = 0;
@@ -171,7 +139,6 @@ export default function Home(props) {
         }
       });
 
-      // eslint-disable-next-line react/prop-types
       props.prufClient.get.asset
         // eslint-disable-next-line react/prop-types
         .balanceOf(props.addr)
@@ -179,7 +146,6 @@ export default function Home(props) {
           setUpdatedAssets(e);
         });
 
-      // eslint-disable-next-line react/prop-types
       props.prufClient.get.pruf
         // eslint-disable-next-line react/prop-types
         .balanceOf(props.addr)
