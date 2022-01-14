@@ -1582,8 +1582,13 @@ max-width: 80px !important;
 }
 
 .home2 {
+  border-radius: 10px 10px 10px 10px !important;
   padding: 15px 0px 0px 350px !important;
   width: 850px !important;
+}
+
+.home2Card {
+  border-radius: 10px 10px 10px 10px !important;
 }
 
 .home1text1 {
@@ -1604,15 +1609,30 @@ max-width: 80px !important;
   border-radius: 5.5px 5.5px 0px 0 !important;
   max-height: 400px !important;
 }
+.homeAssetImage:hover {
+  transition: all 300ms cubic-bezier(0.34, 1.61, 0.7, 1);
+  transform: translate3d(0, -10px, 0);
+  cursor: pointer;
+}
+
+.collectionsAssetImage {
+  border-radius: 5.5px 5.5px 0px 0 !important;
+  max-height: 180px !important;
+}
+.collectionsAssetImage:hover {
+  transition: all 300ms cubic-bezier(0.34, 1.61, 0.7, 1);
+  transform: translate3d(0, -10px, 0);
+  cursor: pointer;
+}
 
 .collectionsPRUFAsset {
   background-color: rgba(245, 245, 245, 0.9);
   border-radius: 50% !important;
-  max-height: 70px;
-  max-width: 70px;
+  max-height: 60px;
+  max-width: 60px;
   position: relative;
   margin-left: 41%;
-  margin-top: -35px;
+  margin-top: -30px;
 }
 
 .button1 {
@@ -1638,6 +1658,17 @@ max-width: 80px !important;
 .CJTbold {
   display: flex;
   width: 100%;
+  /* justify-content: center; */
+}
+
+.CJTbold2 {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.CJTbold3 {
+  display: flex;
   justify-content: center;
 }
 
@@ -1666,9 +1697,40 @@ max-width: 80px !important;
   background-color: rgba(245, 245, 245, 0.349) !important;
   height: 450px !important;
   width: 100% !important;
+  border-radius: 0px 10px 10px 10px !important;
 }
 
 .topCollectionsItem {
+  margin-top: 0px !important;
+  border-radius: 10px 10px 10px 10px !important;
+  margin-top: 0px !important;
   background-color: rgb(245, 245, 245) !important;
-  height: 100%;
+  max-height: 410px;
+}
+
+.topCollectionsItemCard {
+  margin-top: -29px !important;
+  max-width: 45% !important;
+  border-radius: 0px 0px 0px 6px !important;
+}
+
+.topCollectionsItemCard2 {
+  margin-top: -29px !important;
+  max-width: 45% !important;
+  border-radius: 0px 0px 6px 0px !important;
+}
+
+.topCollectionsCardTitle {
+  padding: 5px;
+  border-radius: 6px 6px 0px 0px !important;
+  box-shadow: none !important;
+  margin-top: 0px !important;
+  width: 90% !important;
+}
+.topCollectionsCardTitle {
+  padding: 0px 0px 0px 5px;
+  border-radius: 6px 6px 0px 0px !important;
+  box-shadow: none !important;
+  margin-top: 5px !important;
+  width: 90% !important;
 }

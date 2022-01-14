@@ -4,9 +4,6 @@ import swalReact from "@sweetalert/with-react";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import ComplexProjectCard from "examples/Cards/ProjectCards/ComplexProjectCard";
-import MDBox from "components/MDBox";
-import CustomInput from "components/CustomInput/CustomInput.js";
 
 import Pruf from "../../assets/img/pruftoken.png";
 import PrufBlk from "../../assets/img/pruftokenblk.png";
@@ -229,7 +226,7 @@ export default function Home(props) {
           </Card>
         </div>
         <div className="home2">
-          <Card image className={classes.cardHover2}>
+          <Card image className="home2Card">
             <img
               title="View Asset"
               src={placeholder}
@@ -246,7 +243,7 @@ export default function Home(props) {
       <div className="flex">
         <div className="CJTbold">
           <div>
-          <h4>Top Collections</h4>
+            <h4>Top Collections</h4>
           </div>
         </div>
       </div>
@@ -254,80 +251,142 @@ export default function Home(props) {
         <GridContainer>
           <GridItem xs={12} sm={6} md={6} lg={3}>
             <Card image className="topCollectionsItem">
-            <img
-              title="View Asset"
-              src={monkey}
-              alt=""
-              className="homeAssetImage"
-            />
-            <img
-              title="View Asset"
-              src={PrufBlk}
-              alt=""
-              className="collectionsPRUFAsset"
-            />
+              <img
+                title="View Asset"
+                src={monkey}
+                alt=""
+                className="collectionsAssetImage"
+              />
+              <img
+                title="View Asset"
+                src={PrufBlk}
+                alt=""
+                className="collectionsPRUFAsset"
+              />
+              <div className="CJTbold3">
+              <Card className="topCollectionsCardTitle">
+                <h4>Name</h4>
+              </Card>
+              </div>
+              <div className="CJTbold2">
+                    <Card className="topCollectionsItemCard">
+                      <CardHeader>
+                        <h4>Items</h4>
+                      </CardHeader>
+                      <CardFooter stats>Views</CardFooter>
+                    </Card>
+                    <Card className="topCollectionsItemCard2">
+                      <CardHeader>
+                        <h4>Floor</h4>
+                      </CardHeader>
+                      <CardFooter stats>7 days volume</CardFooter>
+                    </Card>
+              </div>
             </Card>
           </GridItem>
           <GridItem xs={12} sm={6} md={6} lg={3}>
             <Card image className="topCollectionsItem">
-            <img
-              title="View Asset"
-              src={monkey}
-              alt=""
-              className="homeAssetImage"
-            />
-            <img
-              title="View Asset"
-              src={PrufBlk}
-              alt=""
-              className="collectionsPRUFAsset"
-            />
+              <img
+                title="View Asset"
+                src={monkey}
+                alt=""
+                className="collectionsAssetImage"
+              />
+              <img
+                title="View Asset"
+                src={PrufBlk}
+                alt=""
+                className="collectionsPRUFAsset"
+              />
+              <div className="CJTbold3">
+              <Card className="topCollectionsCardTitle">
+                <h4>Name</h4>
+              </Card>
+              </div>
+              <div className="CJTbold2">
+                    <Card className="topCollectionsItemCard">
+                      <CardHeader>
+                        <h4>Items</h4>
+                      </CardHeader>
+                      <CardFooter stats>Views</CardFooter>
+                    </Card>
+                    <Card className="topCollectionsItemCard2">
+                      <CardHeader>
+                        <h4>Floor</h4>
+                      </CardHeader>
+                      <CardFooter stats>7 days volume</CardFooter>
+                    </Card>
+              </div>
             </Card>
           </GridItem>
           <GridItem xs={12} sm={6} md={6} lg={3}>
             <Card image className="topCollectionsItem">
-            <img
-              title="View Asset"
-              src={monkey}
-              alt=""
-              className="homeAssetImage"
-            />
-            <img
-              title="View Asset"
-              src={PrufBlk}
-              alt=""
-              className="collectionsPRUFAsset"
-            />
+              <img
+                title="View Asset"
+                src={monkey}
+                alt=""
+                className="collectionsAssetImage"
+              />
+              <img
+                title="View Asset"
+                src={PrufBlk}
+                alt=""
+                className="collectionsPRUFAsset"
+              />
+              <div className="CJTbold3">
+              <Card className="topCollectionsCardTitle">
+                <h4>Name</h4>
+              </Card>
+              </div>
+              <div className="CJTbold2">
+                    <Card className="topCollectionsItemCard">
+                      <CardHeader>
+                        <h4>Items</h4>
+                      </CardHeader>
+                      <CardFooter stats>Views</CardFooter>
+                    </Card>
+                    <Card className="topCollectionsItemCard2">
+                      <CardHeader>
+                        <h4>Floor</h4>
+                      </CardHeader>
+                      <CardFooter stats>7 days volume</CardFooter>
+                    </Card>
+              </div>
             </Card>
           </GridItem>
           <GridItem xs={12} sm={6} md={6} lg={3}>
             <Card image className="topCollectionsItem">
-            <img
-              title="View Asset"
-              src={monkey}
-              alt=""
-              className="homeAssetImage"
-            />
-            <img
-              title="View Asset"
-              src={PrufBlk}
-              alt=""
-              className="collectionsPRUFAsset"
-            />
-
-<MDBox mb={1.5} mt={1.5}>
-                <ComplexProjectCard
-                  image={logoSlack}
-                  title="slack bot"
-                  description="If everything I did failed - which it doesn't, I think that it actually succeeds."
-                  dateTime="02.03.22"
-                  members={[team1, team2, team3, team4, team5]}
-                  dropdown={{
-                    action: openSlackBotMenu,
-                    menu: renderMenu(slackBotMenu, closeSlackBotMenu),
-                  }}
-                />
-              </MDBox>
+              <img
+                title="View Asset"
+                src={monkey}
+                alt=""
+                className="collectionsAssetImage"
+              />
+              <img
+                title="View Asset"
+                src={PrufBlk}
+                alt=""
+                className="collectionsPRUFAsset"
+              />
+              <div className="CJTbold3">
+              <Card className="topCollectionsCardTitle">
+                <h4>Name</h4>
+              </Card>
+              </div>
+              <div className="CJTbold2">
+                    <Card className="topCollectionsItemCard">
+                      <CardHeader>
+                        <h4>Items</h4>
+                      </CardHeader>
+                      <CardFooter stats>Views</CardFooter>
+                    </Card>
+                    <Card className="topCollectionsItemCard2">
+                      <CardHeader>
+                        <h4>Floor</h4>
+                      </CardHeader>
+                      <CardFooter stats>7 days volume</CardFooter>
+                    </Card>
+              </div>
             </Card>
           </GridItem>
         </GridContainer>
