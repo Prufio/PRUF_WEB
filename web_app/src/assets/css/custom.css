@@ -1572,3 +1572,103 @@ max-width: 80px !important;
   cursor: pointer;
   color:#ff1500;
 }
+
+.home1 {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 50px 0px 0px 150px !important;
+  max-width: 550px;
+}
+
+.home2 {
+  padding: 15px 0px 0px 350px !important;
+  width: 850px !important;
+}
+
+.home1text1 {
+  /* margin-left: 200px; */
+  color: whitesmoke !important;
+  font-weight: 750 !important;
+  font-size: 40px !important;
+}
+
+.home1text2 {
+  /* margin-left: 200px; */
+  color: whitesmoke !important;
+  font-weight: 450 !important;
+  font-size: 30px !important;
+}
+
+.homeAssetImage {
+  border-radius: 5.5px 5.5px 0px 0 !important;
+  max-height: 400px !important;
+}
+
+.collectionsPRUFAsset {
+  background-color: rgba(245, 245, 245, 0.9);
+  border-radius: 50% !important;
+  max-height: 70px;
+  max-width: 70px;
+  position: relative;
+  margin-left: 41%;
+  margin-top: -35px;
+}
+
+.button1 {
+  width: 170px;
+  background-color: rgb(0, 0, 0) !important;
+}
+
+.button2 {
+  left: 50px;
+  width: 170px;
+  background-color: white !important;
+  border-width: 3px !important;
+  border-style: solid;
+  border-color: #ffffff;
+  color: black !important;
+}
+
+.flex {
+  display: flex !important;
+  width: 100% !important;
+}
+
+.CJTbold {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.CJTbold h4 {
+  align-self: center;
+  font-weight: bold;
+  color: whitesmoke;
+  font-size: xx-large;
+}
+
+.CJTbold div {
+  background-color: rgba(245, 245, 245, 0.349) !important;
+  padding: 8px !important;
+  border-radius: 10px 10px 0px 0px ;
+  z-index: 9000;
+}
+
+.collectionsBox {
+  display: flex;
+  flex-direction: row !important;
+}
+
+.topCollectionsBox {
+  margin-top: 0px !important;
+  padding: 20px;
+  background-color: rgba(245, 245, 245, 0.349) !important;
+  height: 450px !important;
+  width: 100% !important;
+}
+
+.topCollectionsItem {
+  background-color: rgb(245, 245, 245) !important;
+  height: 100%;
+}

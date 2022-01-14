@@ -2,19 +2,35 @@ import React from "react";
 import "../../assets/css/custom.css";
 import swalReact from "@sweetalert/with-react";
 
-
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+import ComplexProjectCard from "examples/Cards/ProjectCards/ComplexProjectCard";
+import MDBox from "components/MDBox";
 import CustomInput from "components/CustomInput/CustomInput.js";
 
-import Eth from "../../assets/img/eth-logo.png";
 import Pruf from "../../assets/img/pruftoken.png";
-import Ada from "../../assets/img/adaCoin.png";
-import Matic from "../../assets/img/adaCoin.png"
-import Add from "@material-ui/icons/Add";
-import CheckShield from "@material-ui/icons/VerifiedUser";
-import NoAccount from "@material-ui/icons/PersonAdd";
+import PrufBlk from "../../assets/img/pruftokenblk.png";
+import Select from "@material-ui/core/Select";
+import ReactTable from "components/ReactTable/ReactTable.js";
+import placeholder from "../../assets/img/monalisa.jpeg";
+import monkey from "../../assets/img/bigmonkey.jpeg";
+import ReactTableSimple from "components/ReactTable/ReactTableSimple.js";
+import {
+  AccountBalance,
+  AccountBalanceWallet,
+  BarChartRounded,
+  Dashboard,
+  FiberManualRecordTwoTone,
+  ListAltRounded,
+  MultilineChart,
+  Settings,
+  ShowChart,
+  VpnKey,
+} from "@material-ui/icons";
 
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Danger from "components/Typography/Danger";
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
@@ -26,17 +42,21 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Tooltip from "@material-ui/core/Tooltip";
+import MenuItem from "@material-ui/core/MenuItem";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
+import selectStyles from "assets/jss/material-dashboard-pro-react/customSelectStyle.js";
 import "../../assets/css/custom.css";
 
 import { Cached, DashboardOutlined } from "@material-ui/icons";
-import { Polygon } from "@react-pdf/renderer";
+import { isMobile } from "react-device-detect";
 
 const useStyles = makeStyles(styles);
+const useSelectStyles = makeStyles(selectStyles);
 
 export default function Home(props) {
   const classes = useStyles();
+  const selectClasses = useSelectStyles();
 
   const [error, setError] = React.useState("");
   const [prufTransactionActive, setPrufTransactionActive] =
@@ -47,6 +67,11 @@ export default function Home(props) {
   const [isRefreshingEther, setIsRefreshingEther] = React.useState(false);
   const [isRefreshingPruf, setIsRefreshingPruf] = React.useState(false);
 
+  const [simpleSelect, setSimpleSelect] = React.useState("");
+  const [dash, setDash] = React.useState(true);
+  const [delegation, setDelegation] = React.useState(false);
+  const [analytics, setAnalytics] = React.useState(false);
+  const [rewards, setRewards] = React.useState(true);
   const [updatedEther, setUpdatedEther] = React.useState();
   const [updatedPruf, setUpdatedPruf] = React.useState();
   const [updatedAssets, setUpdatedAssets] = React.useState();
@@ -124,6 +149,25 @@ export default function Home(props) {
     return clearPRUFForm();
   };
 
+  const setDashButton = () => {
+    setDash(true);
+    setDelegation(false);
+    setAnalytics(false);
+  };
+
+  const setDelegationButton = () => {
+    // setDash(false)
+    // setDelegation(true)
+    // setAnalytics(false)
+    swalReact("Coming Soon!");
+  };
+
+  const setAnalyticsButton = () => {
+    // setDash(false)
+    // setDelegation(false)
+    swalReact("Coming Soon!");
+  };
+
   const refreshBalances = () => {
     if (!props.addr) return;
     console.log("Refreshing balances");
@@ -169,389 +213,125 @@ export default function Home(props) {
 
   return (
     <div>
-      <GridContainer>
-        <GridItem xs={12} sm={6} md={6} lg={4}>
-          <Card>
-            <CardHeader color="danger" stats icon>
-              <CardIcon
-                className="headerIconBack"
-                onClick={() => window.open("https://pruf.io/")}
-              >
-                <img className="Icon" src={Pruf} alt=""></img>
-              </CardIcon>
-              <p className={classes.cardCategory}>PRUF Balance</p>
-              {updatedPruf ? (
-                <h3 className={classes.cardTitle}>
-                  <>{String(Math.round(Number(updatedPruf) * 100) / 100)} </>
-                </h3>
-              ) : (
-                <h3 className={classes.cardTitle}>
-                  {/* eslint-disable-next-line react/prop-types */}
-                  {props.pruf !== "~" ? (
-                    <>
-                      {/* eslint-disable-next-line react/prop-types */}
-                      {String(
-                        Math.round(
-                          // eslint-disable-next-line react/prop-types
-                          Number(props.pruf) * 100
-                        ) / 100
-                      )}{" "}
-                    </>
-                  ) : (
-                    <>
-                      {/* eslint-disable-next-line react/prop-types */}
-                      {props.pruf}
-                    </>
-                  )}
-                </h3>
-              )}
-            </CardHeader>
-            <CardFooter stats>
-              {!isRefreshingPruf && (
-                <div className="refresh">
-                  <Cached
-                    onClick={() => {
-                      window.replaceAssetData.refreshBals = true;
-                      refreshBalances();
-                    }}
-                  />
-                </div>
-              )}
-              {isRefreshingPruf && (
-                <div className={classes.stats}>
-                  <div className="lds-ellipsisCard">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                  </div>
-                </div>
-              )}
-              {!prufTransactionActive && props.chainId === 42 && (
-                <div className="MLBGradientSubmit">
-                  <Button
-                    color="info"
-                    className="MLBGradient"
-                    onClick={() => purchasePRUF()}
-                  >
-                    Get PRUF
-                  </Button>
-                </div>
-              )}
-              {!prufTransactionActive && props.chainId === 1000 && (
-                <div className="MLBGradientSubmit">
-                  <Button
-                    color="info"
-                    className="MLBGradient"
-                    onClick={() => purchasePRUF()}
-                  >
-                    Get PRUF
-                  </Button>
-                </div>
-              )}
-              {prufTransactionActive && (
-                <h5 className="transactionMessage">
-                  Getting PRUF from the faucet
-                  <div className="lds-ellipsisIF2">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                  </div>
-                </h5>
-              )}
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={6} md={6} lg={4}>
-          <Card>
-            <CardHeader stats icon>
-              <CardIcon
-                className="headerIconBack"
-                onClick={() => window.open("https://ethereum.org/en/")}
-              >
-                {props.chainId === 1000
-                ? 
-                <img className="Icon" src={Ada} alt=""></img>
-                : 
-                props.chainId === 80001 
-                ? 
-                <img className="Icon" src={Matic} alt=""></img>
-                :
-                <img className="Icon" src={Eth} alt=""></img>
-                }
-              </CardIcon>
-
-              {props.chainId === 1000
-                ? 
-                <p className={classes.cardCategory}>TWADA Balance</p>
-                : 
-                props.chainId === 80001 
-                ? 
-                <p className={classes.cardCategory}>MumMatic Balance</p>
-                :
-                <p className={classes.cardCategory}>KETH Balance</p>
-              }
-              {updatedEther ? (
-                <h3 className={classes.cardTitle}>
-                  {updatedEther.substring(0, 7)}{" "}
-                </h3>
-              ) : // eslint-disable-next-line react/prop-types
-              props.ether ? (
-                <h3 className={classes.cardTitle}>
-                  {/* eslint-disable-next-line react/prop-types */}
-                  {props.ether.substring(0, 7)}{" "}
-                </h3>
-              ) : (
-                <h3 className={classes.cardTitle}>~</h3>
-              )}
-            </CardHeader>
-            <CardFooter stats>
-              {!isRefreshingEther && (
-                <div className="refresh">
-                  <Cached
-                    onClick={() => {
-                      window.replaceAssetData.refreshBals = true;
-                      refreshBalances();
-                    }}
-                  />
-                </div>
-              )}
-              {isRefreshingEther && (
-                <div className={classes.stats}>
-                  <div className="lds-ellipsisCard">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                  </div>
-                </div>
-              )}
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={6} md={6} lg={4}>
-          <Card onClick={() => (window.location.href = "/#/user/dashboard")}>
-            <CardHeader color="info" stats icon>
-              <CardIcon className="headerIconBack">
-                <DashboardOutlined />
-              </CardIcon>
-              <p className={classes.cardCategory}>Assets Held</p>
-              <Tooltip title="View Assets">
-                {updatedAssets ? (
-                  <h3 className={classes.cardTitle}>
-                    {updatedAssets} <small>Assets</small>
-                  </h3>
-                ) : (
-                  <h3 className={classes.cardTitle}>
-                    {/* eslint-disable-next-line react/prop-types */}
-                    {props.assets} <small>Assets</small>
-                  </h3>
-                )}
-              </Tooltip>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Success>
-                  <Add />
-                </Success>
-                <a className="homeCardText" href="/#/user/new-asset">
-                  Mint New Asset
-                </a>
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        {/* <GridItem xs={12} sm={6} md={6} lg={3}>
-                    <Card>
-                        <CardHeader color="danger" stats icon>
-                            {props.IDHolder === true || hasMinted === true ? (
-                                <>
-                                    <CardIcon
-                                        className="headerIconBack"
-                                        onClick={() => {
-                                            swalReact({
-                                                title:
-                                                    'User address is already verified.',
-                                                button: 'Okay',
-                                            })
-                                        }}
-                                    >
-                                        <CheckShield />
-                                    </CardIcon>
-                                    <p className={classes.cardCategory}>
-                                        User Status
-                                    </p>
-                                    <Tooltip title="User already holds an ID token.">
-                                        <h3 className={classes.cardTitle}>
-                                            Verified
-                                        </h3>
-                                    </Tooltip>
-                                </>
-                            ) : 
-                                props.IDHolder === false ? (
-                                    <>
-                                        <CardIcon
-                                            className="headerIconBack"
-                                            onClick={() => mintID()}
-                                        >
-                                            <NoAccount />
-                                        </CardIcon>
-                                        <p className={classes.cardCategory}>
-                                            User Status
-                                    </p>
-                                        <h3 className={classes.cardTitle}>
-                                            Not Verified
-                                    </h3>
-                                    </>
-                                ) : (
-                                    <>
-                                        <CardIcon className="headerIconBack">
-                                            <NoAccount />
-                                        </CardIcon>
-                                        <p className={classes.cardCategory}>
-                                            User Status
-                                    </p>
-                                    </>
-                                )}
-                        </CardHeader>
-                        <CardFooter stats>
-                            {props.IDHolder === true || hasMinted === true ? (
-                                <>
-                                    <div className={classes.stats}>
-                                        User Holds ID
-                                    </div>
-                                </>
-                            ) :
-                                props.IDHolder === false ? (
-                                    !isMinting ? (
-                                        <>
-                                            <button
-                                                className="homeCardText"
-                                                onClick={() => mintID()}
-                                            >
-                                                No ID held by user
-                                        </button>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <div className={classes.stats}>
-                                                <div className="lds-ellipsisCard">
-                                                    <div></div>
-                                                    <div></div>
-                                                    <div></div>
-                                                </div>
-                                            </div>
-                                        </>
-                                    )
-                                ) : (
-                                    <>
-                                        <div className={classes.stats}>
-                                            <div className="lds-ellipsisCard">
-                                                <div></div>
-                                                <div></div>
-                                                <div></div>
-                                            </div>
-                                        </div>
-                                    </>
-                                )}
-                        </CardFooter>
-                    </Card>
-                </GridItem> */}
-      </GridContainer>
-      <Card>
-        <CardHeader color="danger" stats icon>
-          <CardIcon className="headerIconBack">
-            <div className="centerJustifiedIcon">
-            <span className="material-icons">store</span>
+      <div className="flex">
+        <div>
+          <Card className="home1">
+            <h4 className="home1text1">
+              Discover, collect, and sell extraordinary NFTs
+            </h4>
+            <h4 className="home1text2">
+              OpenSea is the world's first and largest NFT marketplace
+            </h4>
+            <div>
+              <Button className="button1">Explore</Button>
+              <Button className="button2">Create</Button>
             </div>
-            {/* <h4 className="centerJustifiedTitle"> */}
-            <h4>Marketspace</h4>
-          </CardIcon>
-        </CardHeader>
-        <h3 className="centerJustified">Coming Soon...</h3>
-        <CardFooter stats></CardFooter>
-      </Card>
-      {/* <Card>
-        <CardHeader color="info" icon>
-          <CardIcon className="headerIconBack">
-            <img className="IconFaucet" src={Pruf} alt=""></img>
-          </CardIcon>
-          <h4 className={classes.cardIconTitle}>
-            PRUF Faucet (Kovan Testnet Only)
-          </h4>
-        </CardHeader>
-        {!props.addr && (
-          <CardBody>
-            <form>
-              <h3 className="bump">
-                <br />
-                Please{" "}
-                <a
-                  onClick={() => {
-                    if (window.ethereum) {
-                      window.ethereum
-                        .request({
-                          method: "eth_accounts",
-                          params: {},
-                        })
-                        .then(async (accounts) => {
-                          console.log(
-                            window.web3.utils.toChecksumAddress(accounts[0])
-                          );
-                        });
-                    } else swalReact("No ethereum provider detected");
-                  }}
-                >
-                  connect
-                </a>{" "}
-                to an Ethereum provider.
-              </h3>
-            </form>
-          </CardBody>
-        )}
-        {props.prufClient === undefined && props.addr && (
-          <CardBody>
-            <form>
-              <h3>
-                Connecting to the blockchain
-                <div className="lds-ellipsisIF">
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                </div>
-              </h3>
-            </form>
-          </CardBody>
-        )}
-
-        {props.prufClient !== undefined &&
-          props.prufClient !== {} &&
-          props.addr && (
+          </Card>
+        </div>
+        <div className="home2">
+          <Card image className={classes.cardHover2}>
+            <img
+              title="View Asset"
+              src={placeholder}
+              alt=""
+              className="homeAssetImage"
+            />
             <CardBody>
-              <form>
-                {!prufTransactionActive && (
-                  <div className="MLBGradientSubmit">
-                    <Button
-                      color="info"
-                      className="MLBGradient"
-                      onClick={() => purchasePRUF()}
-                    >
-                      Get PRUF
-                    </Button>
-                  </div>
-                )}
-                {prufTransactionActive && (
-                  <h3>
-                    Getting PRUF from the faucet
-                    <div className="lds-ellipsisIF">
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                    </div>
-                  </h3>
-                )}
-              </form>
+              <h5 className={classes.cardTitleMain}>Name: Test</h5>
+              <h5 className={classes.cardTitle}>Node: Test</h5>
             </CardBody>
-          )}
-      </Card> */}
+          </Card>
+        </div>
+      </div>
+      <div className="flex">
+        <div className="CJTbold">
+          <div>
+          <h4>Top Collections</h4>
+          </div>
+        </div>
+      </div>
+      <Card className="topCollectionsBox">
+        <GridContainer>
+          <GridItem xs={12} sm={6} md={6} lg={3}>
+            <Card image className="topCollectionsItem">
+            <img
+              title="View Asset"
+              src={monkey}
+              alt=""
+              className="homeAssetImage"
+            />
+            <img
+              title="View Asset"
+              src={PrufBlk}
+              alt=""
+              className="collectionsPRUFAsset"
+            />
+            </Card>
+          </GridItem>
+          <GridItem xs={12} sm={6} md={6} lg={3}>
+            <Card image className="topCollectionsItem">
+            <img
+              title="View Asset"
+              src={monkey}
+              alt=""
+              className="homeAssetImage"
+            />
+            <img
+              title="View Asset"
+              src={PrufBlk}
+              alt=""
+              className="collectionsPRUFAsset"
+            />
+            </Card>
+          </GridItem>
+          <GridItem xs={12} sm={6} md={6} lg={3}>
+            <Card image className="topCollectionsItem">
+            <img
+              title="View Asset"
+              src={monkey}
+              alt=""
+              className="homeAssetImage"
+            />
+            <img
+              title="View Asset"
+              src={PrufBlk}
+              alt=""
+              className="collectionsPRUFAsset"
+            />
+            </Card>
+          </GridItem>
+          <GridItem xs={12} sm={6} md={6} lg={3}>
+            <Card image className="topCollectionsItem">
+            <img
+              title="View Asset"
+              src={monkey}
+              alt=""
+              className="homeAssetImage"
+            />
+            <img
+              title="View Asset"
+              src={PrufBlk}
+              alt=""
+              className="collectionsPRUFAsset"
+            />
+
+<MDBox mb={1.5} mt={1.5}>
+                <ComplexProjectCard
+                  image={logoSlack}
+                  title="slack bot"
+                  description="If everything I did failed - which it doesn't, I think that it actually succeeds."
+                  dateTime="02.03.22"
+                  members={[team1, team2, team3, team4, team5]}
+                  dropdown={{
+                    action: openSlackBotMenu,
+                    menu: renderMenu(slackBotMenu, closeSlackBotMenu),
+                  }}
+                />
+              </MDBox>
+            </Card>
+          </GridItem>
+        </GridContainer>
+      </Card>
     </div>
   );
 }

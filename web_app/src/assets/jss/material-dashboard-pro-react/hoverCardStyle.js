@@ -15,6 +15,22 @@ const hoverCardStyle = {
       },
     },
   },
+  cardHover2: {
+    "&:hover": {
+      "& $cardHeaderHover": {
+        transform: "translate3d(0, -10px, 0)",
+        cursor: "pointer",
+      },
+      "& $cardHeaderHoverDashboard": {
+        transform: "translate3d(0, -10px, 0)",
+        cursor: "pointer",
+      },
+      "& $cardHeaderHoverJdenticon": {
+        transform: "translate3d(0, -10px, 0)",
+        cursor: "pointer",
+      },
+    },
+  },
   cardHeaderHover: {
     transition: "all 300ms cubic-bezier(0.34, 1.61, 0.7, 1)",
     borderRadius: "3px !important",
