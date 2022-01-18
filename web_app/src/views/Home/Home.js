@@ -264,23 +264,23 @@ export default function Home(props) {
                 className="collectionsPRUFAsset"
               />
               <div className="CJTbold3">
-              <Card className="topCollectionsCardTitle">
-                <h4>Name</h4>
-              </Card>
+                <Card className="topCollectionsCardTitle">
+                  <h4>Name</h4>
+                </Card>
               </div>
               <div className="CJTbold2">
-                    <Card className="topCollectionsItemCard">
-                      <CardHeader>
-                        <h4>Items</h4>
-                      </CardHeader>
-                      <CardFooter stats>Views</CardFooter>
-                    </Card>
-                    <Card className="topCollectionsItemCard2">
-                      <CardHeader>
-                        <h4>Floor</h4>
-                      </CardHeader>
-                      <CardFooter stats>7 days volume</CardFooter>
-                    </Card>
+                <Card className="topCollectionsItemCard">
+                  <CardHeader>
+                    <h4>Items</h4>
+                  </CardHeader>
+                  <CardFooter stats>Views</CardFooter>
+                </Card>
+                <Card className="topCollectionsItemCard2">
+                  <CardHeader>
+                    <h4>Floor</h4>
+                  </CardHeader>
+                  <CardFooter stats>7 days volume</CardFooter>
+                </Card>
               </div>
             </Card>
           </GridItem>
@@ -299,23 +299,23 @@ export default function Home(props) {
                 className="collectionsPRUFAsset"
               />
               <div className="CJTbold3">
-              <Card className="topCollectionsCardTitle">
-                <h4>Name</h4>
-              </Card>
+                <Card className="topCollectionsCardTitle">
+                  <h4>Name</h4>
+                </Card>
               </div>
               <div className="CJTbold2">
-                    <Card className="topCollectionsItemCard">
-                      <CardHeader>
-                        <h4>Items</h4>
-                      </CardHeader>
-                      <CardFooter stats>Views</CardFooter>
-                    </Card>
-                    <Card className="topCollectionsItemCard2">
-                      <CardHeader>
-                        <h4>Floor</h4>
-                      </CardHeader>
-                      <CardFooter stats>7 days volume</CardFooter>
-                    </Card>
+                <Card className="topCollectionsItemCard">
+                  <CardHeader>
+                    <h4>Items</h4>
+                  </CardHeader>
+                  <CardFooter stats>Views</CardFooter>
+                </Card>
+                <Card className="topCollectionsItemCard2">
+                  <CardHeader>
+                    <h4>Floor</h4>
+                  </CardHeader>
+                  <CardFooter stats>7 days volume</CardFooter>
+                </Card>
               </div>
             </Card>
           </GridItem>
@@ -334,23 +334,23 @@ export default function Home(props) {
                 className="collectionsPRUFAsset"
               />
               <div className="CJTbold3">
-              <Card className="topCollectionsCardTitle">
-                <h4>Name</h4>
-              </Card>
+                <Card className="topCollectionsCardTitle">
+                  <h4>Name</h4>
+                </Card>
               </div>
               <div className="CJTbold2">
-                    <Card className="topCollectionsItemCard">
-                      <CardHeader>
-                        <h4>Items</h4>
-                      </CardHeader>
-                      <CardFooter stats>Views</CardFooter>
-                    </Card>
-                    <Card className="topCollectionsItemCard2">
-                      <CardHeader>
-                        <h4>Floor</h4>
-                      </CardHeader>
-                      <CardFooter stats>7 days volume</CardFooter>
-                    </Card>
+                <Card className="topCollectionsItemCard">
+                  <CardHeader>
+                    <h4>Items</h4>
+                  </CardHeader>
+                  <CardFooter stats>Views</CardFooter>
+                </Card>
+                <Card className="topCollectionsItemCard2">
+                  <CardHeader>
+                    <h4>Floor</h4>
+                  </CardHeader>
+                  <CardFooter stats>7 days volume</CardFooter>
+                </Card>
               </div>
             </Card>
           </GridItem>
@@ -369,28 +369,141 @@ export default function Home(props) {
                 className="collectionsPRUFAsset"
               />
               <div className="CJTbold3">
-              <Card className="topCollectionsCardTitle">
-                <h4>Name</h4>
-              </Card>
+                <Card className="topCollectionsCardTitle">
+                  <h4>Name</h4>
+                </Card>
               </div>
               <div className="CJTbold2">
-                    <Card className="topCollectionsItemCard">
-                      <CardHeader>
-                        <h4>Items</h4>
-                      </CardHeader>
-                      <CardFooter stats>Views</CardFooter>
-                    </Card>
-                    <Card className="topCollectionsItemCard2">
-                      <CardHeader>
-                        <h4>Floor</h4>
-                      </CardHeader>
-                      <CardFooter stats>7 days volume</CardFooter>
-                    </Card>
+                <Card className="topCollectionsItemCard">
+                  <CardHeader>
+                    <h4>Items</h4>
+                  </CardHeader>
+                  <CardFooter stats>Views</CardFooter>
+                </Card>
+                <Card className="topCollectionsItemCard2">
+                  <CardHeader>
+                    <h4>Floor</h4>
+                  </CardHeader>
+                  <CardFooter stats>7 days volume</CardFooter>
+                </Card>
               </div>
             </Card>
           </GridItem>
         </GridContainer>
       </Card>
+      <div className="flex">
+        <div>
+          <Card className="home1">
+            <h4 className="home1text3">PRüF University</h4>
+            <h4 className="home1text2">
+              Be a part of the forefront of NFT tech and creators. (Graphics:
+              how to mint, what are NFTs, selling your nfts, etc.)
+            </h4>
+          </Card>
+        </div>
+      </div>
+      <div className="flexCol">
+        <div>
+          <Card className="home1">
+            <h4 className="home1text3">Sort by Category</h4>
+          </Card>
+        </div>
+        <div className="flexCenter">
+          <GridContainer>
+            <GridItem xs={12} sm={6} md={6} lg={3}>
+              <Card image className="categoryItem">
+                <img
+                  title="View Asset"
+                  src={monkey}
+                  alt=""
+                  className="categoryAssetImage"
+                />
+                <h4 className="center">Art</h4>
+              </Card>
+            </GridItem>
+            <GridItem xs={12} sm={6} md={6} lg={3}>
+              <Card image className="categoryItem">
+                <img
+                  title="View Asset"
+                  src={monkey}
+                  alt=""
+                  className="categoryAssetImage"
+                />
+                <h4 className="center">Collectables</h4>
+              </Card>
+            </GridItem>
+            <GridItem xs={12} sm={6} md={6} lg={3}>
+              <Card image className="categoryItem">
+                <img
+                  title="View Asset"
+                  src={monkey}
+                  alt=""
+                  className="categoryAssetImage"
+                />
+                <h4 className="center">Domain Names</h4>
+              </Card>
+            </GridItem>
+            <GridItem xs={12} sm={6} md={6} lg={3}>
+              <Card image className="categoryItem">
+                <img
+                  title="View Asset"
+                  src={monkey}
+                  alt=""
+                  className="categoryAssetImage"
+                />
+                <h4 className="center">Music</h4>
+              </Card>
+            </GridItem>
+          </GridContainer>
+
+          <GridContainer>
+            <GridItem xs={12} sm={6} md={6} lg={3}>
+              <Card image className="categoryItem">
+                <img
+                  title="View Asset"
+                  src={monkey}
+                  alt=""
+                  className="categoryAssetImage"
+                />
+                <h4 className="center">Photography</h4>
+              </Card>
+            </GridItem>
+            <GridItem xs={12} sm={6} md={6} lg={3}>
+              <Card image className="categoryItem">
+                <img
+                  title="View Asset"
+                  src={monkey}
+                  alt=""
+                  className="categoryAssetImage"
+                />
+                <h4 className="center">Sports</h4>
+              </Card>
+            </GridItem>
+            <GridItem xs={12} sm={6} md={6} lg={3}>
+              <Card image className="categoryItem">
+                <img
+                  title="View Asset"
+                  src={monkey}
+                  alt=""
+                  className="categoryAssetImage"
+                />
+                <h4 className="center">Trading Cards</h4>
+              </Card>
+            </GridItem>
+            <GridItem xs={12} sm={6} md={6} lg={3}>
+              <Card image className="categoryItem">
+                <img
+                  title="View Asset"
+                  src={monkey}
+                  alt=""
+                  className="categoryAssetImage"
+                />
+                <h4 className="center">Virtual Worlds</h4>
+              </Card>
+            </GridItem>
+          </GridContainer>
+        </div>
+      </div>
     </div>
   );
 }
