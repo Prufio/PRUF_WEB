@@ -220,8 +220,8 @@ export default function Home(props) {
               OpenSea is the world's first and largest NFT marketplace
             </h4>
             <div>
-              <Button className="button1">Explore</Button>
-              <Button className="button2">Create</Button>
+              <Button className="button1" onClick={() => (window.location.href = "/#/user/search")}>Explore</Button>
+              <Button className="button2" onClick={() => (window.location.href = "/#/user/new-asset")}>Create</Button>
             </div>
           </Card>
         </div>
