@@ -1719,9 +1719,10 @@ max-width: 80px !important;
 }
 
 .CJTbold div {
-  background-color: rgba(245, 245, 245, 0.349) !important;
+  /* background-color: rgba(245, 245, 245, 0.349) !important; */
+  background-color: transparent !important;
   padding: 8px !important;
-  border-radius: 10px 10px 0px 0px ;
+  /* border-radius: 10px 10px 0px 0px ; */
   z-index: 9000;
 }
 
@@ -1733,10 +1734,21 @@ max-width: 80px !important;
 .topCollectionsBox {
   margin-top: 0px !important;
   padding: 20px;
-  background-color: rgba(245, 245, 245, 0.349) !important;
+  /* background-color: rgba(245, 245, 245, 0.349) !important; */
   height: 450px !important;
   width: 100% !important;
-  border-radius: 0px 10px 10px 10px !important;
+  background-color: transparent !important;
+  /* border-radius: 0px 10px 10px 10px !important; */
+}
+
+.categoryBox {
+  margin-top: 0px !important;
+  padding: 20px;
+  /* background-color: rgba(245, 245, 245, 0.349) !important; */
+  height: 450px !important;
+  width: 100% !important;
+  background-color: transparent !important;
+  /* border-radius: 0px 10px 10px 10px !important; */
 }
 
 .topCollectionsItem {

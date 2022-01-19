@@ -402,13 +402,14 @@ export default function Home(props) {
           </Card>
         </div>
       </div>
-      <div className="flexCol">
-        <div>
-          <Card className="home1">
-            <h4 className="home1text3">Sort by Category</h4>
-          </Card>
+      <div className="flex">
+        <div className="CJTbold">
+          <div>
+            <h4>Sort by Category</h4>
+          </div>
         </div>
-        <div className="flexCenter">
+      </div>
+        <Card className="categoryBox">
           <GridContainer>
             <GridItem xs={12} sm={6} md={6} lg={3}>
               <Card image className="categoryItem">
@@ -502,8 +503,7 @@ export default function Home(props) {
               </Card>
             </GridItem>
           </GridContainer>
-        </div>
-      </div>
+        </Card>
     </div>
   );
 }
