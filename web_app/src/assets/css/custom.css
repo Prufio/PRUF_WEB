@@ -1808,3 +1808,25 @@ max-width: 80px !important;
   font-weight: bold;
   font-size: 20px;
 }
+
+.categoryButton {
+  background-color: transparent !important;
+  color: #002a40 !important;
+  font-size: 11px !important;
+}
+
+.categoryButton:active {
+  background-color: transparent!important;
+  color: #00a8ff !important;
+}
+
+.categoryButtonActive {
+  background-color: transparent!important;
+  color: #00a8ff !important;
+  font-size: 11px !important;
+}
+
+.categoryButtonActive:active {
+  background-color: transparent !important;
+  color: #002a40 !important;
+}

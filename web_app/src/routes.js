@@ -10,6 +10,7 @@ import ModifyStatus from "views/Forms/ModifyStatus.js";
 import ModifyRGT from "views/Forms/ModifyRGT.js";
 import Transfer from "views/Forms/Transfer.js";
 import Search from "views/Search/Search.js";
+import Explore from "views/Search/Explore.js";
 import Verify from "views/Forms/Verify.js";
 import SetForSale from "views/Forms/SetForSale.js";
 import Counter from "Resources/Counter.js";
@@ -38,24 +39,24 @@ var dashRoutes = [
     layout: "/user",
   },
   {
+    path: "/new-asset",
+    name: "Create",
+    icon: NewRecordIcon,
+    component: NewRecord,
+    layout: "/user",
+  },
+  {
+    path: "/explore",
+    name: "Explore",
+    icon: SearchIcon,
+    component: Explore,
+    layout: "/user",
+  },
+  {
     path: "/dashboard",
     name: "Asset Dashboard",
     icon: DashboardIcon,
     component: Dashboard,
-    layout: "/user",
-  },
-  {
-    path: "/search",
-    name: "Search",
-    icon: SearchIcon,
-    component: Search,
-    layout: "/user",
-  },
-  {
-    path: "/new-asset",
-    name: "New Asset",
-    icon: NewRecordIcon,
-    component: NewRecord,
     layout: "/user",
   },
   {
