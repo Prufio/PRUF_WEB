@@ -257,12 +257,14 @@ export default function Home(props) {
                 alt=""
                 className="collectionsAssetImage"
               />
+              <div className="prufPlaceholder">
               <img
                 title="View Asset"
                 src={PrufBlk}
                 alt=""
                 className="collectionsPRUFAsset"
               />
+              </div>
               <div className="CJTbold3">
                 <Card className="topCollectionsCardTitle">
                   <h4>Name</h4>
@@ -292,12 +294,14 @@ export default function Home(props) {
                 alt=""
                 className="collectionsAssetImage"
               />
+              <div className="prufPlaceholder">
               <img
                 title="View Asset"
                 src={PrufBlk}
                 alt=""
                 className="collectionsPRUFAsset"
               />
+              </div>
               <div className="CJTbold3">
                 <Card className="topCollectionsCardTitle">
                   <h4>Name</h4>
@@ -327,12 +331,14 @@ export default function Home(props) {
                 alt=""
                 className="collectionsAssetImage"
               />
+              <div className="prufPlaceholder">
               <img
                 title="View Asset"
                 src={PrufBlk}
                 alt=""
                 className="collectionsPRUFAsset"
               />
+              </div>
               <div className="CJTbold3">
                 <Card className="topCollectionsCardTitle">
                   <h4>Name</h4>
@@ -362,12 +368,14 @@ export default function Home(props) {
                 alt=""
                 className="collectionsAssetImage"
               />
+              <div className="prufPlaceholder">
               <img
                 title="View Asset"
                 src={PrufBlk}
                 alt=""
                 className="collectionsPRUFAsset"
               />
+              </div>
               <div className="CJTbold3">
                 <Card className="topCollectionsCardTitle">
                   <h4>Name</h4>

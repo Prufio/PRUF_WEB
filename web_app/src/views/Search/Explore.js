@@ -5,6 +5,7 @@ import swalReact from "@sweetalert/with-react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 
+import Eth from "../assets/img/eth-logo2.png";
 import Pruf from "../../assets/img/pruftoken.png";
 import PrufBlk from "../../assets/img/pruftokenblk.png";
 import Select from "@material-ui/core/Select";
@@ -560,6 +561,40 @@ export default function Explore(props) {
           )}
         </CardHeader>
         {/* <br/> */}
+      </Card>
+
+      <Card className="topCollectionsBox">
+        <GridContainer>
+          <GridItem xs={12} sm={6} md={6} lg={3}>
+            <Card image className="topCollectionsItem">
+              <img
+                title="View Asset"
+                src={monkey}
+                alt=""
+                className="collectionsAssetImage"
+              />
+              <div className="prufPlaceholder">
+              <img
+                title="View Asset"
+                src={PrufBlk}
+                alt=""
+                className="collectionsPRUFAsset"
+              />
+              </div>
+              <div className="exploreBold">
+                <Card className="topCollectionsCardTitle">
+                  <h4 className="exploreTitle">Name</h4>
+                </Card>
+              </div>
+              <div className="exploreBold">
+                <Card className="exploreCollectionsCard">
+                  <p className="exploreCollectionstext" >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut odio temporibus voluptas error distinctio hic quae corrupti vero doloribus optio! Inventore ex quaerat modi blanditiis soluta maiores illum, ab velit.</p>
+                </Card>
+              </div>
+              <img className="Icon" src={Eth} alt=""></img>
+            </Card>
+          </GridItem>
+        </GridContainer>
       </Card>
     </div>
   );

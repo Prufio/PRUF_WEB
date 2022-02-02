@@ -1645,16 +1645,6 @@ max-width: 80px !important;
   cursor: pointer;
 }
 
-.collectionsPRUFAsset {
-  background-color: rgba(245, 245, 245, 0.9);
-  border-radius: 50% !important;
-  max-height: 60px;
-  max-width: 60px;
-  position: relative;
-  margin-left: 41%;
-  margin-top: -30px;
-}
-
 .button1 {
   width: 170px;
   background-color: rgb(0, 0, 0) !important;
@@ -1810,6 +1800,7 @@ max-width: 80px !important;
 }
 
 .categoryButton {
+  width: 140px;
   background-color: transparent !important;
   color: #002a40 !important;
   font-size: 11px !important;
@@ -1821,6 +1812,7 @@ max-width: 80px !important;
 }
 
 .categoryButtonActive {
+  width: 140px;
   background-color: transparent!important;
   color: #00a8ff !important;
   font-size: 11px !important;
@@ -1829,4 +1821,50 @@ max-width: 80px !important;
 .categoryButtonActive:active {
   background-color: transparent !important;
   color: #002a40 !important;
+}
+
+.exploreCollectionsCard {
+  padding: 15px;
+  margin-top: -30px !important;
+  border-radius: 0px 0px 0px 6px !important;
+  box-shadow: none !important;
+  width: 90% !important;
+}
+
+.exploreBold {
+  display: flex;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+}
+
+.prufPlaceholder {
+  display: flex;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.collectionsPRUFAsset {
+  background-color: rgba(245, 245, 245, 0.9);
+  border-radius: 50% !important;
+  max-height: 60px;
+  max-width: 60px;
+  position: relative;
+  margin-top: -30px;
+}
+
+.exploreCollectionstext{
+  color: gray !important;
+  font-weight: 400 !important;   
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+   overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300ch;
+  word-break:break-word;
+}
+
+.exploreTitle {
+  font-weight: bold !important;
 }
