@@ -241,11 +241,9 @@ export default function Home(props) {
         </div>
       </div>
       <div className="flex">
-        <div className="CJTbold">
-          <div>
-            <h4>Top Collections</h4>
-          </div>
-        </div>
+        <Card className="CJTbold4">
+            <h4 className="home1text4">Top Collections</h4>
+        </Card>
       </div>
       <Card className="topCollectionsBox">
         <GridContainer>
@@ -411,11 +409,9 @@ export default function Home(props) {
         </div>
       </div>
       <div className="flex">
-        <div className="CJTbold">
-          <div>
-            <h4>Sort by Category</h4>
-          </div>
-        </div>
+        <Card className="CJTbold4">
+            <h4 className="home1text4">Browse by Category</h4>
+        </Card>
       </div>
         <Card className="categoryBox">
           <GridContainer>

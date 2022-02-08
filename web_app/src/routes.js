@@ -24,11 +24,12 @@ import TransferNode from "views/Node/Forms/TransferNode.js";
 import FinalizeNode from "views/Node/Forms/FinalizeNode.js";
 
 // @material-ui/icons
-import DashboardIcon from "@material-ui/icons/DashboardOutlined";
+import Wallet from "@material-ui/icons/AccountBalanceWallet";
 import HomeIcon from "@material-ui/icons/HomeOutlined";
 import SearchIcon from "@material-ui/icons/Search";
 import NewRecordIcon from "@material-ui/icons/LibraryAddOutlined";
 import NodeManagerIcon from "@material-ui/icons/AccountBalance";
+import TrendingUp from "@material-ui/icons/TrendingUp";
 
 var dashRoutes = [
   {
@@ -52,10 +53,17 @@ var dashRoutes = [
     component: Explore,
     layout: "/user",
   },
+  // {
+  //   path: "/dashboard",
+  //   name: "Stats",
+  //   icon: TrendingUp,
+  //   component: Dashboard,
+  //   layout: "/user",
+  // },
   {
     path: "/dashboard",
-    name: "Asset Dashboard",
-    icon: DashboardIcon,
+    name: "Wallet",
+    icon: Wallet,
     component: Dashboard,
     layout: "/user",
   },

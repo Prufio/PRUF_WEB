@@ -757,7 +757,7 @@ class Sidebar extends React.Component {
           )}
         </a>
         <a href="/#/user/home" className={logoNormal}>
-          PRüF DASHBOARD
+          PRüF Marketplace
         </a>
       </div>
     );

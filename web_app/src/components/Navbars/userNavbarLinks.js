@@ -84,9 +84,9 @@ export default function HeaderLinks(props) {
                         }}
                         inputProps={{
                             onChange: (e) => setSearchBarVal(e.target.value),
-                            placeholder: 'Search Asset ID',
+                            placeholder: 'Search collections, creators, and items',
                             inputProps: {
-                                'aria-label': 'Search Asset ID',
+                                'aria-label': 'Search collections, creators, and items',
                                 className: classes.searchInput,
                             },
                         }}

@@ -19,9 +19,13 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Accordion from "@material-ui/core/Accordion";
+import CardBody from "components/Card/CardBody.js";
+import Success from "components/Typography/Success.js";
+import { Cached } from "@material-ui/icons";
 
 // @material-ui/icons
 import Refresh from "@material-ui/icons/Refresh";
+import Add from "@material-ui/icons/Add";
 import Share from "@material-ui/icons/Share";
 
 // core components
@@ -32,13 +36,16 @@ import Danger from "components/Typography/Danger.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
-import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
 import placeholder from "../../assets/img/placeholder.jpg";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import selectStyles from "assets/jss/material-dashboard-pro-react/customSelectStyle.js";
 import engravingStyles from "../../assets/css/custom";
+import Pruf from "../../assets/img/pruftoken.png";
+import Eth from "../../assets/img/eth-logo2.png";
+import Ada from "../../assets/img/adaCoin.png";
+import Matic from "../../assets/img/adaCoin.png";
 import {
   ArrowBackIos,
   ArrowForwardIos,
@@ -77,7 +84,21 @@ export default function Dashboard(props) {
   // eslint-disable-next-line no-unused-vars
   const [currency, setCurrency] = React.useState("ü");
 
+  const [error, setError] = React.useState("");
+  const [prufTransactionActive, setPrufTransactionActive] =
+    React.useState(false);
+  const [txStatus, setTxStatus] = React.useState(false);
+  const [txHash, setTxHash] = React.useState("");
+  const link = document.createElement("div");
+  const [isRefreshingEther, setIsRefreshingEther] = React.useState(false);
+  const [isRefreshingPruf, setIsRefreshingPruf] = React.useState(false);
+
+  const [updatedEther, setUpdatedEther] = React.useState();
+  const [updatedPruf, setUpdatedPruf] = React.useState();
+  const [updatedAssets, setUpdatedAssets] = React.useState();
+
   const assetArr = Object.values(props.assetObj);
+  const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
   // eslint-disable-next-line react/prop-types
   const numOfPages = Math.ceil(assetArr.length / props.assetsPerPage);
@@ -96,8 +117,8 @@ export default function Dashboard(props) {
   }, []);
 
   React.useEffect(() => {
-    setAssetsPerPage(props.assetsPerPage)
-  }, [props.assetsPerPage])
+    setAssetsPerPage(props.assetsPerPage);
+  }, [props.assetsPerPage]);
 
   const moreInfo = (e) => {
     //console.log(e);
@@ -157,7 +178,7 @@ export default function Dashboard(props) {
   const copyTextSnippet = (temp) => {
     navigator.clipboard.writeText(temp);
     if (isMobile) {
-      swalReact("Asset ID Copied to Clipboard!");
+      swalReact("Item ID Copied to Clipboard!");
     }
     if (!isMobile) {
       setCopyText(true);
@@ -165,6 +186,49 @@ export default function Dashboard(props) {
         setCopyText(false);
       }, 1000);
     }
+  };
+
+  const refreshBalances = () => {
+    if (!props.addr) return;
+    console.log("Refreshing balances");
+    console.log(window.replaceAssetData);
+
+    if (props.prufClient && props.prufClient.get) {
+      window.dispatchEvent(props.refresh);
+      window.web3.eth.getBalance(props.addr, (error, result) => {
+        if (error) {
+          console.log("error");
+        } else {
+          setUpdatedEther(window.web3.utils.fromWei(result, "ether"));
+        }
+      });
+
+      props.prufClient.get.asset
+        // eslint-disable-next-line react/prop-types
+        .balanceOf(props.addr)
+        .then((e) => {
+          setUpdatedAssets(e);
+        });
+
+      props.prufClient.get.pruf
+        // eslint-disable-next-line react/prop-types
+        .balanceOf(props.addr)
+        .then((e) => {
+          setUpdatedPruf(e);
+        });
+
+      forceUpdate();
+    } else {
+      window.web3.eth.getBalance(props.addr, (error, result) => {
+        if (error) {
+          console.log("error");
+        } else {
+          setUpdatedEther(window.web3.utils.fromWei(result, "ether"));
+        }
+      });
+    }
+
+    // eslint-disable-next-line react/prop-types
   };
 
   const generateAssetDash = (arr) => {
@@ -245,7 +309,7 @@ export default function Dashboard(props) {
                       {arr[i].displayImage !== "" &&
                         arr[i].displayImage !== undefined && (
                           <img
-                            title="View Asset"
+                            title="View Item"
                             src={arr[i].displayImage}
                             alt=""
                           />
@@ -272,7 +336,7 @@ export default function Dashboard(props) {
                       {arr[i].displayImage !== "" &&
                         arr[i].displayImage !== undefined && (
                           <img
-                            title="View Asset"
+                            title="View Item"
                             src={arr[i].displayImage}
                             alt=""
                           />
@@ -359,12 +423,12 @@ export default function Dashboard(props) {
                     image
                     className={classes.cardHeaderHoverDashboard}
                   >
-                    <img title="View Asset" src={placeholder} alt="" />
+                    <img title="View Item" src={placeholder} alt="" />
                   </CardHeader>
                 )}
                 {isMobile && (
                   <CardHeader image className={classes.cardHeaderHover}>
-                    <img title="View Asset" src={placeholder} alt="" />
+                    <img title="View Item" src={placeholder} alt="" />
                   </CardHeader>
                 )}
               </>
@@ -389,13 +453,21 @@ export default function Dashboard(props) {
       // eslint-disable-next-line react/prop-types
     } else if (props.assets === "0") {
       return (
-        <h2>
-          No assets held by user.{" "}
-          <a className="lightBlue" href="/#/user/new-asset">
-            Create One
-          </a>
-          .
-        </h2>
+        <div className="noHeldItemsBox">
+          <h4>
+            You hold no items.
+            <a className="lightBlueA" href="/#/user/explore">
+              Get one now!
+            </a>
+          </h4>
+        </div>
+        // <h2>
+        //   No assets held by user.{" "}
+        //   <a className="lightBlue" href="/#/user/new-asset">
+        //     Create One
+        //   </a>
+        //   .
+        // </h2>
       );
     } else {
       return (
@@ -412,12 +484,12 @@ export default function Dashboard(props) {
             <>
               {!isMobile && (
                 <CardHeader image className={classes.cardHeaderHoverDashboard}>
-                  <img title="View Asset" src={placeholder} alt="" />
+                  <img title="View Item" src={placeholder} alt="" />
                 </CardHeader>
               )}
               {isMobile && (
                 <CardHeader image className={classes.cardHeaderHover}>
-                  <img title="View Asset" src={placeholder} alt="" />
+                  <img title="View Item" src={placeholder} alt="" />
                 </CardHeader>
               )}
             </>
@@ -1283,19 +1355,320 @@ export default function Dashboard(props) {
   const selectClasses = useSelectStyles();
   return (
     <div>
+      <GridContainer>
+        <GridItem xs={12} sm={6} md={6} lg={4}>
+          <Card>
+            <CardHeader color="danger" stats icon>
+              <CardIcon
+                className="headerIconBack"
+                onClick={() => window.open("https://pruf.io/")}
+              >
+                <img className="Icon" src={Pruf} alt=""></img>
+              </CardIcon>
+              <p className={classes.cardCategory}>PRUF Balance</p>
+              {updatedPruf ? (
+                <h3 className={classes.cardTitle}>
+                  <>{String(Math.round(Number(updatedPruf) * 100) / 100)} </>
+                </h3>
+              ) : (
+                <h3 className={classes.cardTitle}>
+                  {/* eslint-disable-next-line react/prop-types */}
+                  {props.pruf !== "~" ? (
+                    <>
+                      {/* eslint-disable-next-line react/prop-types */}
+                      {String(
+                        Math.round(
+                          // eslint-disable-next-line react/prop-types
+                          Number(props.pruf) * 100
+                        ) / 100
+                      )}{" "}
+                    </>
+                  ) : (
+                    <>
+                      {/* eslint-disable-next-line react/prop-types */}
+                      {props.pruf}
+                    </>
+                  )}
+                </h3>
+              )}
+            </CardHeader>
+            <CardFooter stats>
+              {!isRefreshingPruf && (
+                <div className="refresh">
+                  <Cached
+                    onClick={() => {
+                      window.replaceAssetData.refreshBals = true;
+                      refreshBalances();
+                    }}
+                  />
+                </div>
+              )}
+              {isRefreshingPruf && (
+                <div className={classes.stats}>
+                  <div className="lds-ellipsisCard">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                  </div>
+                </div>
+              )}
+              {/* {!prufTransactionActive && props.chainId === 42 && (
+              <div className="MLBGradientSubmit">
+                <Button
+                  color="info"
+                  className="MLBGradient"
+                  onClick={() => purchasePRUF()}
+                >
+                  Get PRUF
+                </Button>
+              </div>
+            )}
+            {!prufTransactionActive && props.chainId === 1000 && (
+              <div className="MLBGradientSubmit">
+                <Button
+                  color="info"
+                  className="MLBGradient"
+                  onClick={() => purchasePRUF()}
+                >
+                  Get PRUF
+                </Button>
+              </div>
+            )} */}
+              {prufTransactionActive && (
+                <h5 className="transactionMessage">
+                  Getting PRUF from the faucet
+                  <div className="lds-ellipsisIF2">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                  </div>
+                </h5>
+              )}
+            </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={6} md={6} lg={4}>
+          <Card>
+            <CardHeader stats icon>
+              <CardIcon
+                className="headerIconBack"
+                onClick={() => window.open("https://ethereum.org/en/")}
+              >
+                {props.chainId === 1000 ? (
+                  <img className="Icon" src={Ada} alt=""></img>
+                ) : props.chainId === 80001 ? (
+                  <img className="Icon" src={Matic} alt=""></img>
+                ) : (
+                  <img className="Icon" src={Eth} alt=""></img>
+                )}
+              </CardIcon>
+
+              {props.chainId === 1000 ? (
+                <p className={classes.cardCategory}>TWADA Balance</p>
+              ) : props.chainId === 80001 ? (
+                <p className={classes.cardCategory}>MumMatic Balance</p>
+              ) : (
+                <p className={classes.cardCategory}>KETH Balance</p>
+              )}
+              {updatedEther ? (
+                <h3 className={classes.cardTitle}>
+                  {updatedEther.substring(0, 7)}{" "}
+                </h3>
+              ) : // eslint-disable-next-line react/prop-types
+              props.ether ? (
+                <h3 className={classes.cardTitle}>
+                  {/* eslint-disable-next-line react/prop-types */}
+                  {props.ether.substring(0, 7)}{" "}
+                </h3>
+              ) : (
+                <h3 className={classes.cardTitle}>~</h3>
+              )}
+            </CardHeader>
+            <CardFooter stats>
+              {!isRefreshingEther && (
+                <div className="refresh">
+                  <Cached
+                    onClick={() => {
+                      window.replaceAssetData.refreshBals = true;
+                      refreshBalances();
+                    }}
+                  />
+                </div>
+              )}
+              {isRefreshingEther && (
+                <div className={classes.stats}>
+                  <div className="lds-ellipsisCard">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                  </div>
+                </div>
+              )}
+            </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={6} md={6} lg={4}>
+          <Card onClick={() => (window.location.href = "/#/user/dashboard")}>
+            <CardHeader color="info" stats icon>
+              <CardIcon className="headerIconBack">
+                <DashboardOutlined />
+              </CardIcon>
+              <p className={classes.cardCategory}>Items Held</p>
+              <Tooltip title="View Items">
+                {updatedAssets ? (
+                  <h3 className={classes.cardTitle}>
+                    {updatedAssets} <small>Items</small>
+                  </h3>
+                ) : (
+                  <h3 className={classes.cardTitle}>
+                    {/* eslint-disable-next-line react/prop-types */}
+                    {props.assets} <small>Items</small>
+                  </h3>
+                )}
+              </Tooltip>
+            </CardHeader>
+            <CardFooter stats>
+              <div className={classes.stats}>
+                {!isRefreshingEther && (
+                  <div className="refresh">
+                    <Cached
+                      onClick={() => {
+                        window.replaceAssetData.refreshBals = true;
+                        refreshBalances();
+                      }}
+                    />
+                  </div>
+                )}
+                {isRefreshingEther && (
+                  <div className={classes.stats}>
+                    <div className="lds-ellipsisCard">
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                    </div>
+                  </div>
+                )}
+                {/* <Success>
+                <Add />
+              </Success>
+              <a className="homeCardText" href="/#/user/new-asset">
+                Mint New Item
+              </a> */}
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+        {/* <GridItem xs={12} sm={6} md={6} lg={3}>
+                  <Card>
+                      <CardHeader color="danger" stats icon>
+                          {props.IDHolder === true || hasMinted === true ? (
+                              <>
+                                  <CardIcon
+                                      className="headerIconBack"
+                                      onClick={() => {
+                                          swalReact({
+                                              title:
+                                                  'User address is already verified.',
+                                              button: 'Okay',
+                                          })
+                                      }}
+                                  >
+                                      <CheckShield />
+                                  </CardIcon>
+                                  <p className={classes.cardCategory}>
+                                      User Status
+                                  </p>
+                                  <Tooltip title="User already holds an ID token.">
+                                      <h3 className={classes.cardTitle}>
+                                          Verified
+                                      </h3>
+                                  </Tooltip>
+                              </>
+                          ) : 
+                              props.IDHolder === false ? (
+                                  <>
+                                      <CardIcon
+                                          className="headerIconBack"
+                                          onClick={() => mintID()}
+                                      >
+                                          <NoAccount />
+                                      </CardIcon>
+                                      <p className={classes.cardCategory}>
+                                          User Status
+                                  </p>
+                                      <h3 className={classes.cardTitle}>
+                                          Not Verified
+                                  </h3>
+                                  </>
+                              ) : (
+                                  <>
+                                      <CardIcon className="headerIconBack">
+                                          <NoAccount />
+                                      </CardIcon>
+                                      <p className={classes.cardCategory}>
+                                          User Status
+                                  </p>
+                                  </>
+                              )}
+                      </CardHeader>
+                      <CardFooter stats>
+                          {props.IDHolder === true || hasMinted === true ? (
+                              <>
+                                  <div className={classes.stats}>
+                                      User Holds ID
+                                  </div>
+                              </>
+                          ) :
+                              props.IDHolder === false ? (
+                                  !isMinting ? (
+                                      <>
+                                          <button
+                                              className="homeCardText"
+                                              onClick={() => mintID()}
+                                          >
+                                              No ID held by user
+                                      </button>
+                                      </>
+                                  ) : (
+                                      <>
+                                          <div className={classes.stats}>
+                                              <div className="lds-ellipsisCard">
+                                                  <div></div>
+                                                  <div></div>
+                                                  <div></div>
+                                              </div>
+                                          </div>
+                                      </>
+                                  )
+                              ) : (
+                                  <>
+                                      <div className={classes.stats}>
+                                          <div className="lds-ellipsisCard">
+                                              <div></div>
+                                              <div></div>
+                                              <div></div>
+                                          </div>
+                                      </div>
+                                  </>
+                              )}
+                      </CardFooter>
+                  </Card>
+              </GridItem> */}
+      </GridContainer>
+      <Card className="dashboardCard">
       {/* <GridContainer> */}
       {/* <GridItem xs={12}> */}
       {!viewAsset && (
-        <Card>
+        <Card className="innerDashboardCard">
           <CardHeader icon>
-            <CardIcon
+            {/* <CardIcon
               className="headerIconBack"
               onClick={() => {
                 moreInfo("back");
               }}
             >
-              <DashboardOutlined />
-            </CardIcon>
+              <DashboardOutlined /> */}
+            {/* </CardIcon> */}
             <div className="dashboardHeader">
               <div className="flexRowWithGap">
                 <h4 className={classes.cardIconTitle}>Asset Dashboard</h4>
@@ -1379,7 +1752,7 @@ export default function Dashboard(props) {
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
-                        <img src={selectedImage} alt="" />
+                      <img src={selectedImage} alt="" />
                     </>
                   )}
                   {selectedAssetObj.displayImage === "" && (
@@ -1573,13 +1946,13 @@ export default function Dashboard(props) {
                   )}
                   {selectedAssetObj.nodeData.storageProvider === "2" && (
                     <h6 className="storageProviderText">
-                       See it on&nbsp;
-                       <a
+                      See it on&nbsp;
+                      <a
                         href={`${selectedAssetObj.displayImage}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <img src={ARweavePNG} className="ARweave" alt=""/>
+                        <img src={ARweavePNG} className="ARweave" alt="" />
                       </a>
                     </h6>
                   )}
@@ -1724,10 +2097,10 @@ export default function Dashboard(props) {
       {!viewAsset && props.assets > 8 && (
         <Card className="dashboardFooter">
           {isMobile && (
-            <h6 className="dashboardFooterText">Assets Per Page: </h6>
+            <h6 className="dashboardFooterText">Items Per Page: </h6>
           )}
           {!isMobile && (
-            <h4 className="dashboardFooterText">Assets Per Page: </h4>
+            <h4 className="dashboardFooterText">Items Per Page: </h4>
           )}
           <br />
           <Select
@@ -1854,6 +2227,7 @@ export default function Dashboard(props) {
           </div>
         </Card>
       )}
+      </Card>
     </div>
   );
 }

@@ -171,6 +171,15 @@ body {
   color: #0168a0;
 }
 
+.lightBlueA {
+  margin-left: 10px;
+  color: #0091df;
+}
+
+.lightBlueA:hover {
+  color: #0168a0;
+}
+
 .links {
   color: #1b1b1b;
 }
@@ -1618,6 +1627,12 @@ max-width: 80px !important;
   font-size: 40px !important;
 }
 
+.home1text4 {
+  color: whitesmoke !important;
+  font-weight: 750 !important;
+  font-size: 40px !important;
+}
+
 .homeAssetImage {
   border-radius: 5.5px 5.5px 0px 0 !important;
   max-height: 400px !important;
@@ -1687,7 +1702,6 @@ max-width: 80px !important;
 .CJTbold {
   display: flex;
   width: 100%;
-  /* justify-content: center; */
 }
 
 .CJTbold2 {
@@ -1699,6 +1713,16 @@ max-width: 80px !important;
 .CJTbold3 {
   display: flex;
   justify-content: center;
+}
+
+.CJTbold4 {
+  display: flex;
+  width: 100%;
+  font-weight: bold !important;
+  color: whitesmoke !important;
+  font-size: xx-large !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 .CJTbold h4 {
@@ -1867,4 +1891,38 @@ max-width: 80px !important;
 
 .exploreTitle {
   font-weight: bold !important;
+}
+
+.chainSymbol{
+  width:20px;
+  height: 20px;
+}
+
+.chainSymbolPad {
+  height: 25px;
+  width: 30px;
+  margin-top: -30px;
+}
+
+.noHeldItemsBox {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 25%;
+  background-color: transparent !important;
+}
+
+.noHeldItemsBox h4 {
+color: whitesmoke;
+font-size: xx-large;
+font-weight: 450;
+}
+
+.dashboardCard {
+  background-color: transparent !important;
+  padding: 20px;
+}
+
+.innerDashboardCard {
+  margin-top: -40px !important;
 }

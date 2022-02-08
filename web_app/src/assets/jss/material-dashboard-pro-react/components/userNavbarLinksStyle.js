@@ -18,11 +18,11 @@ const adminNavbarLinksStyle = (theme) => ({
       paddingTop: "1px",
       paddingBottom: "1px",
       padding: "10px 15px",
-      width: "auto",
     },
   },
   searchInput: {
-    paddingTop: "2px",
+    height: "200px !important",
+    paddingTop: "2px"
   },
   searchRTL: {
     [theme.breakpoints.down("sm")]: {
@@ -68,7 +68,7 @@ const adminNavbarLinksStyle = (theme) => ({
     },
   },
   top: {
-    zIndex: "4",
+    zIndex: "4"
   },
   searchIcon: {
     width: "17px",
