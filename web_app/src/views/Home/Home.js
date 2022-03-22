@@ -217,7 +217,7 @@ export default function Home(props) {
               Discover, collect, and sell extraordinary NFTs
             </h4>
             <h4 className="home1text2">
-              OpenSea is the world's first and largest NFT marketplace
+              PRüF Assets are NFTs with super powers
             </h4>
             <div>
               <Button className="button1" onClick={() => (window.location.href = "/#/user/search")}>Explore</Button>
