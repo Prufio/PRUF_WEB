@@ -1,4 +1,4 @@
-//PRUF WEB APP RC1-Release
+//PRUF WEB APP Kovan and C1 Release with V1.0.0 contracts
 import React from "react";
 import cx from "classnames";
 import Jdenticon from "react-jdenticon";
