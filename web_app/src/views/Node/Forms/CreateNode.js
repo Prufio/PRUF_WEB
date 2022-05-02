@@ -224,17 +224,20 @@ export default function CreateNode(props) {
         extData: extendedDataHash,
       };
 
-      if (Number(props.nodes) > 0) {
+      tempArr = [];
+      tempExtArr = [];
+
+      if (Number(props.nodes) > 0 && props.heldNodeData && props.nodeExtData) {
         tempArr = JSON.parse(JSON.stringify(props.heldNodeData));
         tempExtArr = JSON.parse(JSON.stringify(props.nodeExtData));
-      } else {
-        tempArr = [["", "", "", ""]];
-        tempExtArr = [];
+        tempArr.pop()
       }
 
       // eslint-disable-next-line react/prop-types
-      tempArr.unshift([name, e, "N/A", "N/A"]);
-      tempExtArr.unshift(tempObj);
+      tempArr.push([name, e, "N/A", "N/A"]);
+      tempArr.push(["", "", "", ""])
+      tempExtArr.push(tempObj);
+      
       console.log({ newList: tempArr, newData: tempExtArr });
       window.replaceAssetData = {
         key: pageKey,
@@ -303,6 +306,7 @@ export default function CreateNode(props) {
         let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
+        console.log(_error)
         setError(Object.values(_error)[0]);
         if (tempTxHash !== undefined) {
           swalReact({

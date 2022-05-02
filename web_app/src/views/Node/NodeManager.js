@@ -269,7 +269,7 @@ export default function NodeManager(props) {
       String(Object.values(tempObj)[iteration].value)
     );
 
-    props.prufClient.do.node
+    props.prufClient.faucet
       .setOperationCost(
         obj.id,
         Object.values(tempObj)[iteration].id,
@@ -537,7 +537,7 @@ export default function NodeManager(props) {
     let addressHash = await window.web3.utils.soliditySha3(e.authorizedAddress);
 
     setTransactionActive(true);
-    props.prufClient.do.node
+    props.prufClient.faucet
       .authorizeUser(e.id, addressHash, "1")
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })

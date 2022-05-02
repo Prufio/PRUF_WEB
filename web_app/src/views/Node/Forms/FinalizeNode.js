@@ -300,7 +300,7 @@ export default function FinalizeNode(props) {
           setTransactionActive(true);
           const pageKey = thousandHashesOf(props.addr, props.winKey);
 
-          props.prufClient.do.node
+          props.prufClient.faucet
             .finalize(
               nodeInfo.id,
               "2",

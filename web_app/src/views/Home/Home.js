@@ -237,7 +237,7 @@ export default function Home(props) {
                   </Button>
                 </div>
               )}
-              {!prufTransactionActive && props.chainId === 1000 && (
+              {!prufTransactionActive && props.chainId === 200101 && (
                 <div className="MLBGradientSubmit">
                   <Button
                     color="info"
@@ -268,7 +268,7 @@ export default function Home(props) {
                 className="headerIconBack"
                 onClick={() => window.open("https://ethereum.org/en/")}
               >
-                {props.chainId === 1000
+                {props.chainId === 200101
                 ? 
                 <img className="Icon" src={Ada} alt=""></img>
                 : 
@@ -280,7 +280,7 @@ export default function Home(props) {
                 }
               </CardIcon>
 
-              {props.chainId === 1000
+              {props.chainId === 200101
                 ? 
                 <p className={classes.cardCategory}>TWADA Balance</p>
                 : 

@@ -18,6 +18,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Switch from "@material-ui/core/Switch";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import { useCookies } from "react-cookie";
 // core components
 import CustomInput from "components/CustomInput/CustomInput.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -68,7 +69,8 @@ fuzzyTextFilterFn.autoRemove = (val) => !val;
 
 // Our table component
 function Table({ columns, data }) {
-  const [numberOfRows, setNumberOfRows] = React.useState(10);
+  const [cookies, setCookie] = useCookies();
+  const [numberOfRows, setNumberOfRows] = React.useState(cookies[`NumberOfNodeRows`] ? cookies[`NumberOfNodeRows`] : 10);
   const [pageSelect, handlePageSelect] = React.useState(0);
   const classes = useStyles();
   const filterTypes = React.useMemo(
@@ -121,7 +123,7 @@ function Table({ columns, data }) {
       data,
       defaultColumn, // Be sure to pass the defaultColumn option
       filterTypes,
-      initialState: { pageSize: 10, pageIndex: 0 },
+      initialState: { pageSize: cookies[`NumberOfNodeRows`] ? cookies[`NumberOfNodeRows`] : 10, pageIndex: 0 },
     },
     useFilters, // useFilters!
     useSortBy,
@@ -282,6 +284,7 @@ function Table({ columns, data }) {
                     onChange={(event) => {
                       setPageSize(event.target.value);
                       setNumberOfRows(event.target.value);
+                      setCookie(`NumberOfNodeRows`, event.target.value);
                     }}
                     inputProps={{
                       name: "numberOfRows",

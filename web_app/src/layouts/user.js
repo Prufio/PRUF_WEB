@@ -155,7 +155,7 @@ export default function Dashboard(props) {
 
     window.addEventListener("refresh", () => {
       console.log(replaceAssetData);
-      setReplaceAssetData(window.replaceAssetData.assetsPerPage);
+      setReplaceAssetData(Math.random());
     });
 
     window.addEventListener("search", () => {
@@ -272,6 +272,7 @@ export default function Dashboard(props) {
 
         if (newData.setAddition) {
           let tempSets = JSON.parse(JSON.stringify(nodeSets));
+          if (!tempSets[newData.setAddition.root]) tempSets[newData.setAddition.root] = []
           tempSets[newData.setAddition.root].push({
             id: newData.setAddition.id,
             name: newData.setAddition.name,
@@ -399,7 +400,7 @@ export default function Dashboard(props) {
     });
 
     const _mumbaiPruf = new PRUF(mumbaiWeb3, 80001, false, true);
-    const _m1tnPruf = new PRUF(m1tnWeb3, 1000, false, true);
+    const _m1tnPruf = new PRUF(m1tnWeb3, 200101, false, true);
     const _kovanPruf = new PRUF(kovanWeb3, 42, false, true);
     await _mumbaiPruf.init();
     await _m1tnPruf.init();
@@ -495,7 +496,7 @@ export default function Dashboard(props) {
       mumbaiWeb3 = new Web3("https://rpc-endpoints.superfluid.dev/mumbai");
 
       const _mumbaiPruf = new PRUF(mumbaiWeb3, 80001, false, true);
-      const _m1tnPruf = new PRUF(m1tnWeb3, 1000, false, true);
+      const _m1tnPruf = new PRUF(m1tnWeb3, 200101, false, true);
       const _kovanPruf = new PRUF(kovanWeb3, 42, false, true);
       await _mumbaiPruf.init();
       await _m1tnPruf.init();
@@ -505,6 +506,7 @@ export default function Dashboard(props) {
       setKovanPruf(_kovanPruf);
 
       web3.eth.net.getId().then(async (chainId) => {
+        console.log(chainId)
         setChainId(chainId);
         window.ethereum.on("chainChanged", (chainId) => {
           console.log(chainId);
@@ -1071,11 +1073,7 @@ export default function Dashboard(props) {
               if (window.web3.utils.toChecksumAddress(x) === _addr) {
                 allNodes.push({
                   id: String(nodeArray[iteration]),
-                  name: e.name
-                    .toLowerCase()
-                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                      letter.toUpperCase()
-                    ),
+                  name: e.name,
                 });
 
                 return getNodesFromDB(
@@ -1129,11 +1127,7 @@ export default function Dashboard(props) {
               if (x === "1") {
                 allNodes.push({
                   id: String(nodeArray[iteration]),
-                  name: e.name
-                    .toLowerCase()
-                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                      letter.toUpperCase()
-                    ),
+                  name: e.name,
                 });
                 return getNodesFromDB(
                   _addr,
@@ -1193,9 +1187,11 @@ export default function Dashboard(props) {
 
     //console.log(allNodes, allClassNames, rootArray)
 
-    allNodes.forEach((node) => {
+    allNodes.forEach((node, index) => {
+      console.log({node, index})
       _prufClient.get.node.record(String(node.id)).then((e) => {
         console.log(e);
+        console.log({sets: _nodeSets, rootArray})
         _nodeSets[String(rootArray[Number(e.root - 1)].id)].push({
           id: node.id,
           name: node.name
@@ -1316,14 +1312,14 @@ export default function Dashboard(props) {
       _prufClient.get.node.ownerOf(rec.nodeId).then((admin) => {
         rec.nodeAdmin = admin;
         if (
-          rec.nonMutableStorage1 ===
+          rec.hardData1 ===
           "0x0000000000000000000000000000000000000000000000000000000000000000"
         ) {
           rec.nonMutableStorage = "";
           getMutableOf(rec, _prufClient, _arweaveClient);
         } else if (rec.nodeData.storageProvider === "1") {
           _prufClient.utils
-            .ipfsFromB32(rec.nonMutableStorage1)
+            .ipfsFromB32(rec.hardData1)
             .then(async (query) => {
               console.log("MDQ", query);
 
@@ -1347,7 +1343,7 @@ export default function Dashboard(props) {
             });
         } else if (rec.nodeData.storageProvider === "2") {
           _prufClient.utils
-            .arweaveTxFromB32(rec.nonMutableStorage1, rec.nonMutableStorage2)
+            .arweaveTxFromB32(rec.hardData1, rec.hardData2)
             .then((query) => {
               rec.contentUrl = `https://arweave.net/${query}`;
               if (cookies[window.web3.utils.soliditySha3(query)]) {
@@ -1415,13 +1411,13 @@ export default function Dashboard(props) {
 
   const getMutableOf = async (rec, _prufClient, _arweaveClient) => {
     if (
-      rec.mutableStorage1 ===
+      rec.softData1 ===
       "0x0000000000000000000000000000000000000000000000000000000000000000"
     ) {
       rec.mutableStorage = "";
       finalize(rec, _prufClient);
     } else if (rec.nodeData.storageProvider === "1") {
-      _prufClient.utils.ipfsFromB32(rec.mutableStorage1).then(async (query) => {
+      _prufClient.utils.ipfsFromB32(rec.softData1).then(async (query) => {
         console.log("MDQ", query);
 
         if (cookies[window.web3.utils.soliditySha3(query)]) {
@@ -1438,7 +1434,7 @@ export default function Dashboard(props) {
       });
     } else if (rec.nodeData.storageProvider === "2") {
       _prufClient.utils
-        .arweaveTxFromB32(rec.mutableStorage1, rec.mutableStorage2)
+        .arweaveTxFromB32(rec.softData1, rec.softData2)
         .then((query) => {
           console.log({ query });
           //rec.contentUrl = `https://arweave.net/${query}`;

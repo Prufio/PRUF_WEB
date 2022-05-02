@@ -99,7 +99,7 @@ export default function Footer(props) {
                     " fab fa-twitter"
                   }
                 />{" "}
-                Connect with Twitter
+                Twitter
               </Button>
               {/* <a href="https://twitter.com/prufteam" className="links" target="_blank">
                 {rtlActive ? "شركة" : "Twitter"}
@@ -118,7 +118,7 @@ export default function Footer(props) {
                     " fab fa-github"
                   }
                 />{" "}
-                Connect with Github
+                Github
               </Button>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
@@ -136,7 +136,7 @@ export default function Footer(props) {
                     " fab fa-telegram"
                   }
                 />{" "}
-                Connect with Telegram
+                Telegram
               </Button>
               {/* <a href="https://t.me/pruftalk" className="links" target="_blank">
                 {rtlActive ? "شركة" : "Telegram"}
@@ -159,7 +159,7 @@ export default function Footer(props) {
                     " fab fa-discord"
                   }
                 />{" "}
-                Connect on Discord
+                Discord
               </Button>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
@@ -180,7 +180,7 @@ export default function Footer(props) {
                     " fab fa-reddit"
                   }
                 />{" "}
-                Connect on Reddit
+                Reddit
               </Button>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
