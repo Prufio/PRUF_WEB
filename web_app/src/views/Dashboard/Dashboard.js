@@ -65,7 +65,7 @@ export default function Dashboard(props) {
   const [identicon, setIdenticon] = React.useState(<></>);
   // eslint-disable-next-line no-unused-vars
   const [baseURL, setBaseURL] = React.useState(
-    "https://indevapp.pruf.io/#/user/search/"
+    "https://app.pruf.io/#/user/search/"
   );
   const [URL, setURL] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("");
@@ -320,7 +320,7 @@ export default function Dashboard(props) {
                 )}
                 <h4 className={classes.cardTitle}>{arr[i].name}</h4>
                 <h5 className={classes.cardTitleMain}>
-                  Name:&nbsp;{arr[i].nonMutableStorage.name}
+                  Name:&nbsp;{arr[i].hardData.name}
                 </h5>
                 <h5 className={classes.cardTitle}>
                   Node:&nbsp;{arr[i].nodeData.name}
@@ -1109,14 +1109,14 @@ export default function Dashboard(props) {
   };
 
   const displayMutableStorage = (asset) => {
-    if (!asset.mutableStorage || asset.mutableStorage === "") {
+    if (!asset.softData || asset.softData === "") {
       console.log("Bad inputs");
       return [];
     }
     let component = [];
     let accordionContent = [];
 
-    let keys = Object.keys(asset.mutableStorage);
+    let keys = Object.keys(asset.softData);
     keys.forEach((key, i) => {
       if (key !== "Signing-Client" && key !== "Signing-Client-Version")
         if (i === 0) {
@@ -1131,7 +1131,7 @@ export default function Dashboard(props) {
                 label={key}
                 disabled
                 rows={2}
-                defaultValue={asset.mutableStorage[key]}
+                defaultValue={asset.softData[key]}
                 variant="outlined"
                 fullWidth
                 // className={engravingClasses.engraving}
@@ -1147,7 +1147,7 @@ export default function Dashboard(props) {
                 label={key}
                 disabled
                 rows={2}
-                defaultValue={asset.mutableStorage[key]}
+                defaultValue={asset.softData[key]}
                 variant="outlined"
                 fullWidth
                 // className={engravingClasses.engraving}
@@ -1469,7 +1469,7 @@ export default function Dashboard(props) {
               <div className="horizontal">
                 <h4 className={classes.cardTitleContent}>Name:&nbsp;</h4>
                 <h4 className={classes.cardTitle}>
-                  {selectedAssetObj.nonMutableStorage.name}
+                  {selectedAssetObj.hardData.name}
                 </h4>
               </div>
               <div className="horizontal">
@@ -1521,20 +1521,20 @@ export default function Dashboard(props) {
                   </>
                 )} */}
               <br />
-              {selectedAssetObj.nonMutableStorage.engraving !== undefined && (
+              {selectedAssetObj.hardData.engraving !== undefined && (
                 <TextField
                   // id="outlined-multiline"
                   label="Engraving"
                   // multiline
                   rows={2}
-                  defaultValue={selectedAssetObj.nonMutableStorage.engraving}
+                  defaultValue={selectedAssetObj.hardData.engraving}
                   variant="outlined"
                   fullWidth
                   disabled
                   className={engravingClasses.engraving}
                 />
               )}
-              {selectedAssetObj.nonMutableStorage.engraving === undefined && (
+              {selectedAssetObj.hardData.engraving === undefined && (
                 <TextField
                   // id="outlined-multiline"
                   label="Engraving"
@@ -1688,7 +1688,7 @@ export default function Dashboard(props) {
                 {!isMobile && (
                   <Printer
                     obj={{
-                      name: selectedAssetObj.nonMutableStorage.name,
+                      name: selectedAssetObj.hardData.name,
                       id: selectedAssetObj.id,
                       nodeName: selectedAssetObj.nodeName,
                     }}

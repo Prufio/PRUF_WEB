@@ -378,12 +378,17 @@ export default function Dashboard(props) {
 
     let m1tnWeb3 = require("web3");
     m1tnWeb3 = new Web3("https://use-util.cloud.milkomeda.com:8555/");
+
     let kovanWeb3 = require("web3");
     kovanWeb3 = new Web3(
       "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
     );
+
     let mumbaiWeb3 = require("web3");
     mumbaiWeb3 = new Web3("https://rpc-endpoints.superfluid.dev/mumbai");
+
+    let libertyWeb3 = require("web3");
+    libertyWeb3 = new Web3("https://liberty10.shardeum.org/");
 
     web3.eth.net.getId().then(async (chainId) => {
       const _prufClient = new PRUF(web3, chainId, false, true);
@@ -492,12 +497,17 @@ export default function Dashboard(props) {
 
       let m1tnWeb3 = require("web3");
       m1tnWeb3 = new Web3("https://use-util.cloud.milkomeda.com:8555/");
+
       let kovanWeb3 = require("web3");
       kovanWeb3 = new Web3(
         "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
       );
+
       let mumbaiWeb3 = require("web3");
       mumbaiWeb3 = new Web3("https://rpc-endpoints.superfluid.dev/mumbai");
+
+      let libertyWeb3 = require("web3");
+    libertyWeb3 = new Web3("https://liberty10.shardeum.org/");
 
       const _mumbaiPruf = new PRUF(mumbaiWeb3, 80001, false, true);
       const _m1tnPruf = new PRUF(m1tnWeb3, 200101, false, true);
@@ -1324,7 +1334,7 @@ export default function Dashboard(props) {
           rec.hardData1 ===
           "0x0000000000000000000000000000000000000000000000000000000000000000"
         ) {
-          rec.nonMutableStorage = "";
+          rec.hardData = "";
           getMutableOf(rec, _prufClient, _arweaveClient);
         } else if (rec.nodeData.storageProvider === "1") {
           _prufClient.utils
@@ -1333,18 +1343,18 @@ export default function Dashboard(props) {
               console.log("MDQ", query);
 
               if (cookies[window.web3.utils.soliditySha3(query)]) {
-                rec.nonMutableStorage =
+                rec.hardData =
                   cookies[window.web3.utils.soliditySha3(query)];
                 getMutableOf(rec, _prufClient, _arweaveClient);
               } else {
                 for await (const chunk of window.ipfs.cat(query)) {
                   let str = new TextDecoder("utf-8").decode(chunk);
-                  rec.nonMutableStorage = JSON.parse(str);
+                  rec.hardData = JSON.parse(str);
                   console.log({ parsedIpfsChunk: str });
-                  if (rec.nonMutableStorage)
+                  if (rec.hardData)
                     setCookieTo(
                       window.web3.utils.soliditySha3(query),
-                      rec.nonMutableStorage
+                      rec.hardData
                     );
                   getMutableOf(rec, _prufClient, _arweaveClient);
                 }
@@ -1356,7 +1366,7 @@ export default function Dashboard(props) {
             .then((query) => {
               rec.contentUrl = `https://arweave.net/${query}`;
               if (cookies[window.web3.utils.soliditySha3(query)]) {
-                rec.nonMutableStorage =
+                rec.hardData =
                   cookies[window.web3.utils.soliditySha3(query)];
                 getMutableOf(rec, _prufClient, _arweaveClient);
               } else {
@@ -1364,10 +1374,10 @@ export default function Dashboard(props) {
                 xhr.responseType = "text";
                 xhr.onload = () => {
                   if (xhr.status !== 404 && xhr.status !== 202) {
-                    rec.nonMutableStorage = {};
+                    rec.hardData = {};
                     // console.log(xhr.response);
                     if (xhr.response === "Pending") {
-                      rec.nonMutableStorage = { Pending: "" };
+                      rec.hardData = { Pending: "" };
                       return getMutableOf(rec, _prufClient, _arweaveClient);
                     }
                     _arweaveClient.transactions
@@ -1383,29 +1393,29 @@ export default function Dashboard(props) {
                             decode: true,
                             string: true,
                           });
-                          rec.nonMutableStorage[key] = value;
+                          rec.hardData[key] = value;
                         });
                         setCookieTo(
                           window.web3.utils.soliditySha3(query),
-                          rec.nonMutableStorage
+                          rec.hardData
                         );
                         getMutableOf(rec, _prufClient, _arweaveClient);
                       })
                       .catch((e) => {
                         console.log(e);
-                        rec.nonMutableStorage = "";
+                        rec.hardData = "";
                         getMutableOf(rec, _prufClient, _arweaveClient);
                       });
                   } else {
                     console.log("Id returned 404");
-                    rec.nonMutableStorage = "";
+                    rec.hardData = "";
                     getMutableOf(rec, _prufClient, _arweaveClient);
                   }
                 };
 
                 xhr.onerror = () => {
                   console.log("Gateway returned 404");
-                  rec.nonMutableStorage = "";
+                  rec.hardData = "";
                   getMutableOf(rec, _prufClient, _arweaveClient);
                 };
 
@@ -1423,20 +1433,20 @@ export default function Dashboard(props) {
       rec.softData1 ===
       "0x0000000000000000000000000000000000000000000000000000000000000000"
     ) {
-      rec.mutableStorage = "";
+      rec.softData = "";
       finalize(rec, _prufClient);
     } else if (rec.nodeData.storageProvider === "1") {
       _prufClient.utils.ipfsFromB32(rec.softData1).then(async (query) => {
         console.log("MDQ", query);
 
         if (cookies[window.web3.utils.soliditySha3(query)]) {
-          rec.mutableStorage = cookies[window.web3.utils.soliditySha3(query)];
+          rec.softData = cookies[window.web3.utils.soliditySha3(query)];
         } else {
           for await (const chunk of window.ipfs.cat(query)) {
             let str = new TextDecoder("utf-8").decode(chunk);
-            rec.mutableStorage = JSON.parse(str);
+            rec.softData = JSON.parse(str);
             console.log({ parsedIpfsChunk: str });
-            // if (rec.mutableStorage) setCookieTo(window.web3.utils.soliditySha3(query), rec.mutableStorage);
+            // if (rec.softData) setCookieTo(window.web3.utils.soliditySha3(query), rec.softData);
             finalize(rec, _prufClient);
           }
         }
@@ -1448,17 +1458,17 @@ export default function Dashboard(props) {
           console.log({ query });
           //rec.contentUrl = `https://arweave.net/${query}`;
           if (cookies[window.web3.utils.soliditySha3(query)]) {
-            rec.mutableStorage = cookies[window.web3.utils.soliditySha3(query)];
+            rec.softData = cookies[window.web3.utils.soliditySha3(query)];
             finalize(rec, _prufClient);
           } else {
             let xhr = new XMLHttpRequest();
             xhr.responseType = "text";
             xhr.onload = () => {
               if (xhr.status !== 404 && xhr.status !== 202) {
-                rec.mutableStorage = {};
+                rec.softData = {};
                 // console.log(xhr.response);
                 if (xhr.response === "Pending") {
-                  rec.mutableStorage = { Pending: "" };
+                  rec.softData = { Pending: "" };
                   return finalize(rec, _prufClient);
                 }
                 _arweaveClient.transactions
@@ -1474,29 +1484,29 @@ export default function Dashboard(props) {
                         decode: true,
                         string: true,
                       });
-                      rec.mutableStorage[key] = value;
+                      rec.softData[key] = value;
                     });
                     setCookieTo(
                       window.web3.utils.soliditySha3(query),
-                      rec.mutableStorage
+                      rec.softData
                     );
                     finalize(rec, _prufClient);
                   })
                   .catch((e) => {
                     console.log(e);
-                    rec.mutableStorage = "";
+                    rec.softData = "";
                     finalize(rec, _prufClient);
                   });
               } else {
                 console.log("Id returned 404");
-                rec.mutableStorage = "";
+                rec.softData = "";
                 finalize(rec, _prufClient);
               }
             };
 
             xhr.onerror = () => {
               console.log("Gateway returned 404");
-              rec.mutableStorage = "";
+              rec.softData = "";
               finalize(rec, _prufClient);
             };
 
@@ -1528,7 +1538,7 @@ export default function Dashboard(props) {
         obj[rec.id] = rec;
         setAssets(obj);
       };
-      req.open("GET", rec.nonMutableStorage.displayImage, true);
+      req.open("GET", rec.hardData.displayImage, true);
       req.send();
     } else if (rec.nodeData.storageProvider === "2") {
       _prufClient.get.asset.URI(rec.id).then((uri) => {

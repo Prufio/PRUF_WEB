@@ -80,7 +80,7 @@ export default function Search(props) {
   const [ownerOf, setOwnerOf] = React.useState(false);
   const [assetURL, setURL] = React.useState("");
   const [baseURL, setBaseURL] = React.useState(
-    "https://indevapp.pruf.io/#/user/search/"
+    "https://app.pruf.io/#/user/search/"
   );
   const [isVerifying, setIsVerifying] = React.useState(false);
   const [isRecycling, setIsRecycling] = React.useState(false);
@@ -206,14 +206,14 @@ export default function Search(props) {
   };
 
   const displayMutableStorage = (asset) => {
-    if (!asset.mutableStorage || asset.mutableStorage === "") {
+    if (!asset.softData || asset.softData === "") {
       console.log("Bad inputs");
       return [];
     }
     let component = [];
     let accordionContent = [];
 
-    let keys = Object.keys(asset.mutableStorage);
+    let keys = Object.keys(asset.softData);
     keys.forEach((key, i) => {
       if (key !== "Signing-Client" && key !== "Signing-Client-Version")
         if (i === 0) {
@@ -228,7 +228,7 @@ export default function Search(props) {
                 label={key}
                 disabled
                 rows={2}
-                defaultValue={asset.mutableStorage[key]}
+                defaultValue={asset.softData[key]}
                 variant="outlined"
                 fullWidth
                 // className={engravingClasses.engraving}
@@ -244,7 +244,7 @@ export default function Search(props) {
                 label={key}
                 disabled
                 rows={2}
-                defaultValue={asset.mutableStorage[key]}
+                defaultValue={asset.softData[key]}
                 variant="outlined"
                 fullWidth
                 // className={engravingClasses.engraving}
@@ -1336,6 +1336,7 @@ export default function Search(props) {
                 .then((e) => {
                   if (e.nodeId !== "0") getAsset(id, "m1tn");
                   else {
+                    console.log("Here!");
                     props.libertyPruf.get.asset.record(id).then((e) => {
                       if (e.nodeId !== "0") getAsset(id, "liberty");
                       else {
@@ -1348,14 +1349,6 @@ export default function Search(props) {
                           button: "Close",
                         });
                       }
-                    });
-                    console.log("Here!");
-                    setIDXRaw("");
-                    setIDXRawInput(false);
-                    return swalReact({
-                      title: "Asset does not exist!",
-                      icon: "warning",
-                      button: "Close",
                     });
                   }
                 })
@@ -1442,40 +1435,40 @@ export default function Search(props) {
 
   const getNonMutableOf = async (rec, _prufClient, _arweaveClient) => {
     if (
-      rec.nonMutableStorage1 ===
+      rec.hardData1 ===
       "0x0000000000000000000000000000000000000000000000000000000000000000"
     ) {
-      rec.nonMutableStorage = "";
+      rec.hardData = "";
       getMutableOf(rec, _prufClient, _arweaveClient);
     } else if (rec.nodeData.storageProvider === "1") {
       _prufClient.utils
-        .ipfsFromB32(rec.nonMutableStorage1)
+        .ipfsFromB32(rec.hardData1)
         .then(async (query) => {
           console.log("MDQ", query);
 
           for await (const chunk of window.ipfs.cat(query)) {
             let str = new TextDecoder("utf-8").decode(chunk);
             try {
-              rec.nonMutableStorage = JSON.parse(str);
+              rec.hardData = JSON.parse(str);
             } catch {
-              rec.nonMutableStorage = str;
+              rec.hardData = str;
             }
             getMutableOf(rec, _prufClient, _arweaveClient);
           }
         });
     } else if (rec.nodeData.storageProvider === "2") {
       _prufClient.utils
-        .arweaveTxFromB32(rec.nonMutableStorage1, rec.nonMutableStorage2)
+        .arweaveTxFromB32(rec.hardData1, rec.hardData2)
         .then((query) => {
           rec.contentUrl = `https://arweave.net/${query}`;
           let xhr = new XMLHttpRequest();
           xhr.responseType = "text";
           xhr.onload = () => {
             if (xhr.status !== 404 && xhr.status !== 202) {
-              rec.nonMutableStorage = {};
+              rec.hardData = {};
               // console.log(xhr.response);
               if (xhr.response === "Pending") {
-                rec.nonMutableStorage = { Pending: "" };
+                rec.hardData = { Pending: "" };
                 return getMutableOf(rec, _prufClient, _arweaveClient);
               }
               _arweaveClient.transactions
@@ -1491,25 +1484,25 @@ export default function Search(props) {
                       decode: true,
                       string: true,
                     });
-                    rec.nonMutableStorage[key] = value;
+                    rec.hardData[key] = value;
                   });
                   getMutableOf(rec, _prufClient, _arweaveClient);
                 })
                 .catch((e) => {
                   console.log(e);
-                  rec.nonMutableStorage = "";
+                  rec.hardData = "";
                   getMutableOf(rec, _prufClient, _arweaveClient);
                 });
             } else {
               console.log("Id returned 404");
-              rec.nonMutableStorage = "";
+              rec.hardData = "";
               getMutableOf(rec, _prufClient, _arweaveClient);
             }
           };
 
           xhr.onerror = () => {
             console.log("Gateway returned 404");
-            rec.nonMutableStorage = "";
+            rec.hardData = "";
             getMutableOf(rec, _prufClient, _arweaveClient);
           };
 
@@ -1521,32 +1514,32 @@ export default function Search(props) {
 
   const getMutableOf = async (rec, _prufClient, _arweaveClient) => {
     if (
-      rec.mutableStorage1 ===
+      rec.softData1 ===
       "0x0000000000000000000000000000000000000000000000000000000000000000"
     ) {
-      rec.mutableStorage = "";
+      rec.softData = "";
       finalize(rec, _prufClient);
     } else if (rec.nodeData.storageProvider === "1") {
-      _prufClient.utils.ipfsFromB32(rec.mutableStorage1).then(async (query) => {
+      _prufClient.utils.ipfsFromB32(rec.softData1).then(async (query) => {
         console.log("MDQ", query);
         for await (const chunk of window.ipfs.cat(query)) {
           let str = new TextDecoder("utf-8").decode(chunk);
-          rec.mutableStorage = JSON.parse(str);
+          rec.softData = JSON.parse(str);
           finalize(rec, _prufClient);
         }
       });
     } else if (rec.nodeData.storageProvider === "2") {
       _prufClient.utils
-        .arweaveTxFromB32(rec.mutableStorage1, rec.mutableStorage2)
+        .arweaveTxFromB32(rec.softData1, rec.softData2)
         .then((query) => {
           let xhr = new XMLHttpRequest();
           xhr.responseType = "text";
           xhr.onload = () => {
             if (xhr.status !== 404 && xhr.status !== 202) {
-              rec.mutableStorage = {};
+              rec.softData = {};
               // console.log(xhr.response);
               if (xhr.response === "Pending") {
-                rec.mutableStorage = { Pending: "" };
+                rec.softData = { Pending: "" };
                 return finalize(rec, _prufClient);
               }
               _arweaveClient.transactions
@@ -1562,25 +1555,25 @@ export default function Search(props) {
                       decode: true,
                       string: true,
                     });
-                    rec.mutableStorage[key] = value;
+                    rec.softData[key] = value;
                   });
                   finalize(rec, _prufClient);
                 })
                 .catch((e) => {
                   console.log(e);
-                  rec.mutableStorage = "";
+                  rec.softData = "";
                   finalize(rec, _prufClient);
                 });
             } else {
               console.log("Id returned 404");
-              rec.mutableStorage = "";
+              rec.softData = "";
               finalize(rec, _prufClient);
             }
           };
 
           xhr.onerror = () => {
             console.log("Gateway returned 404");
-            rec.mutableStorage = "";
+            rec.softData = "";
             finalize(rec, _prufClient);
           };
 
@@ -1617,7 +1610,7 @@ export default function Search(props) {
         setMoreInfo(true);
         window.isSearching = false;
       };
-      req.open("GET", rec.nonMutableStorage.displayImage, true);
+      req.open("GET", rec.hardData.displayImage, true);
       req.send();
     } else if (rec.nodeData.storageProvider === "2") {
       _prufClient.get.asset.URI(rec.id).then((uri) => {
@@ -2179,7 +2172,7 @@ export default function Search(props) {
                           Name:&nbsp;
                         </h4>
                         <h4 className={imgClasses.cardTitle}>
-                          {asset.nonMutableStorage.name}
+                          {asset.hardData.name}
                         </h4>
                       </div>
                       <div className="horizontal">
@@ -2197,20 +2190,20 @@ export default function Search(props) {
                         <h4 className={imgClasses.cardTitle}>{asset.status}</h4>
                       </div>
                       <br />
-                      {asset.nonMutableStorage.engraving !== undefined && (
+                      {asset.hardData.engraving !== undefined && (
                         <TextField
                           // id="outlined-multiline"
                           label="Engraving"
                           // multiline
                           rows={2}
-                          defaultValue={asset.nonMutableStorage.engraving}
+                          defaultValue={asset.hardData.engraving}
                           variant="outlined"
                           fullWidth
                           disabled
                           className={engravingClasses.engraving}
                         />
                       )}
-                      {asset.nonMutableStorage.engraving === undefined && (
+                      {asset.hardData.engraving === undefined && (
                         <TextField
                           // id="outlined-multiline"
                           label="Engraving"

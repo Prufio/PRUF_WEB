@@ -170,22 +170,22 @@ export default function ModifyDescription(props) {
 
   const handleChanges = (key, value) => {
     let obj = JSON.parse(JSON.stringify(asset));
-    console.log(obj.mutableStorage);
-    if (obj.mutableStorage === "") obj.mutableStorage = {};
+    console.log(obj.softData);
+    if (obj.softData === "") obj.softData = {};
     if (value === "delete") {
-      delete obj.mutableStorage[key];
+      delete obj.softData[key];
     } else {
-      obj.mutableStorage[key] = value;
+      obj.softData[key] = value;
     }
     setAsset(obj);
-    if(Object.values(obj.mutableStorage).length < 1){
-      obj.mutableStorage = ""
+    if(Object.values(obj.softData).length < 1){
+      obj.softData = ""
     }
     setStringifiedAsset(JSON.stringify(obj));
   };
 
   const submitChanges = async () => {
-    let tempObj = await JSON.parse(JSON.stringify(asset.mutableStorage));
+    let tempObj = await JSON.parse(JSON.stringify(asset.softData));
     let payload = await JSON.stringify(tempObj, null, 5);
     let fileSize = await Buffer.byteLength(payload, "utf8");
 
@@ -289,7 +289,7 @@ export default function ModifyDescription(props) {
   const addElement = (key) => {
     if (!key)
       key = `Mutable Element #${
-        Object.values(asset.mutableStorage).length + 1
+        Object.values(asset.softData).length + 1
       }`;
     let value = "";
     swalReact({
@@ -337,7 +337,7 @@ export default function ModifyDescription(props) {
   // const editElement = (key, value) => {
   //   // if (!key)
   //   //   key = `Mutable Element #${
-  //   //     Object.values(asset.mutableStorage).length + 1
+  //   //     Object.values(asset.softData).length + 1
   //   //   }`;
   //   // let value = "";
   //   swalReact({
@@ -464,14 +464,14 @@ export default function ModifyDescription(props) {
 
   const displayMutableStorage = () => {
     let component = [];
-    // if (asset.mutableStorage === "")
+    // if (asset.softData === "")
     //   return [
     //     <Button className="MLBGradientInlineLeft" onClick={() => addElement()}>
     //       <NoteAddOutlined />
     //     </Button>,
     //   ];
 
-    let keys = Object.keys(asset.mutableStorage);
+    let keys = Object.keys(asset.softData);
 
     keys.forEach((key) => {
       if (key !== "Signing-Client" && key !== "Signing-Client-Version")
@@ -511,7 +511,7 @@ export default function ModifyDescription(props) {
             }}
             rows={2}
             multiline
-            defaultValue={asset.mutableStorage[key]}
+            defaultValue={asset.softData[key]}
             variant="outlined"
             fullWidth
             // className={engravingClasses.engraving}
@@ -529,7 +529,7 @@ export default function ModifyDescription(props) {
         // <div className="flexRowWithGap">
         //     <DeleteForever onClick={() => handleChanges(key, "delete")}/>
         //   <h4>{key}</h4>
-        //   <h4 className="">{asset.mutableStorage[key]}</h4>
+        //   <h4 className="">{asset.softData[key]}</h4>
         // </div>
         // {/* </AccordionSummary> */}
         // {/* <AccordionDetails>
@@ -537,7 +537,7 @@ export default function ModifyDescription(props) {
         //     <div className="delegationTips">
         //       <FiberManualRecordTwoTone className="delegationPin" />
         //       <h5 className="delegationTipsContent">
-        //         {asset.mutableStorage[key]}
+        //         {asset.softData[key]}
         //       </h5>
         //     </div>
         //   </div>
@@ -553,7 +553,7 @@ export default function ModifyDescription(props) {
     //   >
     //     <NoteAddOutlined />
     //   </Button>
-    //   {asset.mutableStorage !== "" && (
+    //   {asset.softData !== "" && (
     //     <Button
     //       className="MLBGradientInlineRight"
     //       onClick={() => submitChanges()}
@@ -1149,7 +1149,7 @@ export default function ModifyDescription(props) {
           <div className="horizontal">
             <h4 className={classes.cardTitleContent}>Name:&nbsp;</h4>
             <h4 className={classes.cardTitle}>
-              {asset.nonMutableStorage.name}
+              {asset.hardData.name}
             </h4>
           </div>
           <div className="horizontal">
@@ -1200,7 +1200,7 @@ export default function ModifyDescription(props) {
                 )} */}
 
           <br />
-          {asset.nonMutableStorage.engraving !== undefined && (
+          {asset.hardData.engraving !== undefined && (
             <>
               <br />
               <TextField
@@ -1208,7 +1208,7 @@ export default function ModifyDescription(props) {
                 label="Engraving"
                 // multiline
                 rows={2}
-                defaultValue={asset.nonMutableStorage.engraving}
+                defaultValue={asset.hardData.engraving}
                 variant="outlined"
                 fullWidth
                 disabled
@@ -1216,7 +1216,7 @@ export default function ModifyDescription(props) {
               />
             </>
           )}
-          {asset.nonMutableStorage.engraving === undefined && (
+          {asset.hardData.engraving === undefined && (
             <TextField
               // id="outlined-multiline"
               label="Engraving"
