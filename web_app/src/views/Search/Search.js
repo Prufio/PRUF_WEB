@@ -1322,23 +1322,22 @@ export default function Search(props) {
 
       //return getAsset(id, "m1tn")
 
-      props.prufClient.get.asset
-        .record(id)
-        .then((e) => {
-          if (e.nodeId !== "0") {
-            getAsset(id, props.prufClient.network.name);
-          } else {
-            console.log("Here!");
-            props.kovanPruf.get.asset
-              .record(id)
-              .then((e) => {
-                if (e.nodeId !== "0") getAsset(id, "kovan");
-                else{
-                  console.log("Here!");
-                  props.m1tnPruf.get.asset
-                    .record(id)
-                    .then((e) => {
-                      if (e.nodeId !== "0") getAsset(id, "m1tn");
+      props.prufClient.get.asset.record(id).then((e) => {
+        if (e.nodeId !== "0") {
+          getAsset(id, props.prufClient.network.name);
+        } else {
+          console.log("Here!");
+          props.kovanPruf.get.asset.record(id).then((e) => {
+            if (e.nodeId !== "0") getAsset(id, "kovan");
+            else {
+              console.log("Here!");
+              props.m1tnPruf.get.asset
+                .record(id)
+                .then((e) => {
+                  if (e.nodeId !== "0") getAsset(id, "m1tn");
+                  else {
+                    props.libertyPruf.get.asset.record(id).then((e) => {
+                      if (e.nodeId !== "0") getAsset(id, "liberty");
                       else {
                         console.log("Here!");
                         setIDXRaw("");
@@ -1349,14 +1348,24 @@ export default function Search(props) {
                           button: "Close",
                         });
                       }
-                    })
-                    .catch(e => {
-                      console.error(e)
                     });
-                }
-              })
-          }
-        })
+                    console.log("Here!");
+                    setIDXRaw("");
+                    setIDXRawInput(false);
+                    return swalReact({
+                      title: "Asset does not exist!",
+                      icon: "warning",
+                      button: "Close",
+                    });
+                  }
+                })
+                .catch((e) => {
+                  console.error(e);
+                });
+            }
+          });
+        }
+      });
     });
   };
 
@@ -1388,6 +1397,9 @@ export default function Search(props) {
           break;
         case "m1tn":
           _prufClient = props.m1tnPruf;
+          break;
+        case "liberty":
+          _prufClient = props.libertyPruf;
           break;
         default:
           console.log("Bad inputs in switch");

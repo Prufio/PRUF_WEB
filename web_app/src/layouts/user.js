@@ -79,6 +79,7 @@ export default function Dashboard(props) {
   const [mumbaiPruf, setMumbaiPruf] = React.useState();
   const [m1tnPruf, setM1tnPruf] = React.useState();
   const [kovanPruf, setKovanPruf] = React.useState();
+  const [libertyPruf, setLibertyPruf] = React.useState();
   const [roots, setRoots] = React.useState(undefined);
   const [rootNames, setRootNames] = React.useState(undefined);
   const [nodeSets, setNodeSets] = React.useState(undefined);
@@ -402,12 +403,15 @@ export default function Dashboard(props) {
     const _mumbaiPruf = new PRUF(mumbaiWeb3, 80001, false, true);
     const _m1tnPruf = new PRUF(m1tnWeb3, 200101, false, true);
     const _kovanPruf = new PRUF(kovanWeb3, 42, false, true);
+    const _libertyPruf = new PRUF(libertyWeb3, 8080, false, true);
     await _mumbaiPruf.init();
     await _m1tnPruf.init();
     await _kovanPruf.init();
+    await _libertyPruf.init();
     setMumbaiPruf(_mumbaiPruf);
     setM1tnPruf(_m1tnPruf);
     setKovanPruf(_kovanPruf);
+    setLibertyPruf(_libertyPruf);
   };
 
   const checkForCookies = () => {
@@ -498,12 +502,15 @@ export default function Dashboard(props) {
       const _mumbaiPruf = new PRUF(mumbaiWeb3, 80001, false, true);
       const _m1tnPruf = new PRUF(m1tnWeb3, 200101, false, true);
       const _kovanPruf = new PRUF(kovanWeb3, 42, false, true);
+      const _libertyPruf = new PRUF(libertyWeb3, 8080, false, true);
       await _mumbaiPruf.init();
       await _m1tnPruf.init();
       await _kovanPruf.init();
+      await _libertyPruf.init();
       setMumbaiPruf(_mumbaiPruf);
       setM1tnPruf(_m1tnPruf);
       setKovanPruf(_kovanPruf);
+      setLibertyPruf(_libertyPruf);
 
       web3.eth.net.getId().then(async (chainId) => {
         console.log(chainId)
@@ -779,6 +786,7 @@ export default function Dashboard(props) {
               <prop.component
                 clearNodeCache={clearNodeCache}
                 kovanPruf={kovanPruf}
+                libertyPruf={libertyPruf}
                 mumbaiPruf={mumbaiPruf}
                 m1tnPruf={m1tnPruf}
                 assetsPerPage={assetsPerPage}
