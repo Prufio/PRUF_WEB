@@ -1358,7 +1358,7 @@ export default function ModifyDescription(props) {
             <RWebShare
               className="shareMenu"
               data={{
-                text: "Check out my PRüF asset!",
+                text: "Check out thisPRüF asset!",
                 url: URL,
                 title: "Share Asset Link",
               }}

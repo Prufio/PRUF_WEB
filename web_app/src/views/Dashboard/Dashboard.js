@@ -1674,7 +1674,7 @@ export default function Dashboard(props) {
                 <RWebShare
                   className="shareMenu"
                   data={{
-                    text: "Check out my PRüF asset!",
+                    text: "Check out this PRüF asset!",
                     url: URL,
                     title: "Share Asset Link",
                   }}
