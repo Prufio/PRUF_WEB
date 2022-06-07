@@ -2839,7 +2839,7 @@ export default function Search(props) {
                     <RWebShare
                       className="shareMenu"
                       data={{
-                        text: "Check out my PRüF-verified asset!",
+                        text: "app.pruf.io-verified asset!",
                         url: `${baseURL}${asset.id}`,
                         title: "Share Asset Link",
                       }}
