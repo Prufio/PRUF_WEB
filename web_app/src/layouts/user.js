@@ -538,7 +538,8 @@ export default function Dashboard(props) {
 
         if (
           _prufClient.network.name === "kovan" ||
-          _prufClient.network.name === "m1tn"
+          _prufClient.network.name === "m1tn" ||
+          _prufClient.network.name === "liberty"
         ) {
           window.isKovan = true;
           ethereum
@@ -606,8 +607,8 @@ export default function Dashboard(props) {
           return setIsMounted(true);
         } else {
           return swalReact({
-            title: "Connect to the Kovan Testnet!",
-            text: "Please connect your ethereum provider to the Kovan Testnet and reload the page to access page functionality.",
+            title: "Connect to a suported network!",
+            text: "Please swich your wallet network to one which is supported by PRüF.",
             icon: "warning",
             button: "Okay",
           });

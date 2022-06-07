@@ -8,6 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import CustomInput from "components/CustomInput/CustomInput.js";
 
 import Eth from "../../assets/img/eth-logo.png";
+import Shm from "../../assets/img/shm-logo.png";
 import Pruf from "../../assets/img/pruftoken.png";
 import Ada from "../../assets/img/adaCoin.png";
 import Matic from "../../assets/img/adaCoin.png"
@@ -248,6 +249,17 @@ export default function Home(props) {
                   </Button>
                 </div>
               )}
+              {!prufTransactionActive && props.chainId === 8080 && (
+                <div className="MLBGradientSubmit">
+                  <Button
+                    color="info"
+                    className="MLBGradient"
+                    onClick={() => purchasePRUF()}
+                  >
+                    Get PRUF
+                  </Button>
+                </div>
+              )}
               {prufTransactionActive && (
                 <h5 className="transactionMessage">
                   Getting PRUF from the faucet
@@ -276,6 +288,10 @@ export default function Home(props) {
                 ? 
                 <img className="Icon" src={Matic} alt=""></img>
                 :
+                props.chainId === 8080
+                ?
+                <img className="Icon" src={Shm} alt=""></img>
+                :
                 <img className="Icon" src={Eth} alt=""></img>
                 }
               </CardIcon>
@@ -287,6 +303,10 @@ export default function Home(props) {
                 props.chainId === 80001 
                 ? 
                 <p className={classes.cardCategory}>MumMatic Balance</p>
+                :
+                props.chainId === 8080
+                ?
+                <p className={classes.cardCategory}>SHM Balance</p>
                 :
                 <p className={classes.cardCategory}>KETH Balance</p>
               }

@@ -7,7 +7,6 @@ import { isMobile } from "react-device-detect";
 
 // @material-ui/core components
 import { makeStyles } from '@material-ui/core/styles'
-import swal from 'sweetalert'
 import Search from '@material-ui/icons/Search'
 
 // core components
