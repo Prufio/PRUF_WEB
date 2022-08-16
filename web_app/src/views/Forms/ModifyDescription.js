@@ -414,7 +414,7 @@ export default function ModifyDescription(props) {
         setTxStatus(false);
         setTxHash(Object.values(_error)[0].transactionHash);
         tempTxHash = Object.values(_error)[0].transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str1 = `Check out your TX <a href='${props.explorer}'`;
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         setError(Object.values(_error)[0]);
@@ -438,7 +438,7 @@ export default function ModifyDescription(props) {
         setTransactionActive(false);
         setTxStatus(receipt.status);
         tempTxHash = receipt.transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str1 = `Check out your TX <a href='${props.explorer}'`;
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         setTxHash(receipt.transactionHash);

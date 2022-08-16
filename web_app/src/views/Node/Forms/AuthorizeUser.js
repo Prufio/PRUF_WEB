@@ -161,7 +161,7 @@ export default function AuthorizeUser(props) {
                             tempTxHash = Object.values(_error)[0]
                                 .transactionHash
                             let str1 =
-                                "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+                                `Check out your TX <a href='${props.explorer}'`
                             let str2 = "' target='_blank'>here</a>"
                             link.innerHTML = String(str1 + tempTxHash + str2)
                             if (tempTxHash !== undefined) {
@@ -185,7 +185,7 @@ export default function AuthorizeUser(props) {
                             setTxStatus(receipt.status)
                             tempTxHash = receipt.transactionHash
                             let str1 =
-                                "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+                                `Check out your TX <a href='${props.explorer}'`
                             let str2 = "' target='_blank'>here</a>"
                             link.innerHTML = String(str1 + tempTxHash + str2)
                             swalReact({
