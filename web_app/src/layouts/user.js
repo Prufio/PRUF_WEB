@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 //PRUF WEB APP Kovan and C1 Release with V1.0.0 contracts
 import React from "react";
 import cx from "classnames";
@@ -46,6 +48,7 @@ export default function Dashboard(props) {
   // states and functions
 
   const IPFS = require("ipfs-http-client"); //require("ipfs-mini")
+  const API_KEY = React.useState(process.env.PINATA_API_KEY)
 
   //const OrbitDB = require('orbit-db')
 
@@ -657,7 +660,7 @@ export default function Dashboard(props) {
       setAssetsPerPage(cookies[`assetsPerPage`]);
     }
 
-    _ipfs = new IPFS(new URL("https://ipfs.infura.io:5001"));
+    _ipfs = new IPFS(new URL("pruf.mypinata.cloud"));
 
     window.ipfs = _ipfs;
 
