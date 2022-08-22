@@ -285,7 +285,7 @@ export default function Verify(props) {
           .on("error", (_error) => {
             setTransaction(false);
             tempTxHash = Object.values(_error)[0].transactionHash;
-            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str1 = `Check out your TX <a href='${props.explorer}'`;
             let str2 = "' target='_blank'>here</a>";
             link.innerHTML = String(str1 + tempTxHash + str2);
             setTxHash(Object.values(_error)[0].transactionHash);
@@ -298,7 +298,7 @@ export default function Verify(props) {
             setTransaction(false);
             setTxHash(receipt.transactionHash);
             tempTxHash = receipt.transactionHash;
-            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str1 = `Check out your TX <a href='${props.explorer}'`;
             let str2 = "' target='_blank'>here</a>";
             link.innerHTML = String(str1 + tempTxHash + str2);
             setVerifyResult(receiptVal);

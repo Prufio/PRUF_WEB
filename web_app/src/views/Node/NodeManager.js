@@ -284,7 +284,7 @@ export default function NodeManager(props) {
         setTransactionActive(false);
         console.error(_error);
         tempTxHash = Object.values(_error)[0].transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str1 = `Check out your TX <a href='${props.explorer}'`;
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         // setError(Object.values(_error)[0]);
@@ -309,7 +309,7 @@ export default function NodeManager(props) {
         setTransactionActive(false);
         // setTxStatus(receipt.status);
         tempTxHash = receipt.transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str1 = `Check out your TX <a href='${props.explorer}'`;
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         window.replaceAssetData.refreshBals = true;
@@ -547,7 +547,7 @@ export default function NodeManager(props) {
         // setTxHash(Object.values(_error)[0].transactionHash)
         console.error(_error);
         tempTxHash = Object.values(_error)[0].transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str1 = `Check out your TX <a href='${props.explorer}'`;
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         if (tempTxHash !== undefined) {
@@ -571,7 +571,7 @@ export default function NodeManager(props) {
         setTransactionActive(false);
         // setTxStatus(receipt.status)
         tempTxHash = receipt.transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str1 = `Check out your TX <a href='${props.explorer}'`;
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         swalReact({
@@ -601,7 +601,7 @@ export default function NodeManager(props) {
         // setTxHash(Object.values(_error)[0].transactionHash)
         console.error(_error);
         tempTxHash = Object.values(_error)[0].transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str1 = `Check out your TX <a href='${props.explorer}'`;
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         if (tempTxHash !== undefined) {
@@ -625,7 +625,7 @@ export default function NodeManager(props) {
         setTransactionActive(false);
         // setTxStatus(receipt.status)
         tempTxHash = receipt.transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str1 = `Check out your TX <a href='${props.explorer}'`;
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         swalReact({

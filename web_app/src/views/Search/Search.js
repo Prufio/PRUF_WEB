@@ -1193,8 +1193,7 @@ export default function Search(props) {
             setTransaction(false);
             setIsVerifying(false);
             tempTxHash = Object.values(_error)[0].transactionHash;
-            let str1 =
-              "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str1 = `Check out your TX <a href='${props.explorer}'`;
             let str2 = "' target='_blank'>here</a>";
             link.innerHTML = String(str1 + tempTxHash + str2);
             setTxHash(Object.values(_error)[0].transactionHash);
@@ -1208,8 +1207,7 @@ export default function Search(props) {
             setIsVerifying(false);
             setTxHash(receipt.transactionHash);
             tempTxHash = receipt.transactionHash;
-            let str1 =
-              "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str1 = `Check out your TX <a href='${props.explorer}'`;
             let str2 = "' target='_blank'>here</a>";
             link.innerHTML = String(str1 + tempTxHash + str2);
             setVerifyResult(receiptVal);
@@ -1320,43 +1318,37 @@ export default function Search(props) {
           button: "Close",
         });
 
-      //return getAsset(id, "m1tn")
+      //return getAsset(id, "m1c1")
 
       props.prufClient.get.asset.record(id).then((e) => {
         if (e.nodeId !== "0") {
           getAsset(id, props.prufClient.network.name);
         } else {
           console.log("Here!");
-          props.kovanPruf.get.asset.record(id).then((e) => {
-            if (e.nodeId !== "0") getAsset(id, "kovan");
-            else {
-              console.log("Here!");
-              props.m1tnPruf.get.asset
-                .record(id)
-                .then((e) => {
-                  if (e.nodeId !== "0") getAsset(id, "m1tn");
+          props.m1c1Pruf.get.asset
+            .record(id)
+            .then((e) => {
+              if (e.nodeId !== "0") getAsset(id, "m1c1");
+              else {
+                console.log("Here!");
+                props.polygonPruf.get.asset.record(id).then((e) => {
+                  if (e.nodeId !== "0") getAsset(id, "polygon");
                   else {
-                    console.log("Here!");
-                    props.libertyPruf.get.asset.record(id).then((e) => {
-                      if (e.nodeId !== "0") getAsset(id, "liberty");
-                      else {
-                        console.log("Here!");
-                        setIDXRaw("");
-                        setIDXRawInput(false);
-                        return swalReact({
-                          title: "Asset does not exist!",
-                          icon: "warning",
-                          button: "Close",
-                        });
-                      }
+                    console.log("Here!")
+                    setIDXRaw("");
+                    setIDXRawInput(false);
+                    return swalReact({
+                      title: "Asset does not exist!",
+                      icon: "warning",
+                      button: "Close",
                     });
                   }
-                })
-                .catch((e) => {
-                  console.error(e);
                 });
-            }
-          });
+              }
+            })
+            .catch((e) => {
+              console.error(e);
+            });
         }
       });
     });
@@ -1382,17 +1374,11 @@ export default function Search(props) {
   ) => {
     if (netName !== _prufClient.network.name) {
       switch (netName) {
-        case "kovan":
-          _prufClient = props.kovanPruf;
+        case "polygon":
+          _prufClient = props.polygonPruf;
           break;
-        case "mumbai":
-          _prufClient = props.mumbaiPruf;
-          break;
-        case "m1tn":
-          _prufClient = props.m1tnPruf;
-          break;
-        case "liberty":
-          _prufClient = props.libertyPruf;
+        case "m1c1":
+          _prufClient = props.m1c1Pruf;
           break;
         default:
           console.log("Bad inputs in switch");
@@ -1441,21 +1427,19 @@ export default function Search(props) {
       rec.hardData = "";
       getMutableOf(rec, _prufClient, _arweaveClient);
     } else if (rec.nodeData.storageProvider === "1") {
-      _prufClient.utils
-        .ipfsFromB32(rec.hardData1)
-        .then(async (query) => {
-          console.log("MDQ", query);
+      _prufClient.utils.ipfsFromB32(rec.hardData1).then(async (query) => {
+        console.log("MDQ", query);
 
-          for await (const chunk of window.ipfs.cat(query)) {
-            let str = new TextDecoder("utf-8").decode(chunk);
-            try {
-              rec.hardData = JSON.parse(str);
-            } catch {
-              rec.hardData = str;
-            }
-            getMutableOf(rec, _prufClient, _arweaveClient);
+        for await (const chunk of window.ipfs.cat(query)) {
+          let str = new TextDecoder("utf-8").decode(chunk);
+          try {
+            rec.hardData = JSON.parse(str);
+          } catch {
+            rec.hardData = str;
           }
-        });
+          getMutableOf(rec, _prufClient, _arweaveClient);
+        }
+      });
     } else if (rec.nodeData.storageProvider === "2") {
       _prufClient.utils
         .arweaveTxFromB32(rec.hardData1, rec.hardData2)

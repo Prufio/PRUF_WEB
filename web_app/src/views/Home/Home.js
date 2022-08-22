@@ -7,14 +7,10 @@ import swalReact from "@sweetalert/with-react";
 import { makeStyles } from "@material-ui/core/styles";
 import CustomInput from "components/CustomInput/CustomInput.js";
 
-import Eth from "../../assets/img/eth-logo.png";
-import Shm from "../../assets/img/shm-logo.png";
 import Pruf from "../../assets/img/pruftoken.png";
 import Ada from "../../assets/img/adaCoin.png";
-import Matic from "../../assets/img/adaCoin.png"
+import Matic from "../../assets/img/Matic.png"
 import Add from "@material-ui/icons/Add";
-import CheckShield from "@material-ui/icons/VerifiedUser";
-import NoAccount from "@material-ui/icons/PersonAdd";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
@@ -78,7 +74,7 @@ export default function Home(props) {
         setTxStatus(false);
         setTxHash(Object.values(_error)[0].transactionHash);
         tempTxHash = Object.values(_error)[0].transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str1 = `Check out your TX <a href='${props.explorer}'`;
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         setError(Object.values(_error)[0]);
@@ -103,7 +99,7 @@ export default function Home(props) {
         setPrufTransactionActive(false);
         setTxStatus(receipt.status);
         tempTxHash = receipt.transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str1 = `Check out your TX <a href='${props.explorer}'`;
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         setTxHash(receipt.transactionHash);
@@ -227,49 +223,6 @@ export default function Home(props) {
                   </div>
                 </div>
               )}
-              {!prufTransactionActive && props.chainId === 42 && (
-                <div className="MLBGradientSubmit">
-                  <Button
-                    color="info"
-                    className="MLBGradient"
-                    onClick={() => purchasePRUF()}
-                  >
-                    Get PRUF
-                  </Button>
-                </div>
-              )}
-              {!prufTransactionActive && props.chainId === 200101 && (
-                <div className="MLBGradientSubmit">
-                  <Button
-                    color="info"
-                    className="MLBGradient"
-                    onClick={() => purchasePRUF()}
-                  >
-                    Get PRUF
-                  </Button>
-                </div>
-              )}
-              {!prufTransactionActive && props.chainId === 8080 && (
-                <div className="MLBGradientSubmit">
-                  <Button
-                    color="info"
-                    className="MLBGradient"
-                    onClick={() => purchasePRUF()}
-                  >
-                    Get PRUF
-                  </Button>
-                </div>
-              )}
-              {prufTransactionActive && (
-                <h5 className="transactionMessage">
-                  Getting PRUF from the faucet
-                  <div className="lds-ellipsisIF2">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                  </div>
-                </h5>
-              )}
             </CardFooter>
           </Card>
         </GridItem>
@@ -278,37 +231,29 @@ export default function Home(props) {
             <CardHeader stats icon>
               <CardIcon
                 className="headerIconBack"
-                onClick={() => window.open("https://ethereum.org/en/")}
+                onClick={() => window.open(`${props.explorer.substring(0, props.explorer.length-4)}'`)}
               >
-                {props.chainId === 200101
+                {props.chainId === 2001
                 ? 
-                <img className="Icon" src={Ada} alt=""></img>
+                <img className="Icon" src={Ada} alt=""/>
                 : 
-                props.chainId === 80001 
+                props.chainId === 137 
                 ? 
-                <img className="Icon" src={Matic} alt=""></img>
+                <img className="Icon" src={Matic} alt=""/>
                 :
-                props.chainId === 8080
-                ?
-                <img className="Icon" src={Shm} alt=""></img>
-                :
-                <img className="Icon" src={Eth} alt=""></img>
+                <img className="Icon" src={Pruf} alt=""/>
                 }
               </CardIcon>
 
-              {props.chainId === 200101
+              {props.chainId === 2001
                 ? 
-                <p className={classes.cardCategory}>TWADA Balance</p>
+                <p className={classes.cardCategory}>MADA Balance</p>
                 : 
-                props.chainId === 80001 
+                props.chainId === 137 
                 ? 
-                <p className={classes.cardCategory}>MumMatic Balance</p>
+                <p className={classes.cardCategory}>Matic Balance</p>
                 :
-                props.chainId === 8080
-                ?
-                <p className={classes.cardCategory}>SHM Balance</p>
-                :
-                <p className={classes.cardCategory}>KETH Balance</p>
+                <></>
               }
               {updatedEther ? (
                 <h3 className={classes.cardTitle}>

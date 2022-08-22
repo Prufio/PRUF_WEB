@@ -39,6 +39,7 @@ export default function CreateNode(props) {
 
   // eslint-disable-next-line no-unused-vars
   const [error, setError] = React.useState("");
+  const [tld, setTld] = React.useState("");
   // eslint-disable-next-line no-unused-vars
   const [showHelp, setShowHelp] = React.useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -57,12 +58,14 @@ export default function CreateNode(props) {
 
   // eslint-disable-next-line no-unused-vars
   const [loginName, setloginName] = React.useState("");
+  const [loginTld, setloginTld] = React.useState("");
   // eslint-disable-next-line no-unused-vars
   const [loginIPFS, setloginIPFS] = React.useState("");
 
   const [loginNameState, setloginNameState] = React.useState("");
   // eslint-disable-next-line no-unused-vars
   const [loginIPFSState, setloginIPFSState] = React.useState("");
+  const [loginTldState, setloginTldState] = React.useState("");
 
   // eslint-disable-next-line no-unused-vars
   const [standard1, setStandard1] = React.useState(true);
@@ -294,6 +297,56 @@ export default function CreateNode(props) {
     setTxHash("");
     setError(undefined);
 
+    props.prufClient.do.node.mint ? 
+    props.prufClient.do.node.mint(name, tld, root, "2", extendedDataHash, extendedDataHash)
+    .send({ from: props.addr })
+    .on("error", function (_error) {
+      setTransactionActive(false);
+      setTxStatus(false);
+      setTxHash(Object.values(_error)[0].transactionHash);
+      tempTxHash = Object.values(_error)[0].transactionHash;
+      let str1 = `Check out your TX <a href='${props.explorer}'`;
+      let str2 = "' target='_blank'>here</a>";
+      link.innerHTML = String(str1 + tempTxHash + str2);
+      console.log(_error)
+      setError(Object.values(_error)[0]);
+      if (tempTxHash !== undefined) {
+        swalReact({
+          title: "Something went wrong!",
+          content: link,
+          icon: "warning",
+          button: "Close",
+        });
+      }
+      if (tempTxHash === undefined) {
+        swalReact({
+          title: "Something went wrong!",
+          icon: "warning",
+          button: "Close",
+        });
+      }
+    })
+    .on("receipt", (receipt) => {
+      setTransactionActive(false);
+      setTxStatus(receipt.status);
+      tempTxHash = receipt.transactionHash;
+      let str1 = `Check out your TX <a href='${props.explorer}'`;
+      let str2 = "' target='_blank'>here</a>";
+      link.innerHTML = String(str1 + tempTxHash + str2);
+      setTxHash(receipt.transactionHash);
+      swalReact({
+        title: "Node Minting Successul!",
+        content: link,
+        icon: "success",
+        button: "Close",
+      }).then(() => {
+        //refreshBalances()
+        handleNewNode(extendedDataHash);
+      });
+    })
+    
+    :
+
     props.prufClient.faucet
       .getNode(name, root, "2", extendedDataHash, extendedDataHash, props.addr)
       // eslint-disable-next-line react/prop-types
@@ -303,7 +356,7 @@ export default function CreateNode(props) {
         setTxStatus(false);
         setTxHash(Object.values(_error)[0].transactionHash);
         tempTxHash = Object.values(_error)[0].transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str1 = `Check out your TX <a href='${props.explorer}'`;
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         console.log(_error)
@@ -328,7 +381,7 @@ export default function CreateNode(props) {
         setTransactionActive(false);
         setTxStatus(receipt.status);
         tempTxHash = receipt.transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str1 = `Check out your TX <a href='${props.explorer}'`;
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         setTxHash(receipt.transactionHash);
@@ -391,6 +444,48 @@ export default function CreateNode(props) {
                 {!transactionActive && (
                   <>
                     <h5 className="costsText">Cost: ü{props.currentACPrice}</h5>
+                    {props.prufClient.do.node.mint? <>
+                      <CustomInput
+                      success={loginNameState === "success"}
+                      error={loginNameState === "error"}
+                      labelText="Domain name*"
+                      id="name"
+                      formControlProps={{
+                        fullWidth: true,
+                      }}
+                      inputProps={{
+                        onChange: (event) => {
+                          setName(event.target.value.trim());
+                          if (event.target.value !== "") {
+                            setloginNameState("success");
+                          } else {
+                            setloginNameState("error");
+                          }
+                          setloginName(event.target.value);
+                        },
+                      }}
+                    />
+                    <CustomInput
+                      success={loginTldState === "success"}
+                      error={loginTldState === "error"}
+                      labelText="Domain TLD*"
+                      id="tld"
+                      formControlProps={{
+                        fullWidth: true,
+                      }}
+                      inputProps={{
+                        onChange: (event) => {
+                          setTld(event.target.value.trim());
+                          if (event.target.value !== "") {
+                            setloginTldState("success");
+                          } else {
+                            setloginTldState("error");
+                          }
+                          setloginTld(event.target.value);
+                        },
+                      }}
+                    />
+                    </>:
                     <CustomInput
                       success={loginNameState === "success"}
                       error={loginNameState === "error"}
@@ -410,7 +505,7 @@ export default function CreateNode(props) {
                           setloginName(event.target.value);
                         },
                       }}
-                    />
+                    />}
                     <FormControl
                       fullWidth
                       className={classes.selectFormControl}

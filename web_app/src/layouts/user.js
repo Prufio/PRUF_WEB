@@ -65,6 +65,7 @@ export default function Dashboard(props) {
   const [simpleAssetView, setSimpleAssetView] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState();
   const [hasBeenNotified, setHasBeenNotified] = React.useState(false);
+  const [explorer, setExplorer] = React.useState("");
   // const [isIDHolder, setIsIDHolder] = React.useState();
   const [sidebarRoutes, setSidebarRoutes] = React.useState([
     routes[0],
@@ -79,10 +80,8 @@ export default function Dashboard(props) {
   const [listenersLaunched, setListenersLaunched] = React.useState(false);
   const [prufBalance, setPrufBalance] = React.useState("~");
   const [prufClient, setPrufClient] = React.useState();
-  const [mumbaiPruf, setMumbaiPruf] = React.useState();
-  const [m1tnPruf, setM1tnPruf] = React.useState();
-  const [kovanPruf, setKovanPruf] = React.useState();
-  const [libertyPruf, setLibertyPruf] = React.useState();
+  const [polygonPruf, setPolygonPruf] = React.useState();
+  const [m1c1Pruf, setM1c1Pruf] = React.useState();
   const [roots, setRoots] = React.useState(undefined);
   const [rootNames, setRootNames] = React.useState(undefined);
   const [nodeSets, setNodeSets] = React.useState(undefined);
@@ -177,9 +176,9 @@ export default function Dashboard(props) {
     //   setSearchQuery(window.idxQuery);
     // });
 
-    window.addEventListener("clearNodeCache", ()=>{
-      setCookie("")
-    })
+    window.addEventListener("clearNodeCache", () => {
+      setCookie("");
+    });
 
     window.addEventListener("connectArweave", () => {
       if (!window.arweaveWallet) {
@@ -276,7 +275,8 @@ export default function Dashboard(props) {
 
         if (newData.setAddition) {
           let tempSets = JSON.parse(JSON.stringify(nodeSets));
-          if (!tempSets[newData.setAddition.root]) tempSets[newData.setAddition.root] = []
+          if (!tempSets[newData.setAddition.root])
+            tempSets[newData.setAddition.root] = [];
           tempSets[newData.setAddition.root].push({
             id: newData.setAddition.id,
             name: newData.setAddition.name,
@@ -375,23 +375,13 @@ export default function Dashboard(props) {
     let web3;
     web3 = require("web3");
 
-    web3 = new Web3(
-      "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
-    );
+    web3 = new Web3("https://polygon-rpc.com/");
 
-    let m1tnWeb3 = require("web3");
-    m1tnWeb3 = new Web3("https://use-util.cloud.milkomeda.com:8555/");
+    let m1c1Web3 = require("web3");
+    m1c1Web3 = new Web3("https://rpc-mainnet-cardano-evm.c1.milkomeda.com");
 
-    let kovanWeb3 = require("web3");
-    kovanWeb3 = new Web3(
-      "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
-    );
-
-    let mumbaiWeb3 = require("web3");
-    mumbaiWeb3 = new Web3("https://rpc-endpoints.superfluid.dev/mumbai");
-
-    let libertyWeb3 = require("web3");
-    libertyWeb3 = new Web3("https://liberty10.shardeum.org/");
+    let polygonWeb3 = require("web3");
+    polygonWeb3 = new Web3("https://polygon-rpc.com/");
 
     web3.eth.net.getId().then(async (chainId) => {
       const _prufClient = new PRUF(web3, chainId, false, true);
@@ -408,18 +398,12 @@ export default function Dashboard(props) {
       return setIsMounted(true);
     });
 
-    const _mumbaiPruf = new PRUF(mumbaiWeb3, 80001, false, true);
-    const _m1tnPruf = new PRUF(m1tnWeb3, 200101, false, true);
-    const _kovanPruf = new PRUF(kovanWeb3, 42, false, true);
-    const _libertyPruf = new PRUF(libertyWeb3, 8080, false, true);
-    await _mumbaiPruf.init();
-    await _m1tnPruf.init();
-    await _kovanPruf.init();
-    await _libertyPruf.init();
-    setMumbaiPruf(_mumbaiPruf);
-    setM1tnPruf(_m1tnPruf);
-    setKovanPruf(_kovanPruf);
-    setLibertyPruf(_libertyPruf);
+    const _polygonPruf = new PRUF(polygonWeb3, 137, false, true);
+    const _m1c1Pruf = new PRUF(m1c1Web3, 2001, false, true);
+    await _polygonPruf.init();
+    await _m1c1Pruf.init();
+    setPolygonPruf(_polygonPruf);
+    setM1c1Pruf(_m1c1Pruf);
   };
 
   const checkForCookies = () => {
@@ -498,35 +482,22 @@ export default function Dashboard(props) {
       web3 = new Web3(web3.givenProvider);
       window.web3 = web3;
 
-      let m1tnWeb3 = require("web3");
-      m1tnWeb3 = new Web3("https://use-util.cloud.milkomeda.com:8555/");
+      let m1c1Web3 = require("web3");
+      m1c1Web3 = new Web3("https://rpc-mainnet-cardano-evm.c1.milkomeda.com");
 
-      let kovanWeb3 = require("web3");
-      kovanWeb3 = new Web3(
-        "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
-      );
+      let polygonWeb3 = require("web3");
+      polygonWeb3 = new Web3("https://polygon-rpc.com/");
 
-      let mumbaiWeb3 = require("web3");
-      mumbaiWeb3 = new Web3("https://rpc-endpoints.superfluid.dev/mumbai");
+      const _polygonPruf = new PRUF(polygonWeb3, 137, false, true);
+      const _m1c1Pruf = new PRUF(m1c1Web3, 2001, false, true);
 
-      let libertyWeb3 = require("web3");
-    libertyWeb3 = new Web3("https://liberty10.shardeum.org/");
-
-      const _mumbaiPruf = new PRUF(mumbaiWeb3, 80001, false, true);
-      const _m1tnPruf = new PRUF(m1tnWeb3, 200101, false, true);
-      const _kovanPruf = new PRUF(kovanWeb3, 42, false, true);
-      const _libertyPruf = new PRUF(libertyWeb3, 8080, false, true);
-      await _mumbaiPruf.init();
-      await _m1tnPruf.init();
-      await _kovanPruf.init();
-      await _libertyPruf.init();
-      setMumbaiPruf(_mumbaiPruf);
-      setM1tnPruf(_m1tnPruf);
-      setKovanPruf(_kovanPruf);
-      setLibertyPruf(_libertyPruf);
+      await _polygonPruf.init();
+      await _m1c1Pruf.init();
+      setPolygonPruf(_polygonPruf);
+      setM1c1Pruf(_m1c1Pruf);
 
       web3.eth.net.getId().then(async (chainId) => {
-        console.log(chainId)
+        console.log(chainId);
         setChainId(chainId);
         window.ethereum.on("chainChanged", (chainId) => {
           console.log(chainId);
@@ -557,11 +528,9 @@ export default function Dashboard(props) {
         // setIsIDHolder(false);
 
         if (
-          _prufClient.network.name === "kovan" ||
-          _prufClient.network.name === "m1tn" ||
-          _prufClient.network.name === "liberty"
+          _prufClient.network.name === "polygon" ||
+          _prufClient.network.name === "m1c1"
         ) {
-          window.isKovan = true;
           ethereum
             .request({
               method: "eth_accounts",
@@ -798,10 +767,9 @@ export default function Dashboard(props) {
             render={() => (
               <prop.component
                 clearNodeCache={clearNodeCache}
-                kovanPruf={kovanPruf}
-                libertyPruf={libertyPruf}
-                mumbaiPruf={mumbaiPruf}
-                m1tnPruf={m1tnPruf}
+                explorer={explorer}
+                polygonPruf={polygonPruf}
+                m1c1Pruf={m1c1Pruf}
                 assetsPerPage={assetsPerPage}
                 searchQuery={searchQuery}
                 roots={roots}
@@ -855,6 +823,19 @@ export default function Dashboard(props) {
     //console.log(_prufClient)
 
     console.log("Getting things set up...");
+
+    switch (_prufClient.network.name) {
+      case "polygon":
+        setExplorer("https://polygonscan.com/tx/");
+        break;
+      case "m1c1":
+        setExplorer(
+          "https://explorer-mainnet-cardano-evm.c1.milkomeda.com/tx/"
+        );
+        break;
+      default:
+        break;
+    }
 
     initArweave().then((e) => {
       if (window.ethereum) {
@@ -927,7 +908,7 @@ export default function Dashboard(props) {
       });
 
       _prufClient.get.node.priceData().then((e) => {
-        console.log(e)
+        console.log(e);
         setCurrentACIndex(e.currentNodeIndex);
         setCurrentACPrice(e.currentNodePrice);
         console.log(e);
@@ -1210,10 +1191,10 @@ export default function Dashboard(props) {
     //console.log(allNodes, allClassNames, rootArray)
 
     allNodes.forEach((node, index) => {
-      console.log({node, index})
+      console.log({ node, index });
       _prufClient.get.node.record(String(node.id)).then((e) => {
         console.log(e);
-        console.log({sets: _nodeSets, rootArray})
+        console.log({ sets: _nodeSets, rootArray });
         _nodeSets[String(rootArray[Number(e.root - 1)].id)].push({
           id: node.id,
           name: node.name
@@ -1340,37 +1321,33 @@ export default function Dashboard(props) {
           rec.hardData = "";
           getMutableOf(rec, _prufClient, _arweaveClient);
         } else if (rec.nodeData.storageProvider === "1") {
-          _prufClient.utils
-            .ipfsFromB32(rec.hardData1)
-            .then(async (query) => {
-              console.log("MDQ", query);
+          _prufClient.utils.ipfsFromB32(rec.hardData1).then(async (query) => {
+            console.log("MDQ", query);
 
-              if (cookies[window.web3.utils.soliditySha3(query)]) {
-                rec.hardData =
-                  cookies[window.web3.utils.soliditySha3(query)];
+            if (cookies[window.web3.utils.soliditySha3(query)]) {
+              rec.hardData = cookies[window.web3.utils.soliditySha3(query)];
+              getMutableOf(rec, _prufClient, _arweaveClient);
+            } else {
+              for await (const chunk of window.ipfs.cat(query)) {
+                let str = new TextDecoder("utf-8").decode(chunk);
+                rec.hardData = JSON.parse(str);
+                console.log({ parsedIpfsChunk: str });
+                if (rec.hardData)
+                  setCookieTo(
+                    window.web3.utils.soliditySha3(query),
+                    rec.hardData
+                  );
                 getMutableOf(rec, _prufClient, _arweaveClient);
-              } else {
-                for await (const chunk of window.ipfs.cat(query)) {
-                  let str = new TextDecoder("utf-8").decode(chunk);
-                  rec.hardData = JSON.parse(str);
-                  console.log({ parsedIpfsChunk: str });
-                  if (rec.hardData)
-                    setCookieTo(
-                      window.web3.utils.soliditySha3(query),
-                      rec.hardData
-                    );
-                  getMutableOf(rec, _prufClient, _arweaveClient);
-                }
               }
-            });
+            }
+          });
         } else if (rec.nodeData.storageProvider === "2") {
           _prufClient.utils
             .arweaveTxFromB32(rec.hardData1, rec.hardData2)
             .then((query) => {
               rec.contentUrl = `https://arweave.net/${query}`;
               if (cookies[window.web3.utils.soliditySha3(query)]) {
-                rec.hardData =
-                  cookies[window.web3.utils.soliditySha3(query)];
+                rec.hardData = cookies[window.web3.utils.soliditySha3(query)];
                 getMutableOf(rec, _prufClient, _arweaveClient);
               } else {
                 let xhr = new XMLHttpRequest();
