@@ -48,7 +48,7 @@ export default function Dashboard(props) {
   // states and functions
 
   const IPFS = require("ipfs-http-client"); //require("ipfs-mini")
-  const API_KEY = React.useState(process.env.PINATA_API_KEY)
+  const API_KEY = process.env.PINATA_API_KEY
 
   //const OrbitDB = require('orbit-db')
 
