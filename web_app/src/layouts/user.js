@@ -1,5 +1,3 @@
-
-
 //PRUF WEB APP Kovan and C1 Release with V1.0.0 contracts
 import React from "react";
 import cx from "classnames";
@@ -31,7 +29,7 @@ import AdminNavbar from "components/Navbars/userNavbar.js";
 import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
-
+//import * as dotenv from 'dotenv'
 import routes from "routes.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/layouts/userStyle.js";
@@ -45,12 +43,9 @@ const useStyles = makeStyles(styles);
 
 export default function Dashboard(props) {
   const { ...rest } = props;
-
-  require("dotenv").config();
   // states and functions
 
-  const IPFS = require("ipfs-http-client"); //require("ipfs-mini")
-  const API_KEY = process.env.API_KEY
+  const ipfsClient = require("ipfs-http-client"); //require("ipfs-mini")
 
   //const OrbitDB = require('orbit-db')
 
@@ -204,6 +199,23 @@ export default function Dashboard(props) {
     if (!isMobile)
       setSidebarRoutes([routes[0], routes[2], routes[1], routes[3], routes[4]]);
     window.addEventListener("resize", resizeFunction);
+
+    const _A = process.env.REACT_APP_DEFAULT;
+    const _B = process.env.REACT_APP_ID;
+
+    console.log(process.env)
+
+    const auth =
+      "Basic " + Buffer.from(_B + ":" + _A).toString("base64");
+
+    window.ipfs = ipfsClient({
+      host: "ipfs.infura.io",
+      port: 5001,
+      protocol: "https",
+      headers: {
+        authorization: auth,
+      },
+    });
 
     // Specify how to clean up after this effect:
     return function cleanup() {
@@ -625,15 +637,12 @@ export default function Dashboard(props) {
     window.balances = {};
     window.replaceAssetData = {};
     window.recount = false;
-    let _ipfs;
 
     if (cookies[`assetsPerPage`]) {
       setAssetsPerPage(cookies[`assetsPerPage`]);
     }
 
-    _ipfs = new IPFS(new URL("https://api.web3.storage"));
-
-    window.ipfs = _ipfs;
+    //_ipfs = new IPFS(new URL(`https://ipfs.infura.io:5001/v0/${API_KEY}`));
 
     let hrefStr = String(
       window.location.href.substring(

@@ -403,6 +403,18 @@ export default function NewRecord(props) {
     let tempBuffer = buffer;
     let src = prefix + base64.encode(tempBuffer);
 
+    let fileSize = Buffer.byteLength(src, "utf8");
+
+    if (fileSize > 3000000) {
+      return swalReact({
+        title:
+          "Document size exceeds 3 MB limit! Please try adding a custom CID using the form. (" + String(fileSize) + "Bytes)",
+        content: link,
+        icon: "warning",
+        button: "Close",
+      });
+    }
+
       window.ipfs.add(src).then((hash) => {
         if (!hash) {
           console.error("ERROR UPLOADING TO IPFS")
@@ -611,10 +623,10 @@ export default function NewRecord(props) {
       let payload = JSON.stringify(ipfsObj);
       let fileSize = Buffer.byteLength(payload, "utf8");
 
-      if (fileSize > 50000000) {
+      if (fileSize > 3000000) {
         return swalReact({
           title:
-            "Document size exceeds 50 MB limit! (" + String(fileSize) + "Bytes)",
+            "Document size exceeds 3 MB limit! Please try adding a custom CID using the form. (" + String(fileSize) + "Bytes)",
           content: link,
           icon: "warning",
           button: "Close",
