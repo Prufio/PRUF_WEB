@@ -443,6 +443,7 @@ export default function CreateNode(props) {
               <>
                 {!transactionActive && (
                   <>
+                  <span className="plainText">Placeholder (Instructions/Description)</span>
                     <h5 className="costsText">Cost: ü{props.currentACPrice}</h5>
                     {props.prufClient.do.node.mint? <>
                       <CustomInput
