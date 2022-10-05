@@ -1572,3 +1572,8 @@ max-width: 80px !important;
   cursor: pointer;
   color:#ff1500;
 }
+
+.plainText {
+  color: rgb(87, 87, 87);
+  font-weight: 500;
+}
