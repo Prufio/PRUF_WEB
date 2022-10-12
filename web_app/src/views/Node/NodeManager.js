@@ -269,6 +269,67 @@ export default function NodeManager(props) {
       String(Object.values(tempObj)[iteration].value)
     );
 
+    props.prufClient.do.node.setOperationCost ?
+
+    props.prufClient.do.node
+    .setOperationCost(
+      obj.id,
+      Object.values(tempObj)[iteration].id,
+      calculatedCost,
+      _beneficiaryAddress
+    )
+    // eslint-disable-next-line react/prop-types
+    .send({ from: props.addr })
+    .on("error", (_error) => {
+      setFormChanged(false);
+      setBeneficiaryAddress("");
+      setTransactionActive(false);
+      console.error(_error);
+      tempTxHash = Object.values(_error)[0].transactionHash;
+      let str1 = `Check out your TX <a href='${props.explorer}'`;
+      let str2 = "' target='_blank'>here</a>";
+      link.innerHTML = String(str1 + tempTxHash + str2);
+      // setError(Object.values(_error)[0]);
+      if (tempTxHash !== undefined) {
+        swalReact({
+          title: "Something went wrong!",
+          content: link,
+          icon: "warning",
+          button: "Close",
+        });
+      }
+      if (tempTxHash === undefined) {
+        swalReact({
+          title: "Something went wrong!",
+          icon: "warning",
+          button: "Close",
+        });
+      }
+      return changeCosts(obj, tempObj, _beneficiaryAddress, iteration + 1);
+    })
+    .on("receipt", (receipt) => {
+      setTransactionActive(false);
+      // setTxStatus(receipt.status);
+      tempTxHash = receipt.transactionHash;
+      let str1 = `Check out your TX <a href='${props.explorer}'`;
+      let str2 = "' target='_blank'>here</a>";
+      link.innerHTML = String(str1 + tempTxHash + str2);
+      window.replaceAssetData.refreshBals = true;
+      window.dispatchEvent(props.refresh);
+
+      swalReact({
+        title: `Changed cost of id ${
+          Object.values(tempObj)[iteration].id
+        } to ü${Object.values(tempObj)[iteration].value}`,
+        content: link,
+        icon: "success",
+        button: "close",
+      }).then(() => {
+        return changeCosts(obj, tempObj, _beneficiaryAddress, iteration + 1);
+      });
+      // setTxHash(receipt.transactionHash);
+    }) :
+
     props.prufClient.faucet
       .setOperationCost(
         obj.id,
@@ -537,6 +598,56 @@ export default function NodeManager(props) {
     let addressHash = await window.web3.utils.soliditySha3(e.authorizedAddress);
 
     setTransactionActive(true);
+    props.prufClient.do.node.authorizeUser ? 
+
+    props.prufClient.do.node
+      .authorizeUser(e.id, addressHash, "1")
+      // eslint-disable-next-line react/prop-types
+      .send({ from: props.addr })
+      .on("error", (_error) => {
+        setTransactionActive(false);
+        // setTxStatus(false)
+        // setTxHash(Object.values(_error)[0].transactionHash)
+        console.error(_error);
+        tempTxHash = Object.values(_error)[0].transactionHash;
+        let str1 = `Check out your TX <a href='${props.explorer}'`;
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
+        if (tempTxHash !== undefined) {
+          swalReact({
+            title: "Something went wrong!",
+            content: link,
+            icon: "warning",
+            button: "Close",
+          });
+        }
+        if (tempTxHash === undefined) {
+          swalReact({
+            title: "Something went wrong!",
+            icon: "warning",
+            button: "Close",
+          });
+        }
+      })
+      .on("receipt", (receipt) => {
+        console.log(receipt);
+        setTransactionActive(false);
+        // setTxStatus(receipt.status)
+        tempTxHash = receipt.transactionHash;
+        let str1 = `Check out your TX <a href='${props.explorer}'`;
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
+        swalReact({
+          title: "User Authorized!",
+          content: link,
+          icon: "success",
+          button: "Close",
+        });
+        // window.replaceAssetData.refreshBals = true
+        window.dispatchEvent(props.refresh);
+        // window.location.href = nodeInfo.lastRef
+      }) :
+
     props.prufClient.faucet
       .authorizeUser(e.id, addressHash, "1")
       // eslint-disable-next-line react/prop-types

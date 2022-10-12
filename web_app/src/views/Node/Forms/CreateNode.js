@@ -74,6 +74,8 @@ export default function CreateNode(props) {
   // eslint-disable-next-line no-unused-vars
   const [standard3, setStandard3] = React.useState(false);
 
+  const UDContractAddress = "0xa9a6A3626993D487d2Dbda3173cf58cA1a9D9e9f"
+
   const link = document.createElement("div");
   const sampleIpfs = {
     idHashFields: [
@@ -443,7 +445,6 @@ export default function CreateNode(props) {
               <>
                 {!transactionActive && (
                   <>
-                  <span className="plainText">Placeholder (Instructions/Description)</span>
                     <h5 className="costsText">Cost: ü{props.currentACPrice}</h5>
                     {props.prufClient.do.node.mint? <>
                       <CustomInput

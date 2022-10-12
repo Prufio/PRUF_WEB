@@ -300,6 +300,88 @@ export default function FinalizeNode(props) {
           setTransactionActive(true);
           const pageKey = thousandHashesOf(props.addr, props.winKey);
 
+          props.prufClient.do.node.finalize ?
+
+          props.prufClient.do.node
+          .finalize(
+            nodeInfo.id,
+            "2",
+            storageProvider,
+            "0x0000000000000000000000000000000000000000",
+            advancedNodePreferences
+          )
+          // eslint-disable-next-line react/prop-types
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            // setTxHash(Object.values(_error)[0].transactionHash) BS:EXAMINE
+            tempTxHash = Object.values(_error)[0].transactionHash;
+            let str1 =
+              `Check out your TX <a href='${props.explorer}'`;
+            let str2 = "' target='_blank'>here</a>";
+            link.innerHTML = String(str1 + tempTxHash + str2);
+            if (tempTxHash !== undefined) {
+              swalReact({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swalReact({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash;
+            let str1 =
+              `Check out your TX <a href='${props.explorer}'`;
+            let str2 = "' target='_blank'>here</a>";
+            link.innerHTML = String(str1 + tempTxHash + str2);
+            swalReact({
+              title: "Node Finalized!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            });
+
+            let newNodeInfo = JSON.parse(
+              JSON.stringify(props.nodeExtData[nodeInfo.index])
+            );
+            let tempExtArr = JSON.parse(JSON.stringify(props.nodeExtData));
+
+            newNodeInfo.storageProvider = storageProvider;
+            newNodeInfo.managementType = "2";
+
+            tempExtArr.splice(nodeInfo.index, 1, newNodeInfo);
+            console.log({
+              root: nodeInfo.root,
+              id: nodeInfo.id,
+              name: nodeInfo.name,
+            });
+            window.replaceAssetData = {
+              key: pageKey,
+              nodeList: {
+                extData: tempExtArr,
+                setAddition: {
+                  root: nodeInfo.root,
+                  id: nodeInfo.id,
+                  name: nodeInfo.name,
+                },
+              },
+            };
+            window.replaceAssetData.refreshBals = true;
+            window.dispatchEvent(props.refresh);
+            window.location.href = "/#/user/node-manager"
+          }) :
+
           props.prufClient.faucet
             .finalize(
               nodeInfo.id,
